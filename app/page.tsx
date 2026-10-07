@@ -163,8 +163,8 @@ export default function LandingPage({ searchParams }: LandingPageProps) {
               place.
             </p>
             <div className="landing-actions">
-              <Link href="/app/signup" className="landing-cta">
-                Get started
+              <Link href="/app/auth?view=signup" className="landing-cta">
+                Get started for free
               </Link>
             </div>
           </div>
@@ -360,7 +360,7 @@ export default function LandingPage({ searchParams }: LandingPageProps) {
               single branch at any time.
             </p>
             <div className="landing-actions">
-              <Link href="/app/signup" className="landing-cta">
+              <Link href="/app/auth?view=signup" className="landing-cta">
                 Get started
               </Link>
             </div>

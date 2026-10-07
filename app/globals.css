@@ -452,7 +452,7 @@ button {
   color: var(--ds-color-on-primary-container);
 }
 
-/* Authentication pages: SME login and signup at /app/login and /app/signup */
+/* Authentication page: SME login and signup views at /app/auth */
 
 .auth-page {
   min-height: var(--ds-layout-full-dvh);
@@ -559,6 +559,67 @@ button {
 
 .auth-alt a {
   font: var(--ds-text-label-large);
+  color: var(--ds-color-primary);
+}
+
+.auth-input[aria-invalid='true'] {
+  border-color: var(--ds-color-error);
+}
+
+.auth-hint {
+  font: var(--ds-text-body-small);
+  color: var(--ds-color-on-surface-variant);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.auth-submit-disabled {
+  background-color: var(--ds-color-surface-container-high);
+  border-color: var(--ds-color-outline-variant);
+  color: var(--ds-color-on-surface-variant);
+  cursor: not-allowed;
+}
+
+.auth-submit-disabled:hover {
+  background-color: var(--ds-color-surface-container-high);
+  border-color: var(--ds-color-outline-variant);
+}
+
+.auth-terms {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+}
+
+.auth-terms input[type='checkbox'] {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+  accent-color: var(--ds-color-primary);
+}
+
+.auth-terms label {
+  font: var(--ds-text-body-small);
+  color: var(--ds-color-on-surface);
+}
+
+.auth-terms-links {
+  font: var(--ds-text-body-small);
+  color: var(--ds-color-on-surface-variant);
+}
+
+.auth-terms-links a {
   color: var(--ds-color-primary);
 }
 

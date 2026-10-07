@@ -33,7 +33,7 @@ Open http://localhost:3000.
 | --- | --- |
 | `/` | Public landing page, with `/?view=privacy` and `/?view=terms` legal views |
 | `/app` | SME product route group (owners, managers, staff) |
-| `/app/login`, `/app/signup` | SME authentication screens |
+| `/app/auth?view=login`, `/app/auth?view=signup` | SME authentication, one page with conditional views |
 | `/admin` | Platform Admin Console route group |
 | `/founder` | Founder Dashboard route group |
 

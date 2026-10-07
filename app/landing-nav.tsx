@@ -33,7 +33,7 @@ export default function LandingNav() {
             />
           </Link>
           <div className="landing-actions">
-            <Link href="/app/signup" className="landing-cta">
+            <Link href="/app/auth?view=signup" className="landing-cta">
               Get started
             </Link>
           </div>
@@ -94,7 +94,7 @@ export default function LandingNav() {
           </svg>
         </button>
         <Link
-          href="/app/signup"
+          href="/app/auth?view=signup"
           className="landing-cta"
           onClick={closeMenu}
         >
