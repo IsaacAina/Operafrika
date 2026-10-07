@@ -1,7 +1,8 @@
 import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import Image from 'next/image';
+import { PrivacyPolicyView, TermsOfServiceView } from './legal';
+import LandingNav from './landing-nav';
 
 export const metadata: Metadata = {
   title: { absolute: 'Operafrika — Business Operating System for African SMEs' },
@@ -36,55 +37,48 @@ export const metadata: Metadata = {
   twitter: { card: 'summary' },
 };
 
-const problemPoints = [
-  'Each branch runs on its own notebook, its own invoice pad, and its own memory of what was sold, what is owed, and what is running low.',
-  'The owner cannot see combined profit and loss across branches without manually gathering numbers from each one.',
-  'Staff have no consistent way to log sales or check stock.',
-  'There is no record of who owes what, what payroll has been paid, or which items are about to run out, until it becomes a problem.',
-];
-
 const capabilityCards = [
   {
     badgeClass: 'badge-sme',
     badge: 'Money in and out',
     title: 'Sales, invoices, income, and expenses',
-    body: 'Invoices per branch with an optional customer and an optional payment method, and a manual Paid, Unpaid, or Partial status. A quick walk-in sale is simply an invoice created without a customer, defaulting to Paid. Income entries can sit outside an invoice, expense entries are recorded per branch, and payroll counts as an expense in the profit and loss calculation.',
+    body: 'Record sales, invoices, income, and expenses per branch. Payroll counts as an expense.',
   },
   {
     badgeClass: 'badge-admin',
     badge: 'Profit and loss',
     title: 'Computed from recorded transactions',
-    body: 'Profit and loss is calculated per branch, and combined across all branches for the Owner role, from the income and expenses actually recorded, including payroll, over a selected period.',
+    body: 'Calculated per branch, and combined across all branches for the Owner, from recorded income and expenses.',
   },
   {
     badgeClass: 'badge-founder',
     badge: 'Stock',
     title: 'Items, movement history, and low-stock alerts',
-    body: 'Product name, SKU or product code, quantity in stock, cost price, selling price, and a low-stock threshold. Every change is recorded as a distinct stock-in or stock-out movement, forming a stock history for that item. Stock goes out automatically when an invoice item is created against it, and a low-stock alert is shown when quantity falls at or below the threshold.',
+    body: 'Items with quantity, cost, and selling price, plus stock movement history and low-stock alerts.',
   },
   {
     badgeClass: 'badge-sme',
     badge: 'Customers',
     title: 'Optional profiles, with no sale blocked',
-    body: 'A customer profile is optional and no sale requires one, so a walk-in sale can be recorded in seconds. Where profiles do exist, the list can be searched, filtered, and paginated, and an existing customer list can be imported from CSV, processed in batches and validated before any record is committed.',
+    body: 'Optional profiles, searchable and importable from CSV. No sale ever requires one.',
   },
   {
     badgeClass: 'badge-admin',
     badge: 'People and payroll',
     title: 'A staff list and a record-only payroll log',
-    body: 'A staff list per branch, with each person holding a role. A payroll entry records the employee, pay period, salary amount, and payment status, and feeds into expense totals. It is a record only. No payment is processed and no money moves.',
+    body: 'A staff list per branch and a record-only payroll log that feeds into expenses. No money moves.',
   },
   {
     badgeClass: 'badge-founder',
     badge: 'Reports and exports',
     title: 'A dashboard, plus CSV and PDF export',
-    body: 'The dashboard shows today\u2019s sales, the week\u2019s sales, profit and loss, and the low-stock count, filterable by branch, with a combined view available to the Owner role. Reports and invoices can be exported as CSV or PDF.',
+    body: 'A per-branch dashboard, a combined Owner view, and CSV and PDF export.',
   },
   {
     badgeClass: 'badge-sme',
     badge: 'Notifications and support',
     title: 'In-app and email only',
-    body: 'Notifications are sent in-app and by email. There is an FAQ, and a direct message channel to the platform team.',
+    body: 'In-app and email notifications, an FAQ, and a direct line to the platform team.',
   },
 ];
 
@@ -103,129 +97,81 @@ const answerFlow = [
 ];
 
 const assistantPoints = [
-  'For a question with a numeric answer, the system runs a direct database query and calculation first. The model only explains the result that was already computed, and never generates a financial figure of its own.',
-  'Vector search is reserved for genuinely unstructured business information, such as free-text notes, uploaded documents, and product descriptions. It is never used for a numeric or financial total, and a search is filtered to the same business, branch, and role limits as every other data access before ranking runs.',
-  'It answers only when asked. It does not use internet data, market or industry benchmark data, or any other business\u2019s data, and it refuses questions unrelated to the business.',
-  'If the AI service fails or is rate-limited, the assistant shows a plain error message. Sales, invoices, inventory, and financial records stay fully available, because AI availability is never a condition for accessing core business records.',
+  'Numeric answers are calculated from your own records. The assistant explains the result but never invents a figure.',
+  'It only searches your business\u2019s own notes and documents, never the internet or another business.',
+  'It refuses off-topic questions. If the AI service ever fails, your sales, stock, and records keep working normally.',
 ];
 
 const roleCards = [
   {
     title: 'Owner',
-    body: 'Runs the business. Has access to every branch, and can view combined, company-wide information or switch to a single branch view. Sees combined profit and loss, all staff, and all payroll, and can ask the AI assistant about any branch or the whole business.',
+    body: 'Full access to every branch: combined or single-branch views, all staff and payroll, and the AI assistant across the whole business.',
   },
   {
     title: 'Manager',
-    body: 'Assigned to exactly one branch. Sees and manages sales, invoices, stock, and customers for that branch only, and reads the staff list for their own branch.',
+    body: 'One branch only: manages sales, invoices, stock, and customers there.',
   },
   {
     title: 'Staff',
-    body: 'Assigned to exactly one branch. Creates and views sales and invoices for that branch only, and sees stock levels and quantities there on a read-only basis, without being able to add, edit, remove, or transfer stock. Customer totals and payroll are not visible.',
+    body: 'One branch only: creates and views sales and invoices, and reads stock levels there.',
   },
 ];
 
 const accessPoints = [
-  'Every protected request resolves the authenticated user, their business, their role, and their branch access from the server session, before anything runs.',
-  'Business, branch, and role values sent from the client are never trusted as proof of access. A manipulated value is ignored, not honored.',
-  'Authorization runs on two independent layers. The server checks the request before it reaches the database, and PostgreSQL Row Level Security checks the query again, independently.',
-  'Row Level Security refuses to return or modify rows outside the caller\u2019s authorized scope, even if a server-side check is missed.',
-  'A Manager or Staff account cannot be created without exactly one branch-access record. That is checked in the API layer at account creation.',
-  'The interface hides actions and screens a person cannot perform, for usability only. A hidden button is not a security boundary.',
+  'Your role and the branches you can see are checked on the server before anything runs.',
+  'A value sent from the browser is never trusted. If it can be edited, it is ignored for access.',
+  'Checks happen twice: first on the server, then again at the database level. Both must agree.',
+  'Hiding a button in the interface is for usability only. The real protection is those server and database checks.',
 ];
 
 const protectionPractices = [
   'Data minimization',
-  'Access control',
-  'Authentication',
-  'Authorization',
-  'Encryption in transit',
-  'Encryption and security controls at rest',
-  'Secure secrets management',
-  'Defined data retention and deletion practices',
-  'Privacy notices',
+  'Server-enforced access control',
+  'Authentication and authorization',
+  'Encryption in transit and at rest',
+  'Defined retention and deletion',
   'Review of third-party processors',
-  'Support for data export and access requests',
+  'Data export and access requests',
 ];
 
-export default function LandingPage() {
+type LandingPageProps = {
+  searchParams: { view?: string | string[] };
+};
+
+export default function LandingPage({ searchParams }: LandingPageProps) {
+  const view = Array.isArray(searchParams.view)
+    ? searchParams.view[0]
+    : searchParams.view;
+
   return (
     <div className="landing">
-      <nav className="landing-nav" aria-label="Primary">
-        <div className="landing-nav-inner">
-          <Link href="/" className="landing-brand" aria-label="Operafrika home">
-            <Image
-              src="/icon.svg"
-              alt="Operafrika"
-              width={32}
-              height={32}
-              priority
-            />
-          </Link>
-          <div className="landing-actions">
-            <Link href="/app" className="landing-cta">
-              Get started
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <LandingNav />
 
       <main>
+        {view === 'privacy' ? (
+          <PrivacyPolicyView />
+        ) : view === 'terms' ? (
+          <TermsOfServiceView />
+        ) : (
+          <>
         <section className="landing-section">
           <div className="landing-section-inner landing-hero">
-            <p className="landing-eyebrow">
-              Business operating system for African SMEs
-            </p>
             <h1 className="landing-title">One system for every branch you run.</h1>
             <p className="landing-lede">
-              Operafrika is a business operating system for African SMEs that
-              run one or more branches under a single owner. It replaces manual
-              notebooks, loose invoice pads, and informal bookkeeping with one
-              system that tracks money in, money out, stock, staff, and
-              customers per branch. An AI assistant lets owners and staff ask
-              plain questions about their own business data and get direct
-              answers, scoped to both their branch access and their role.
+              Track sales, expenses, stock, and staff across every branch you
+              run. See profit, stock alerts, and who owes what, all in one
+              place.
             </p>
             <div className="landing-actions">
-              <Link href="/app" className="landing-cta">
+              <Link href="/app/signup" className="landing-cta">
                 Get started
               </Link>
-              <Link href="/app" className="landing-cta landing-cta-quiet">
-                See the SME product
-              </Link>
             </div>
-            <p className="landing-note">The initial market is Nigeria.</p>
           </div>
         </section>
 
         <section
-          className="landing-section landing-section-alt"
-          aria-labelledby="landing-problem-heading"
-        >
-          <div className="landing-section-inner">
-            <h2 className="landing-heading" id="landing-problem-heading">
-              The picture is spread across notebooks
-            </h2>
-            <p className="landing-lede">
-              Small business owners running more than one branch have no simple
-              way to see their full picture.
-            </p>
-            <div className="landing-list">
-              {problemPoints.map((point) => (
-                <p className="landing-list-item" key={point}>
-                  {point}
-                </p>
-              ))}
-            </div>
-            <p className="landing-note">
-              This problem is stated as an informed assumption rather than
-              proven fact, and is treated as a hypothesis to validate during the
-              test window.
-            </p>
-          </div>
-        </section>
-
-        <section
-          className="landing-section"
+          className="landing-section landing-section-card"
           aria-labelledby="landing-capabilities-heading"
         >
           <div className="landing-section-inner">
@@ -236,14 +182,23 @@ export default function LandingPage() {
               What Operafrika does
             </h2>
             <div className="landing-grid">
-              {capabilityCards.map((card) => (
-                <article className="landing-card" key={card.title}>
+              {capabilityCards.map((card, index) => (
+                <article
+                  className="landing-card"
+                  key={card.title}
+                  aria-labelledby={`capability-heading-${index}`}
+                >
                   <span
                     className={`badge-tag ${card.badgeClass}`}
                   >
                     {card.badge}
                   </span>
-                  <h3 className="card-heading">{card.title}</h3>
+                  <h3
+                    className="card-heading"
+                    id={`capability-heading-${index}`}
+                  >
+                    {card.title}
+                  </h3>
                   <p className="card-body">{card.body}</p>
                 </article>
               ))}
@@ -260,9 +215,8 @@ export default function LandingPage() {
               Ask a question in plain language
             </h2>
             <p className="landing-lede">
-              The assistant answers using only the data the asking person&rsquo;s
-              business, branch, and role already authorize. It does not use data
-              from another business, and it does not pull from the internet.
+              Ask about your own business and get a clear answer, using only the
+              data your role allows you to see.
             </p>
             <div className="landing-flow">
               {answerFlow.map((step, index) => (
@@ -277,8 +231,7 @@ export default function LandingPage() {
               ))}
             </div>
             <p className="landing-note">
-              The model explains an already-computed result. Every answer is
-              labelled as one of the following.
+              Every answer is labelled as one of the following.
             </p>
             <div className="landing-flow">
               {answerLabels.map((label) => (
@@ -310,17 +263,19 @@ export default function LandingPage() {
               ever sees what their role allows.
             </p>
             <div className="landing-grid">
-              {roleCards.map((role) => (
-                <article className="landing-card" key={role.title}>
-                  <h3 className="card-heading">{role.title}</h3>
+              {roleCards.map((role, index) => (
+                <article
+                  className="landing-card"
+                  key={role.title}
+                  aria-labelledby={`role-heading-${index}`}
+                >
+                  <h3 className="card-heading" id={`role-heading-${index}`}>
+                    {role.title}
+                  </h3>
                   <p className="card-body">{role.body}</p>
                 </article>
               ))}
             </div>
-            <p className="landing-note">
-              A Regional Manager role, for someone covering more than one branch
-              without full company-wide access, is not part of this version.
-            </p>
           </div>
         </section>
 
@@ -333,8 +288,8 @@ export default function LandingPage() {
               Access is decided on the server, not in the interface
             </h2>
             <p className="landing-lede">
-              Authorization is a core system requirement in this product, not a
-              user interface concern.
+              What you can see is decided by your role and checked on the
+              server, not by what the interface shows you.
             </p>
             <div className="landing-list">
               {accessPoints.map((point) => (
@@ -361,8 +316,10 @@ export default function LandingPage() {
               start, not later additions.
             </p>
             <div className="landing-grid">
-              <article className="landing-card">
-                <h3 className="card-heading">Practices applied</h3>
+              <article className="landing-card" aria-labelledby="practices-heading">
+                <h3 className="card-heading" id="practices-heading">
+                  Practices applied
+                </h3>
                 <div className="landing-list">
                   {protectionPractices.map((practice) => (
                     <p className="landing-list-item" key={practice}>
@@ -371,8 +328,10 @@ export default function LandingPage() {
                   ))}
                 </div>
               </article>
-              <article className="landing-card">
-                <h3 className="card-heading">Nigeria, reviewed properly</h3>
+              <article className="landing-card" aria-labelledby="nigeria-heading">
+                <h3 className="card-heading" id="nigeria-heading">
+                  Nigeria, reviewed properly
+                </h3>
                 <p className="card-body">
                   The Nigeria Data Protection Act and the relevant Nigeria Data
                   Protection Commission requirements are to be reviewed with
@@ -401,12 +360,14 @@ export default function LandingPage() {
               single branch at any time.
             </p>
             <div className="landing-actions">
-              <Link href="/app" className="landing-cta">
+              <Link href="/app/signup" className="landing-cta">
                 Get started
               </Link>
             </div>
           </div>
         </section>
+          </>
+        )}
       </main>
 
       <footer className="landing-footer">
@@ -418,6 +379,14 @@ export default function LandingPage() {
             Business operating system for African SMEs running one or more
             branches under a single owner.
           </p>
+          <nav className="landing-footer-links" aria-label="Legal">
+            <Link href="/?view=privacy" className="landing-footer-link">
+              Privacy Policy
+            </Link>
+            <Link href="/?view=terms" className="landing-footer-link">
+              Terms of Service
+            </Link>
+          </nav>
         </div>
       </footer>
     </div>

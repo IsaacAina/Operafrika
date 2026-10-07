@@ -10,12 +10,15 @@
            A 96 96 0 1 1 352 247
            Z" fill="#FFFFFF"/>
   
-  <!-- Light Blue G-Shaped Growth Arrow Element -->
-  <path d="M 265 370
-           L 265 432
-           A 176 176 0 0 0 432 265
-           L 432 185
-           L 370 247
-           A 114 114 0 0 0 265 370
+  <!-- Light Blue Growth Arrow: starts at the O's open end, follows the O's
+       circular path, and rises into an upward arrow — progress, growth,
+       better operations. The arrowhead is as thick as the arc and centered
+       so the arc points into its middle. -->
+  <path d="M 247 432
+           A 185 185 0 0 0 432 247
+           L 404 152
+           L 377 247
+           A 130 130 0 0 1 247 377
+           L 247 432
            Z" fill="#38A0FF"/>
 </svg>

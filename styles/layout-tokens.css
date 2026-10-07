@@ -24,5 +24,6 @@
   --ds-layout-full-dvh: 100dvh;
   --ds-layout-max-width: 1200px;
   --ds-layout-card-max-width: 360px;
+  --ds-layout-breakpoint-mobile: 720px;
   --ds-border-width-standard: 1px;
 }
