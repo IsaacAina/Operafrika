@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Rounded Primary Blue Container -->
+  <rect width="512" height="512" rx="112" fill="#3157D5"/>
+  
+  <!-- Bold White O Ring -->
+  <path d="M 352 247
+           L 432 247
+           A 176 176 0 1 0 247 432
+           L 247 352
+           A 96 96 0 1 1 352 247
+           Z" fill="#FFFFFF"/>
+  
+  <!-- Light Blue G-Shaped Growth Arrow Element -->
+  <path d="M 265 370
+           L 265 432
+           A 176 176 0 0 0 432 265
+           L 432 185
+           L 370 247
+           A 114 114 0 0 0 265 370
+           Z" fill="#38A0FF"/>
+</svg>
