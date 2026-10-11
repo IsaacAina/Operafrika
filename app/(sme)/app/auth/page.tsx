@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import AuthCard, { type AuthView } from './auth-forms';
 
 type AuthPageProps = {
-  searchParams: { view?: string | string[] };
+  searchParams: Promise<{ view?: string | string[] }>;
 };
 
 function resolveAuthView(raw: string | string[] | undefined): AuthView {
@@ -13,13 +13,15 @@ function resolveAuthView(raw: string | string[] | undefined): AuthView {
 export async function generateMetadata({
   searchParams,
 }: AuthPageProps): Promise<Metadata> {
-  const view = resolveAuthView(searchParams.view);
+  const { view: rawView } = await searchParams;
+  const view = resolveAuthView(rawView);
   return {
     title: view === 'signup' ? 'Create account' : 'Log in',
   };
 }
 
-export default function AuthPage({ searchParams }: AuthPageProps) {
-  const view = resolveAuthView(searchParams.view);
+export default async function AuthPage({ searchParams }: AuthPageProps) {
+  const { view: rawView } = await searchParams;
+  const view = resolveAuthView(rawView);
   return <AuthCard key={view} view={view} />;
 }

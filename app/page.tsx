@@ -135,13 +135,12 @@ const protectionPractices = [
 ];
 
 type LandingPageProps = {
-  searchParams: { view?: string | string[] };
+  searchParams: Promise<{ view?: string | string[] }>;
 };
 
-export default function LandingPage({ searchParams }: LandingPageProps) {
-  const view = Array.isArray(searchParams.view)
-    ? searchParams.view[0]
-    : searchParams.view;
+export default async function LandingPage({ searchParams }: LandingPageProps) {
+  const { view: rawView } = await searchParams;
+  const view = Array.isArray(rawView) ? rawView[0] : rawView;
 
   return (
     <div className="landing">

@@ -1,0 +1,265 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  OWNER
+  MANAGER
+  STAFF
+}
+
+enum InvoiceStatus {
+  PAID
+  UNPAID
+  PARTIAL
+}
+
+enum StockMovementType {
+  IN
+  OUT
+}
+
+enum AuditAction {
+  INVOICE_CREATED
+  INVOICE_UPDATED
+  INVOICE_STATUS_CHANGED
+  STOCK_MOVEMENT_RECORDED
+  PAYROLL_RECORD_CREATED
+  PAYROLL_RECORD_UPDATED
+  STAFF_CHANGED
+  CUSTOMER_RECORD_CHANGED
+  ROLE_PERMISSION_CHANGED
+  CURRENCY_CORRECTED
+}
+
+model Business {
+  id           String        @id @default(cuid())
+  name         String
+  businessType String
+  currency     String        @default("NGN")
+  contactInfo  String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  branches     Branch[]
+  subscription Subscription?
+  users        User[]
+}
+
+model Branch {
+  id             String          @id @default(cuid())
+  businessId     String
+  business       Business        @relation(fields: [businessId], references: [id])
+  name           String
+  address        String?
+  contactInfo    String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  branchAccess   BranchAccess[]
+  customers      Customer[]
+  stockItems     StockItem[]
+  invoices       Invoice[]
+  incomeEntries  IncomeEntry[]
+  expenseEntries ExpenseEntry[]
+}
+
+model User {
+  id              String           @id @default(cuid())
+  email           String           @unique
+  passwordHash    String
+  role            Role
+  businessId      String
+  business        Business         @relation(fields: [businessId], references: [id])
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  branchAccess    BranchAccess[]
+  payrollEntries  PayrollEntry[]
+  supportMessages SupportMessage[]
+  auditLogEntries AuditLog[]
+}
+
+// Manager/Staff get exactly one row in v1. Owner gets none (full bypass by role).
+// A future Regional Manager can hold several rows without a schema change.
+model BranchAccess {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  branchId  String
+  branch    Branch   @relation(fields: [branchId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, branchId])
+}
+
+model PlatformUser {
+  id                    String   @id @default(cuid())
+  email                 String   @unique
+  passwordHash          String
+  canAccessAdminConsole Boolean  @default(true)
+  canAccessFounderDashboard Boolean @default(true)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model Customer {
+  id            String        @id @default(cuid())
+  branchId      String
+  branch        Branch        @relation(fields: [branchId], references: [id])
+  name          String
+  contact       String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  invoices      Invoice[]
+  incomeEntries IncomeEntry[]
+}
+
+model StockItem {
+  id               String          @id @default(cuid())
+  branchId         String
+  branch           Branch          @relation(fields: [branchId], references: [id])
+  name             String
+  sku              String?
+  quantity         Int
+  costPrice        Decimal         @db.Decimal(14, 2)
+  sellingPrice     Decimal         @db.Decimal(14, 2)
+  reorderThreshold Int
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  invoiceItems     InvoiceItem[]
+  stockMovements   StockMovement[]
+
+  @@index([branchId])
+}
+
+model StockMovement {
+  id               String            @id @default(cuid())
+  stockItemId      String
+  stockItem        StockItem         @relation(fields: [stockItemId], references: [id])
+  type             StockMovementType
+  quantity         Int
+  reason           String
+  relatedInvoiceId String?
+  createdAt        DateTime          @default(now())
+
+  @@index([stockItemId])
+}
+
+model Invoice {
+  id            String        @id @default(cuid())
+  branchId      String
+  branch        Branch        @relation(fields: [branchId], references: [id])
+  customerId    String?
+  customer      Customer?     @relation(fields: [customerId], references: [id])
+  status        InvoiceStatus @default(UNPAID)
+  paymentMethod String?
+  paymentAmount Decimal?      @db.Decimal(14, 2)
+  paymentDate   DateTime?
+  total         Decimal       @db.Decimal(14, 2)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  items         InvoiceItem[]
+
+  @@index([branchId])
+}
+
+model InvoiceItem {
+  id          String    @id @default(cuid())
+  invoiceId   String
+  invoice     Invoice   @relation(fields: [invoiceId], references: [id])
+  stockItemId String
+  stockItem   StockItem @relation(fields: [stockItemId], references: [id])
+  quantity    Int
+  price       Decimal   @db.Decimal(14, 2)
+}
+
+model IncomeEntry {
+  id         String    @id @default(cuid())
+  branchId   String
+  branch     Branch    @relation(fields: [branchId], references: [id])
+  customerId String?
+  customer   Customer? @relation(fields: [customerId], references: [id])
+  amount     Decimal   @db.Decimal(14, 2)
+  date       DateTime
+  note       String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([branchId])
+}
+
+model ExpenseEntry {
+  id        String   @id @default(cuid())
+  branchId  String
+  branch    Branch   @relation(fields: [branchId], references: [id])
+  category  String
+  amount    Decimal  @db.Decimal(14, 2)
+  date      DateTime
+  note      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([branchId])
+}
+
+model PayrollEntry {
+  id           String        @id @default(cuid())
+  userId       String
+  user         User          @relation(fields: [userId], references: [id])
+  payPeriod    String
+  salaryAmount Decimal       @db.Decimal(14, 2)
+  status       InvoiceStatus @default(UNPAID)
+  datePaid     DateTime?
+  createdAt    DateTime      @default(now())
+}
+
+model Subscription {
+  id          String   @id @default(cuid())
+  businessId  String   @unique
+  business    Business @relation(fields: [businessId], references: [id])
+  planName    String   @default("Free (Test Period)")
+  price       Decimal  @default(0) @db.Decimal(14, 2)
+  renewalDate DateTime
+}
+
+model SupportMessage {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  message   String
+  createdAt DateTime @default(now())
+  resolved  Boolean  @default(false)
+}
+
+model AuditLog {
+  id            String      @id @default(cuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id])
+  businessId    String
+  branchId      String?
+  action        AuditAction
+  resourceType  String
+  resourceId    String
+  previousValue Json?
+  newValue      Json?
+  metadata      Json?
+  createdAt     DateTime    @default(now())
+
+  @@index([businessId])
+}
+
+model AnalyticsEvent {
+  id         String   @id @default(cuid())
+  eventType  String
+  userId     String?
+  businessId String?
+  branchId   String?
+  sessionId  String?
+  metadata   Json?
+  createdAt  DateTime @default(now())
+
+  @@index([eventType])
+}
