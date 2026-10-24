@@ -32,3 +32,16 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# --- Ignored non-functional Markdown files ---
+# Exclude generic Markdown docs (e.g., notes, drafts) but keep functional docs
+*.md
+!README.md
+!AGENTS.md
+!docs/**/*.md
+
+# --- Context folders (configuration / rules) ---
+.agent/
+agent/
+skills/
+rules/
