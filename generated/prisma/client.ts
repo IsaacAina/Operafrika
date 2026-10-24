@@ -57,6 +57,12 @@ export type Branch = Prisma.BranchModel
  */
 export type User = Prisma.UserModel
 /**
+ * Model Session
+ * A login session. The browser holds a random token; only its SHA-256 hash
+ * is stored here, so a leaked table cannot be replayed as a live session.
+ */
+export type Session = Prisma.SessionModel
+/**
  * Model BranchAccess
  * 
  */
@@ -66,6 +72,11 @@ export type BranchAccess = Prisma.BranchAccessModel
  * 
  */
 export type PlatformUser = Prisma.PlatformUserModel
+/**
+ * Model PlatformSession
+ * 
+ */
+export type PlatformSession = Prisma.PlatformSessionModel
 /**
  * Model Customer
  * 
@@ -126,3 +137,15 @@ export type AuditLog = Prisma.AuditLogModel
  * 
  */
 export type AnalyticsEvent = Prisma.AnalyticsEventModel
+/**
+ * Model PasswordResetToken
+ * A password reset link. The email carries the raw token; only its SHA-256
+ * hash is stored here, so a leaked table cannot reset anyone's password.
+ */
+export type PasswordResetToken = Prisma.PasswordResetTokenModel
+/**
+ * Model EmailVerificationCode
+ * An email verification code. The email carries the raw code; only its
+ * SHA-256 hash is stored here.
+ */
+export type EmailVerificationCode = Prisma.EmailVerificationCodeModel

@@ -1,5 +1,6 @@
 @import "../styles/tokens.css";
 @import "../styles/layout-tokens.css";
+@import "./onboarding.css";
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -14,6 +15,17 @@ html, body {
   font: var(--ds-text-body-medium);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* The typography tokens name Inter. Keep a sans-serif fallback so a failed
+   webfont request never drops the UI back to the browser serif default. */
+body,
+button,
+input,
+select,
+textarea {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
+    Roboto, Arial, sans-serif;
 }
 
 button {
@@ -562,6 +574,29 @@ button {
   color: var(--ds-color-primary);
 }
 
+.auth-link-button {
+  font: var(--ds-text-label-large);
+  color: var(--ds-color-primary);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.auth-link-button:disabled {
+  color: var(--ds-color-on-surface-variant);
+  cursor: default;
+}
+
+.auth-forgot {
+  font: var(--ds-text-body-small);
+  text-align: right;
+}
+
+.auth-forgot a {
+  color: var(--ds-color-primary);
+}
+
 .auth-input[aria-invalid='true'] {
   border-color: var(--ds-color-error);
 }
@@ -636,3 +671,518 @@ button {
     display: inline-flex;
   }
 }
+
+/* Account page: the details of the signed in account and the danger zone that
+   closes it. */
+.account-card {
+  width: 100%;
+  max-width: var(--ds-layout-card-max-width);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--ds-space-3);
+  padding: var(--ds-space-6);
+  text-align: left;
+  background-color: var(--ds-color-surface-container-lowest);
+  border: var(--ds-border-width-standard) solid var(--ds-color-outline-variant);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-effect-soft-shadow);
+}
+
+.account-card-danger {
+  border-color: var(--ds-color-error-container);
+}
+
+.account-card-title {
+  font: var(--ds-text-title-medium);
+  color: var(--ds-color-on-surface);
+}
+
+.account-card-body {
+  font: var(--ds-text-body-medium);
+  color: var(--ds-color-on-surface-variant);
+}
+
+.account-card-warning {
+  font: var(--ds-text-body-small);
+  color: var(--ds-color-error);
+}
+
+.account-form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--ds-space-2);
+}
+
+.account-label {
+  font: var(--ds-text-label-large);
+  color: var(--ds-color-on-surface-variant);
+}
+
+.account-input {
+  width: 100%;
+  font: var(--ds-text-body-large);
+  color: var(--ds-color-on-surface);
+  background-color: var(--ds-color-surface-container-lowest);
+  border: var(--ds-border-width-standard) solid var(--ds-color-outline);
+  border-radius: 0.5rem;
+  padding: 0.875rem;
+}
+
+.account-input:focus {
+  outline: 2px solid var(--ds-color-primary);
+  outline-offset: 1px;
+  border-color: var(--ds-color-primary);
+}
+
+.account-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-2);
+  margin-top: var(--ds-space-2);
+}
+
+.account-button-danger {
+  border: var(--ds-border-width-standard) solid var(--ds-color-error);
+  background-color: var(--ds-color-error);
+  color: var(--ds-color-on-error);
+  cursor: pointer;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.account-button-danger:hover {
+  background-color: var(--ds-ref-error-30);
+  border-color: var(--ds-ref-error-30);
+}
+
+.account-button-danger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.account-button-quiet {
+  border: var(--ds-border-width-standard) solid var(--ds-color-outline);
+  background-color: var(--ds-color-surface-container-lowest);
+  color: var(--ds-color-on-surface);
+  cursor: pointer;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1.25rem;
+}
+
+.account-button-quiet:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+/* Onboarding education flow */
+.onboarding-step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-2);
+  padding: var(--ds-space-4);
+  text-align: left;
+  background-color: var(--ds-color-surface);
+  border: var(--ds-border-width-standard) solid var(--ds-color-outline-variant);
+  border-radius: var(--ds-radius-lg);
+}
+
+.onboarding-counter {
+  font: var(--ds-text-label-small);
+  color: var(--ds-color-on-surface-variant);
+}
+
+.onboarding-step-title {
+  font: var(--ds-text-title-medium);
+  color: var(--ds-color-on-surface);
+}
+
+.onboarding-step-desc {
+  font: var(--ds-text-body-medium);
+  color: var(--ds-color-on-surface-variant);
+}
+
+.onboarding-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-3);
+  margin-top: var(--ds-space-4);
+}
+
+.onboarding-actions-single {
+  justify-content: flex-end;
+}
+
+.onboarding-cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  border: var(--ds-border-width-standard) solid var(--ds-color-primary);
+  background-color: var(--ds-color-primary);
+  color: var(--ds-color-on-primary);
+  font: var(--ds-text-label-large);
+  padding: 0.875rem var(--ds-space-5);
+  border-radius: var(--ds-radius-md);
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.onboarding-cta-button:hover:not(:disabled) {
+  background-color: var(--ds-color-on-primary-fixed-variant);
+  border-color: var(--ds-color-on-primary-fixed-variant);
+}
+
+.onboarding-cta-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.onboarding-cta-label {
+  font: var(--ds-text-label-large);
+}
+
+.onboarding-cta-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.onboarding-button-quiet {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  border: var(--ds-border-width-standard) solid var(--ds-color-outline);
+  background-color: var(--ds-color-surface-container-lowest);
+  color: var(--ds-color-on-surface);
+  font: var(--ds-text-label-large);
+  padding: 0.875rem var(--ds-space-4);
+  border-radius: var(--ds-radius-md);
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.onboarding-button-quiet:hover:not(:disabled) {
+  background-color: var(--ds-color-primary-container);
+  border-color: var(--ds-color-primary);
+}
+
+.onboarding-button-quiet:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.onboarding-button-label {
+  font: var(--ds-text-label-large);
+}
+
+.onboarding-button-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.onboarding-card {
+  width: 100%;
+  max-width: 540px;
+}
+
+.onboarding-section-title {
+  font: var(--ds-text-title-small);
+  color: var(--ds-color-on-surface);
+  margin-top: var(--ds-space-2);
+  padding-bottom: var(--ds-space-1);
+  border-bottom: var(--ds-border-width-standard) solid var(--ds-color-outline-variant);
+}
+
+.onboarding-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--ds-space-4);
+}
+
+@media (min-width: 640px) {
+  .onboarding-grid-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Onboarding form: spacing and borders come from colour and shape roles only. */
+.onboarding-card .auth-form {
+  gap: var(--ds-space-5);
+}
+
+.onboarding-card .auth-field {
+  gap: var(--ds-space-2);
+}
+
+.onboarding-card .auth-label {
+  color: var(--ds-color-on-surface);
+}
+
+.onboarding-card .auth-input {
+  padding: var(--ds-space-3);
+  border: var(--ds-border-width-standard) solid var(--ds-color-outline);
+  border-radius: var(--ds-radius-md);
+}
+
+.onboarding-card .auth-input:focus {
+  border-color: var(--ds-color-primary);
+  outline: 2px solid var(--ds-color-primary);
+  outline-offset: 1px;
+}
+
+.onboarding-card .auth-input:disabled {
+  color: var(--ds-color-on-surface-variant);
+  background-color: var(--ds-color-surface-container-low);
+}
+
+.onboarding-select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.onboarding-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: calc(var(--ds-space-8) + var(--ds-space-2));
+}
+
+.onboarding-select-chevron {
+  position: absolute;
+  right: var(--ds-space-3);
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--ds-color-on-surface-variant);
+  pointer-events: none;
+}
+
+.onboarding-notice {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+  padding: var(--ds-space-3);
+  background-color: var(--ds-color-surface-container-low);
+  border: var(--ds-border-width-standard) solid var(--ds-color-outline-variant);
+  border-radius: var(--ds-radius-md);
+  font: var(--ds-text-body-small);
+  color: var(--ds-color-on-surface-variant);
+}
+
+.onboarding-notice-strong {
+  font: var(--ds-text-label-medium);
+  color: var(--ds-color-on-surface);
+}
+
+.onboarding-input-locked {
+  background-color: var(--ds-color-surface-container-low);
+  cursor: not-allowed;
+  color: var(--ds-color-on-surface-variant);
+}
+
+/* Progressive Onboarding Stepper & Animations */
+
+.onboarding-stepper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-3);
+  margin-bottom: var(--ds-space-4);
+  width: 100%;
+}
+
+.onboarding-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.onboarding-progress-caption {
+  font: var(--ds-text-label-medium);
+  color: var(--ds-color-on-surface);
+}
+
+.onboarding-progress-percent {
+  font: var(--ds-text-label-medium);
+  color: var(--ds-color-primary);
+}
+
+.onboarding-progress-track {
+  width: 100%;
+  height: 6px;
+  background-color: var(--ds-color-surface-container-low);
+  border: var(--ds-border-width-standard) solid var(--ds-color-outline-variant);
+  border-radius: var(--ds-radius-full);
+  overflow: hidden;
+}
+
+.onboarding-progress-fill {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--ds-color-primary) 0%,
+    var(--ds-color-primary-container) 100%
+  );
+  border-radius: var(--ds-radius-full);
+  transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.onboarding-stepper-list {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  list-style: none;
+  padding: 0;
+  margin: var(--ds-space-2) 0 0 0;
+  position: relative;
+}
+
+.onboarding-stepper-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--ds-space-1);
+  flex: 1;
+  position: relative;
+}
+
+/* Connecting track line between stepper nodes */
+.onboarding-stepper-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background-color: var(--ds-color-outline-variant);
+  z-index: 1;
+  transition: background-color 0.4s ease;
+}
+
+.onboarding-stepper-item.is-completed:not(:last-child)::after {
+  background-color: var(--ds-color-primary);
+}
+
+.onboarding-step-badge {
+  position: relative;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--ds-radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: var(--ds-border-width-standard) solid transparent;
+  cursor: default;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: none;
+}
+
+.onboarding-stepper-item.is-upcoming .onboarding-step-badge {
+  background-color: var(--ds-color-surface-container-low);
+  border-color: var(--ds-color-outline-variant);
+  color: var(--ds-color-on-surface-variant);
+}
+
+.onboarding-stepper-item.is-current .onboarding-step-badge {
+  background-color: var(--ds-color-primary);
+  color: var(--ds-color-on-primary);
+  box-shadow: 0 0 0 4px var(--ds-color-primary-container);
+  animation: step-pulse 2.2s infinite ease-in-out;
+}
+
+.onboarding-stepper-item.is-completed .onboarding-step-badge {
+  background-color: var(--ds-color-primary);
+  color: var(--ds-color-on-primary);
+}
+
+.onboarding-stepper-item.is-completed .onboarding-step-badge:enabled {
+  cursor: pointer;
+}
+
+.onboarding-stepper-item.is-completed .onboarding-step-badge:enabled:hover {
+  transform: scale(1.12);
+  box-shadow: 0 0 0 3px var(--ds-color-primary-container);
+}
+
+.onboarding-check-icon {
+  width: 14px;
+  height: 14px;
+  stroke-dasharray: 20;
+  stroke-dashoffset: 0;
+  animation: check-draw 0.35s ease forwards;
+}
+
+.onboarding-step-num {
+  font: var(--ds-text-label-small);
+  line-height: 1;
+}
+
+.onboarding-step-label {
+  font: var(--ds-text-label-medium);
+  color: var(--ds-color-on-surface-variant);
+  transition: color 0.25s ease;
+}
+
+.onboarding-label-short {
+  display: inline;
+}
+
+.onboarding-label-full {
+  display: none;
+}
+
+@media (min-width: 480px) {
+  .onboarding-label-short {
+    display: none;
+  }
+  .onboarding-label-full {
+    display: inline;
+  }
+}
+
+.onboarding-stepper-item.is-current .onboarding-step-label {
+  color: var(--ds-color-primary);
+  font: var(--ds-text-label-large);
+}
+
+.onboarding-stepper-item.is-completed .onboarding-step-label {
+  color: var(--ds-color-on-surface);
+}
+
+/* Fluid Pane Entrance Animation */
+.onboarding-animated-pane {
+  animation: onboarding-fade-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes step-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 3px var(--ds-color-primary-container);
+  }
+  50% {
+    box-shadow: 0 0 0 6px var(--ds-color-primary-container);
+  }
+}
+
+@keyframes check-draw {
+  from {
+    stroke-dashoffset: 20;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes onboarding-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

@@ -8,15 +8,29 @@
     "start": "next start",
     "studio": "prisma studio",
     "lint": "next lint",
+    "seed:test-user": "node scripts/seed-test-user.mjs",
+    "purge:deletions": "node scripts/purge-scheduled-deletions.mjs",
     "tokens:build": "node scripts/build-css-variables.mjs",
     "tokens:check": "node scripts/build-css-variables.mjs --check"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.10.1",
     "@prisma/client": "7.10.0",
+    "@tanstack/react-query": "^5.104.5",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/nodemailer": "^8.0.2",
+    "argon2": "^0.45.1",
+    "bcryptjs": "^3.0.3",
     "dotenv": "17.4.2",
+    "gsap": "^3.15.0",
+    "jsonwebtoken": "^9.0.3",
     "next": "^16.4.0",
+    "nodemailer": "^10.1.1",
+    "pg": "^8.23.1",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",

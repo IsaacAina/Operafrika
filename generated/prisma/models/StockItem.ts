@@ -268,8 +268,8 @@ export type StockItemWhereInput = {
   reorderThreshold?: Prisma.IntFilter<"StockItem"> | number
   createdAt?: Prisma.DateTimeFilter<"StockItem"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"StockItem"> | Date | string
-  branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
   invoiceItems?: Prisma.InvoiceItemListRelationFilter
+  branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
   stockMovements?: Prisma.StockMovementListRelationFilter
 }
 
@@ -284,8 +284,8 @@ export type StockItemOrderByWithRelationInput = {
   reorderThreshold?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  branch?: Prisma.BranchOrderByWithRelationInput
   invoiceItems?: Prisma.InvoiceItemOrderByRelationAggregateInput
+  branch?: Prisma.BranchOrderByWithRelationInput
   stockMovements?: Prisma.StockMovementOrderByRelationAggregateInput
 }
 
@@ -303,8 +303,8 @@ export type StockItemWhereUniqueInput = Prisma.AtLeast<{
   reorderThreshold?: Prisma.IntFilter<"StockItem"> | number
   createdAt?: Prisma.DateTimeFilter<"StockItem"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"StockItem"> | Date | string
-  branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
   invoiceItems?: Prisma.InvoiceItemListRelationFilter
+  branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
   stockMovements?: Prisma.StockMovementListRelationFilter
 }, "id">
 
@@ -352,8 +352,8 @@ export type StockItemCreateInput = {
   reorderThreshold: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  branch: Prisma.BranchCreateNestedOneWithoutStockItemsInput
   invoiceItems?: Prisma.InvoiceItemCreateNestedManyWithoutStockItemInput
+  branch: Prisma.BranchCreateNestedOneWithoutStockItemsInput
   stockMovements?: Prisma.StockMovementCreateNestedManyWithoutStockItemInput
 }
 
@@ -382,8 +382,8 @@ export type StockItemUpdateInput = {
   reorderThreshold?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  branch?: Prisma.BranchUpdateOneRequiredWithoutStockItemsNestedInput
   invoiceItems?: Prisma.InvoiceItemUpdateManyWithoutStockItemNestedInput
+  branch?: Prisma.BranchUpdateOneRequiredWithoutStockItemsNestedInput
   stockMovements?: Prisma.StockMovementUpdateManyWithoutStockItemNestedInput
 }
 
@@ -674,8 +674,8 @@ export type StockItemCreateWithoutStockMovementsInput = {
   reorderThreshold: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  branch: Prisma.BranchCreateNestedOneWithoutStockItemsInput
   invoiceItems?: Prisma.InvoiceItemCreateNestedManyWithoutStockItemInput
+  branch: Prisma.BranchCreateNestedOneWithoutStockItemsInput
 }
 
 export type StockItemUncheckedCreateWithoutStockMovementsInput = {
@@ -718,8 +718,8 @@ export type StockItemUpdateWithoutStockMovementsInput = {
   reorderThreshold?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  branch?: Prisma.BranchUpdateOneRequiredWithoutStockItemsNestedInput
   invoiceItems?: Prisma.InvoiceItemUpdateManyWithoutStockItemNestedInput
+  branch?: Prisma.BranchUpdateOneRequiredWithoutStockItemsNestedInput
 }
 
 export type StockItemUncheckedUpdateWithoutStockMovementsInput = {
@@ -911,8 +911,8 @@ export type StockItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   reorderThreshold?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   invoiceItems?: boolean | Prisma.StockItem$invoiceItemsArgs<ExtArgs>
+  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   stockMovements?: boolean | Prisma.StockItem$stockMovementsArgs<ExtArgs>
   _count?: boolean | Prisma.StockItemCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["stockItem"]>
@@ -960,8 +960,8 @@ export type StockItemSelectScalar = {
 
 export type StockItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "branchId" | "name" | "sku" | "quantity" | "costPrice" | "sellingPrice" | "reorderThreshold" | "createdAt" | "updatedAt", ExtArgs["result"]["stockItem"]>
 export type StockItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   invoiceItems?: boolean | Prisma.StockItem$invoiceItemsArgs<ExtArgs>
+  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   stockMovements?: boolean | Prisma.StockItem$stockMovementsArgs<ExtArgs>
   _count?: boolean | Prisma.StockItemCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -975,8 +975,8 @@ export type StockItemIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
 export type $StockItemPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "StockItem"
   objects: {
-    branch: Prisma.$BranchPayload<ExtArgs>
     invoiceItems: Prisma.$InvoiceItemPayload<ExtArgs>[]
+    branch: Prisma.$BranchPayload<ExtArgs>
     stockMovements: Prisma.$StockMovementPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1384,8 +1384,8 @@ readonly fields: StockItemFieldRefs;
  */
 export interface Prisma__StockItemClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  branch<T extends Prisma.BranchDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BranchDefaultArgs<ExtArgs>>): Prisma.Prisma__BranchClient<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   invoiceItems<T extends Prisma.StockItem$invoiceItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StockItem$invoiceItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoiceItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  branch<T extends Prisma.BranchDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BranchDefaultArgs<ExtArgs>>): Prisma.Prisma__BranchClient<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   stockMovements<T extends Prisma.StockItem$stockMovementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StockItem$stockMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.

@@ -201,10 +201,10 @@ export type BranchWhereInput = {
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
   branchAccess?: Prisma.BranchAccessListRelationFilter
   customers?: Prisma.CustomerListRelationFilter
-  stockItems?: Prisma.StockItemListRelationFilter
-  invoices?: Prisma.InvoiceListRelationFilter
-  incomeEntries?: Prisma.IncomeEntryListRelationFilter
   expenseEntries?: Prisma.ExpenseEntryListRelationFilter
+  incomeEntries?: Prisma.IncomeEntryListRelationFilter
+  invoices?: Prisma.InvoiceListRelationFilter
+  stockItems?: Prisma.StockItemListRelationFilter
 }
 
 export type BranchOrderByWithRelationInput = {
@@ -218,10 +218,10 @@ export type BranchOrderByWithRelationInput = {
   business?: Prisma.BusinessOrderByWithRelationInput
   branchAccess?: Prisma.BranchAccessOrderByRelationAggregateInput
   customers?: Prisma.CustomerOrderByRelationAggregateInput
-  stockItems?: Prisma.StockItemOrderByRelationAggregateInput
-  invoices?: Prisma.InvoiceOrderByRelationAggregateInput
-  incomeEntries?: Prisma.IncomeEntryOrderByRelationAggregateInput
   expenseEntries?: Prisma.ExpenseEntryOrderByRelationAggregateInput
+  incomeEntries?: Prisma.IncomeEntryOrderByRelationAggregateInput
+  invoices?: Prisma.InvoiceOrderByRelationAggregateInput
+  stockItems?: Prisma.StockItemOrderByRelationAggregateInput
 }
 
 export type BranchWhereUniqueInput = Prisma.AtLeast<{
@@ -238,10 +238,10 @@ export type BranchWhereUniqueInput = Prisma.AtLeast<{
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
   branchAccess?: Prisma.BranchAccessListRelationFilter
   customers?: Prisma.CustomerListRelationFilter
-  stockItems?: Prisma.StockItemListRelationFilter
-  invoices?: Prisma.InvoiceListRelationFilter
-  incomeEntries?: Prisma.IncomeEntryListRelationFilter
   expenseEntries?: Prisma.ExpenseEntryListRelationFilter
+  incomeEntries?: Prisma.IncomeEntryListRelationFilter
+  invoices?: Prisma.InvoiceListRelationFilter
+  stockItems?: Prisma.StockItemListRelationFilter
 }, "id">
 
 export type BranchOrderByWithAggregationInput = {
@@ -280,10 +280,10 @@ export type BranchCreateInput = {
   business: Prisma.BusinessCreateNestedOneWithoutBranchesInput
   branchAccess?: Prisma.BranchAccessCreateNestedManyWithoutBranchInput
   customers?: Prisma.CustomerCreateNestedManyWithoutBranchInput
-  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutBranchInput
-  incomeEntries?: Prisma.IncomeEntryCreateNestedManyWithoutBranchInput
   expenseEntries?: Prisma.ExpenseEntryCreateNestedManyWithoutBranchInput
+  incomeEntries?: Prisma.IncomeEntryCreateNestedManyWithoutBranchInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateInput = {
@@ -296,10 +296,10 @@ export type BranchUncheckedCreateInput = {
   updatedAt?: Date | string
   branchAccess?: Prisma.BranchAccessUncheckedCreateNestedManyWithoutBranchInput
   customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutBranchInput
-  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBranchInput
-  incomeEntries?: Prisma.IncomeEntryUncheckedCreateNestedManyWithoutBranchInput
   expenseEntries?: Prisma.ExpenseEntryUncheckedCreateNestedManyWithoutBranchInput
+  incomeEntries?: Prisma.IncomeEntryUncheckedCreateNestedManyWithoutBranchInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUpdateInput = {
@@ -312,10 +312,10 @@ export type BranchUpdateInput = {
   business?: Prisma.BusinessUpdateOneRequiredWithoutBranchesNestedInput
   branchAccess?: Prisma.BranchAccessUpdateManyWithoutBranchNestedInput
   customers?: Prisma.CustomerUpdateManyWithoutBranchNestedInput
-  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
-  invoices?: Prisma.InvoiceUpdateManyWithoutBranchNestedInput
-  incomeEntries?: Prisma.IncomeEntryUpdateManyWithoutBranchNestedInput
   expenseEntries?: Prisma.ExpenseEntryUpdateManyWithoutBranchNestedInput
+  incomeEntries?: Prisma.IncomeEntryUpdateManyWithoutBranchNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateInput = {
@@ -328,10 +328,10 @@ export type BranchUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   branchAccess?: Prisma.BranchAccessUncheckedUpdateManyWithoutBranchNestedInput
   customers?: Prisma.CustomerUncheckedUpdateManyWithoutBranchNestedInput
-  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBranchNestedInput
-  incomeEntries?: Prisma.IncomeEntryUncheckedUpdateManyWithoutBranchNestedInput
   expenseEntries?: Prisma.ExpenseEntryUncheckedUpdateManyWithoutBranchNestedInput
+  incomeEntries?: Prisma.IncomeEntryUncheckedUpdateManyWithoutBranchNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateManyInput = {
@@ -543,10 +543,10 @@ export type BranchCreateWithoutBusinessInput = {
   updatedAt?: Date | string
   branchAccess?: Prisma.BranchAccessCreateNestedManyWithoutBranchInput
   customers?: Prisma.CustomerCreateNestedManyWithoutBranchInput
-  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutBranchInput
-  incomeEntries?: Prisma.IncomeEntryCreateNestedManyWithoutBranchInput
   expenseEntries?: Prisma.ExpenseEntryCreateNestedManyWithoutBranchInput
+  incomeEntries?: Prisma.IncomeEntryCreateNestedManyWithoutBranchInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutBusinessInput = {
@@ -558,10 +558,10 @@ export type BranchUncheckedCreateWithoutBusinessInput = {
   updatedAt?: Date | string
   branchAccess?: Prisma.BranchAccessUncheckedCreateNestedManyWithoutBranchInput
   customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutBranchInput
-  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBranchInput
-  incomeEntries?: Prisma.IncomeEntryUncheckedCreateNestedManyWithoutBranchInput
   expenseEntries?: Prisma.ExpenseEntryUncheckedCreateNestedManyWithoutBranchInput
+  incomeEntries?: Prisma.IncomeEntryUncheckedCreateNestedManyWithoutBranchInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutBusinessInput = {
@@ -612,10 +612,10 @@ export type BranchCreateWithoutBranchAccessInput = {
   updatedAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutBranchesInput
   customers?: Prisma.CustomerCreateNestedManyWithoutBranchInput
-  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutBranchInput
-  incomeEntries?: Prisma.IncomeEntryCreateNestedManyWithoutBranchInput
   expenseEntries?: Prisma.ExpenseEntryCreateNestedManyWithoutBranchInput
+  incomeEntries?: Prisma.IncomeEntryCreateNestedManyWithoutBranchInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutBranchAccessInput = {
@@ -627,10 +627,10 @@ export type BranchUncheckedCreateWithoutBranchAccessInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutBranchInput
-  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBranchInput
-  incomeEntries?: Prisma.IncomeEntryUncheckedCreateNestedManyWithoutBranchInput
   expenseEntries?: Prisma.ExpenseEntryUncheckedCreateNestedManyWithoutBranchInput
+  incomeEntries?: Prisma.IncomeEntryUncheckedCreateNestedManyWithoutBranchInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutBranchAccessInput = {
@@ -658,10 +658,10 @@ export type BranchUpdateWithoutBranchAccessInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutBranchesNestedInput
   customers?: Prisma.CustomerUpdateManyWithoutBranchNestedInput
-  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
-  invoices?: Prisma.InvoiceUpdateManyWithoutBranchNestedInput
-  incomeEntries?: Prisma.IncomeEntryUpdateManyWithoutBranchNestedInput
   expenseEntries?: Prisma.ExpenseEntryUpdateManyWithoutBranchNestedInput
+  incomeEntries?: Prisma.IncomeEntryUpdateManyWithoutBranchNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutBranchAccessInput = {
@@ -673,10 +673,10 @@ export type BranchUncheckedUpdateWithoutBranchAccessInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   customers?: Prisma.CustomerUncheckedUpdateManyWithoutBranchNestedInput
-  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBranchNestedInput
-  incomeEntries?: Prisma.IncomeEntryUncheckedUpdateManyWithoutBranchNestedInput
   expenseEntries?: Prisma.ExpenseEntryUncheckedUpdateManyWithoutBranchNestedInput
+  incomeEntries?: Prisma.IncomeEntryUncheckedUpdateManyWithoutBranchNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutCustomersInput = {
@@ -688,10 +688,10 @@ export type BranchCreateWithoutCustomersInput = {
   updatedAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutBranchesInput
   branchAccess?: Prisma.BranchAccessCreateNestedManyWithoutBranchInput
-  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutBranchInput
-  incomeEntries?: Prisma.IncomeEntryCreateNestedManyWithoutBranchInput
   expenseEntries?: Prisma.ExpenseEntryCreateNestedManyWithoutBranchInput
+  incomeEntries?: Prisma.IncomeEntryCreateNestedManyWithoutBranchInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutCustomersInput = {
@@ -703,10 +703,10 @@ export type BranchUncheckedCreateWithoutCustomersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   branchAccess?: Prisma.BranchAccessUncheckedCreateNestedManyWithoutBranchInput
-  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBranchInput
-  incomeEntries?: Prisma.IncomeEntryUncheckedCreateNestedManyWithoutBranchInput
   expenseEntries?: Prisma.ExpenseEntryUncheckedCreateNestedManyWithoutBranchInput
+  incomeEntries?: Prisma.IncomeEntryUncheckedCreateNestedManyWithoutBranchInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutCustomersInput = {
@@ -734,10 +734,10 @@ export type BranchUpdateWithoutCustomersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutBranchesNestedInput
   branchAccess?: Prisma.BranchAccessUpdateManyWithoutBranchNestedInput
-  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
-  invoices?: Prisma.InvoiceUpdateManyWithoutBranchNestedInput
-  incomeEntries?: Prisma.IncomeEntryUpdateManyWithoutBranchNestedInput
   expenseEntries?: Prisma.ExpenseEntryUpdateManyWithoutBranchNestedInput
+  incomeEntries?: Prisma.IncomeEntryUpdateManyWithoutBranchNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutCustomersInput = {
@@ -749,10 +749,10 @@ export type BranchUncheckedUpdateWithoutCustomersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   branchAccess?: Prisma.BranchAccessUncheckedUpdateManyWithoutBranchNestedInput
-  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBranchNestedInput
-  incomeEntries?: Prisma.IncomeEntryUncheckedUpdateManyWithoutBranchNestedInput
   expenseEntries?: Prisma.ExpenseEntryUncheckedUpdateManyWithoutBranchNestedInput
+  incomeEntries?: Prisma.IncomeEntryUncheckedUpdateManyWithoutBranchNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutStockItemsInput = {
@@ -765,9 +765,9 @@ export type BranchCreateWithoutStockItemsInput = {
   business: Prisma.BusinessCreateNestedOneWithoutBranchesInput
   branchAccess?: Prisma.BranchAccessCreateNestedManyWithoutBranchInput
   customers?: Prisma.CustomerCreateNestedManyWithoutBranchInput
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutBranchInput
-  incomeEntries?: Prisma.IncomeEntryCreateNestedManyWithoutBranchInput
   expenseEntries?: Prisma.ExpenseEntryCreateNestedManyWithoutBranchInput
+  incomeEntries?: Prisma.IncomeEntryCreateNestedManyWithoutBranchInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutStockItemsInput = {
@@ -780,9 +780,9 @@ export type BranchUncheckedCreateWithoutStockItemsInput = {
   updatedAt?: Date | string
   branchAccess?: Prisma.BranchAccessUncheckedCreateNestedManyWithoutBranchInput
   customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutBranchInput
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBranchInput
-  incomeEntries?: Prisma.IncomeEntryUncheckedCreateNestedManyWithoutBranchInput
   expenseEntries?: Prisma.ExpenseEntryUncheckedCreateNestedManyWithoutBranchInput
+  incomeEntries?: Prisma.IncomeEntryUncheckedCreateNestedManyWithoutBranchInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutStockItemsInput = {
@@ -811,9 +811,9 @@ export type BranchUpdateWithoutStockItemsInput = {
   business?: Prisma.BusinessUpdateOneRequiredWithoutBranchesNestedInput
   branchAccess?: Prisma.BranchAccessUpdateManyWithoutBranchNestedInput
   customers?: Prisma.CustomerUpdateManyWithoutBranchNestedInput
-  invoices?: Prisma.InvoiceUpdateManyWithoutBranchNestedInput
-  incomeEntries?: Prisma.IncomeEntryUpdateManyWithoutBranchNestedInput
   expenseEntries?: Prisma.ExpenseEntryUpdateManyWithoutBranchNestedInput
+  incomeEntries?: Prisma.IncomeEntryUpdateManyWithoutBranchNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutStockItemsInput = {
@@ -826,9 +826,9 @@ export type BranchUncheckedUpdateWithoutStockItemsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   branchAccess?: Prisma.BranchAccessUncheckedUpdateManyWithoutBranchNestedInput
   customers?: Prisma.CustomerUncheckedUpdateManyWithoutBranchNestedInput
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBranchNestedInput
-  incomeEntries?: Prisma.IncomeEntryUncheckedUpdateManyWithoutBranchNestedInput
   expenseEntries?: Prisma.ExpenseEntryUncheckedUpdateManyWithoutBranchNestedInput
+  incomeEntries?: Prisma.IncomeEntryUncheckedUpdateManyWithoutBranchNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutInvoicesInput = {
@@ -841,9 +841,9 @@ export type BranchCreateWithoutInvoicesInput = {
   business: Prisma.BusinessCreateNestedOneWithoutBranchesInput
   branchAccess?: Prisma.BranchAccessCreateNestedManyWithoutBranchInput
   customers?: Prisma.CustomerCreateNestedManyWithoutBranchInput
-  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
-  incomeEntries?: Prisma.IncomeEntryCreateNestedManyWithoutBranchInput
   expenseEntries?: Prisma.ExpenseEntryCreateNestedManyWithoutBranchInput
+  incomeEntries?: Prisma.IncomeEntryCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutInvoicesInput = {
@@ -856,9 +856,9 @@ export type BranchUncheckedCreateWithoutInvoicesInput = {
   updatedAt?: Date | string
   branchAccess?: Prisma.BranchAccessUncheckedCreateNestedManyWithoutBranchInput
   customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutBranchInput
-  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
-  incomeEntries?: Prisma.IncomeEntryUncheckedCreateNestedManyWithoutBranchInput
   expenseEntries?: Prisma.ExpenseEntryUncheckedCreateNestedManyWithoutBranchInput
+  incomeEntries?: Prisma.IncomeEntryUncheckedCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutInvoicesInput = {
@@ -887,9 +887,9 @@ export type BranchUpdateWithoutInvoicesInput = {
   business?: Prisma.BusinessUpdateOneRequiredWithoutBranchesNestedInput
   branchAccess?: Prisma.BranchAccessUpdateManyWithoutBranchNestedInput
   customers?: Prisma.CustomerUpdateManyWithoutBranchNestedInput
-  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
-  incomeEntries?: Prisma.IncomeEntryUpdateManyWithoutBranchNestedInput
   expenseEntries?: Prisma.ExpenseEntryUpdateManyWithoutBranchNestedInput
+  incomeEntries?: Prisma.IncomeEntryUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutInvoicesInput = {
@@ -902,9 +902,9 @@ export type BranchUncheckedUpdateWithoutInvoicesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   branchAccess?: Prisma.BranchAccessUncheckedUpdateManyWithoutBranchNestedInput
   customers?: Prisma.CustomerUncheckedUpdateManyWithoutBranchNestedInput
-  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
-  incomeEntries?: Prisma.IncomeEntryUncheckedUpdateManyWithoutBranchNestedInput
   expenseEntries?: Prisma.ExpenseEntryUncheckedUpdateManyWithoutBranchNestedInput
+  incomeEntries?: Prisma.IncomeEntryUncheckedUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutIncomeEntriesInput = {
@@ -917,9 +917,9 @@ export type BranchCreateWithoutIncomeEntriesInput = {
   business: Prisma.BusinessCreateNestedOneWithoutBranchesInput
   branchAccess?: Prisma.BranchAccessCreateNestedManyWithoutBranchInput
   customers?: Prisma.CustomerCreateNestedManyWithoutBranchInput
-  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutBranchInput
   expenseEntries?: Prisma.ExpenseEntryCreateNestedManyWithoutBranchInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutIncomeEntriesInput = {
@@ -932,9 +932,9 @@ export type BranchUncheckedCreateWithoutIncomeEntriesInput = {
   updatedAt?: Date | string
   branchAccess?: Prisma.BranchAccessUncheckedCreateNestedManyWithoutBranchInput
   customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutBranchInput
-  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBranchInput
   expenseEntries?: Prisma.ExpenseEntryUncheckedCreateNestedManyWithoutBranchInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutIncomeEntriesInput = {
@@ -963,9 +963,9 @@ export type BranchUpdateWithoutIncomeEntriesInput = {
   business?: Prisma.BusinessUpdateOneRequiredWithoutBranchesNestedInput
   branchAccess?: Prisma.BranchAccessUpdateManyWithoutBranchNestedInput
   customers?: Prisma.CustomerUpdateManyWithoutBranchNestedInput
-  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
-  invoices?: Prisma.InvoiceUpdateManyWithoutBranchNestedInput
   expenseEntries?: Prisma.ExpenseEntryUpdateManyWithoutBranchNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutIncomeEntriesInput = {
@@ -978,9 +978,9 @@ export type BranchUncheckedUpdateWithoutIncomeEntriesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   branchAccess?: Prisma.BranchAccessUncheckedUpdateManyWithoutBranchNestedInput
   customers?: Prisma.CustomerUncheckedUpdateManyWithoutBranchNestedInput
-  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBranchNestedInput
   expenseEntries?: Prisma.ExpenseEntryUncheckedUpdateManyWithoutBranchNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutExpenseEntriesInput = {
@@ -993,9 +993,9 @@ export type BranchCreateWithoutExpenseEntriesInput = {
   business: Prisma.BusinessCreateNestedOneWithoutBranchesInput
   branchAccess?: Prisma.BranchAccessCreateNestedManyWithoutBranchInput
   customers?: Prisma.CustomerCreateNestedManyWithoutBranchInput
-  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutBranchInput
   incomeEntries?: Prisma.IncomeEntryCreateNestedManyWithoutBranchInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutExpenseEntriesInput = {
@@ -1008,9 +1008,9 @@ export type BranchUncheckedCreateWithoutExpenseEntriesInput = {
   updatedAt?: Date | string
   branchAccess?: Prisma.BranchAccessUncheckedCreateNestedManyWithoutBranchInput
   customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutBranchInput
-  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBranchInput
   incomeEntries?: Prisma.IncomeEntryUncheckedCreateNestedManyWithoutBranchInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutBranchInput
+  stockItems?: Prisma.StockItemUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutExpenseEntriesInput = {
@@ -1039,9 +1039,9 @@ export type BranchUpdateWithoutExpenseEntriesInput = {
   business?: Prisma.BusinessUpdateOneRequiredWithoutBranchesNestedInput
   branchAccess?: Prisma.BranchAccessUpdateManyWithoutBranchNestedInput
   customers?: Prisma.CustomerUpdateManyWithoutBranchNestedInput
-  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
-  invoices?: Prisma.InvoiceUpdateManyWithoutBranchNestedInput
   incomeEntries?: Prisma.IncomeEntryUpdateManyWithoutBranchNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutExpenseEntriesInput = {
@@ -1054,9 +1054,9 @@ export type BranchUncheckedUpdateWithoutExpenseEntriesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   branchAccess?: Prisma.BranchAccessUncheckedUpdateManyWithoutBranchNestedInput
   customers?: Prisma.CustomerUncheckedUpdateManyWithoutBranchNestedInput
-  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBranchNestedInput
   incomeEntries?: Prisma.IncomeEntryUncheckedUpdateManyWithoutBranchNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateManyBusinessInput = {
@@ -1077,10 +1077,10 @@ export type BranchUpdateWithoutBusinessInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   branchAccess?: Prisma.BranchAccessUpdateManyWithoutBranchNestedInput
   customers?: Prisma.CustomerUpdateManyWithoutBranchNestedInput
-  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
-  invoices?: Prisma.InvoiceUpdateManyWithoutBranchNestedInput
-  incomeEntries?: Prisma.IncomeEntryUpdateManyWithoutBranchNestedInput
   expenseEntries?: Prisma.ExpenseEntryUpdateManyWithoutBranchNestedInput
+  incomeEntries?: Prisma.IncomeEntryUpdateManyWithoutBranchNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutBusinessInput = {
@@ -1092,10 +1092,10 @@ export type BranchUncheckedUpdateWithoutBusinessInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   branchAccess?: Prisma.BranchAccessUncheckedUpdateManyWithoutBranchNestedInput
   customers?: Prisma.CustomerUncheckedUpdateManyWithoutBranchNestedInput
-  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBranchNestedInput
-  incomeEntries?: Prisma.IncomeEntryUncheckedUpdateManyWithoutBranchNestedInput
   expenseEntries?: Prisma.ExpenseEntryUncheckedUpdateManyWithoutBranchNestedInput
+  incomeEntries?: Prisma.IncomeEntryUncheckedUpdateManyWithoutBranchNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutBranchNestedInput
+  stockItems?: Prisma.StockItemUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateManyWithoutBusinessInput = {
@@ -1115,19 +1115,19 @@ export type BranchUncheckedUpdateManyWithoutBusinessInput = {
 export type BranchCountOutputType = {
   branchAccess: number
   customers: number
-  stockItems: number
-  invoices: number
-  incomeEntries: number
   expenseEntries: number
+  incomeEntries: number
+  invoices: number
+  stockItems: number
 }
 
 export type BranchCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   branchAccess?: boolean | BranchCountOutputTypeCountBranchAccessArgs
   customers?: boolean | BranchCountOutputTypeCountCustomersArgs
-  stockItems?: boolean | BranchCountOutputTypeCountStockItemsArgs
-  invoices?: boolean | BranchCountOutputTypeCountInvoicesArgs
-  incomeEntries?: boolean | BranchCountOutputTypeCountIncomeEntriesArgs
   expenseEntries?: boolean | BranchCountOutputTypeCountExpenseEntriesArgs
+  incomeEntries?: boolean | BranchCountOutputTypeCountIncomeEntriesArgs
+  invoices?: boolean | BranchCountOutputTypeCountInvoicesArgs
+  stockItems?: boolean | BranchCountOutputTypeCountStockItemsArgs
 }
 
 /**
@@ -1157,15 +1157,8 @@ export type BranchCountOutputTypeCountCustomersArgs<ExtArgs extends runtime.Type
 /**
  * BranchCountOutputType without action
  */
-export type BranchCountOutputTypeCountStockItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.StockItemWhereInput
-}
-
-/**
- * BranchCountOutputType without action
- */
-export type BranchCountOutputTypeCountInvoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.InvoiceWhereInput
+export type BranchCountOutputTypeCountExpenseEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ExpenseEntryWhereInput
 }
 
 /**
@@ -1178,8 +1171,15 @@ export type BranchCountOutputTypeCountIncomeEntriesArgs<ExtArgs extends runtime.
 /**
  * BranchCountOutputType without action
  */
-export type BranchCountOutputTypeCountExpenseEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ExpenseEntryWhereInput
+export type BranchCountOutputTypeCountInvoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvoiceWhereInput
+}
+
+/**
+ * BranchCountOutputType without action
+ */
+export type BranchCountOutputTypeCountStockItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StockItemWhereInput
 }
 
 
@@ -1194,10 +1194,10 @@ export type BranchSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   branchAccess?: boolean | Prisma.Branch$branchAccessArgs<ExtArgs>
   customers?: boolean | Prisma.Branch$customersArgs<ExtArgs>
-  stockItems?: boolean | Prisma.Branch$stockItemsArgs<ExtArgs>
-  invoices?: boolean | Prisma.Branch$invoicesArgs<ExtArgs>
-  incomeEntries?: boolean | Prisma.Branch$incomeEntriesArgs<ExtArgs>
   expenseEntries?: boolean | Prisma.Branch$expenseEntriesArgs<ExtArgs>
+  incomeEntries?: boolean | Prisma.Branch$incomeEntriesArgs<ExtArgs>
+  invoices?: boolean | Prisma.Branch$invoicesArgs<ExtArgs>
+  stockItems?: boolean | Prisma.Branch$stockItemsArgs<ExtArgs>
   _count?: boolean | Prisma.BranchCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["branch"]>
 
@@ -1238,10 +1238,10 @@ export type BranchInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   branchAccess?: boolean | Prisma.Branch$branchAccessArgs<ExtArgs>
   customers?: boolean | Prisma.Branch$customersArgs<ExtArgs>
-  stockItems?: boolean | Prisma.Branch$stockItemsArgs<ExtArgs>
-  invoices?: boolean | Prisma.Branch$invoicesArgs<ExtArgs>
-  incomeEntries?: boolean | Prisma.Branch$incomeEntriesArgs<ExtArgs>
   expenseEntries?: boolean | Prisma.Branch$expenseEntriesArgs<ExtArgs>
+  incomeEntries?: boolean | Prisma.Branch$incomeEntriesArgs<ExtArgs>
+  invoices?: boolean | Prisma.Branch$invoicesArgs<ExtArgs>
+  stockItems?: boolean | Prisma.Branch$stockItemsArgs<ExtArgs>
   _count?: boolean | Prisma.BranchCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BranchIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1257,10 +1257,10 @@ export type $BranchPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     business: Prisma.$BusinessPayload<ExtArgs>
     branchAccess: Prisma.$BranchAccessPayload<ExtArgs>[]
     customers: Prisma.$CustomerPayload<ExtArgs>[]
-    stockItems: Prisma.$StockItemPayload<ExtArgs>[]
-    invoices: Prisma.$InvoicePayload<ExtArgs>[]
-    incomeEntries: Prisma.$IncomeEntryPayload<ExtArgs>[]
     expenseEntries: Prisma.$ExpenseEntryPayload<ExtArgs>[]
+    incomeEntries: Prisma.$IncomeEntryPayload<ExtArgs>[]
+    invoices: Prisma.$InvoicePayload<ExtArgs>[]
+    stockItems: Prisma.$StockItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1667,10 +1667,10 @@ export interface Prisma__BranchClient<T, Null = never, ExtArgs extends runtime.T
   business<T extends Prisma.BusinessDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BusinessDefaultArgs<ExtArgs>>): Prisma.Prisma__BusinessClient<runtime.Types.Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   branchAccess<T extends Prisma.Branch$branchAccessArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$branchAccessArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BranchAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   customers<T extends Prisma.Branch$customersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$customersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  stockItems<T extends Prisma.Branch$stockItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$stockItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  invoices<T extends Prisma.Branch$invoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  incomeEntries<T extends Prisma.Branch$incomeEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$incomeEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IncomeEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   expenseEntries<T extends Prisma.Branch$expenseEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$expenseEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExpenseEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  incomeEntries<T extends Prisma.Branch$incomeEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$incomeEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IncomeEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  invoices<T extends Prisma.Branch$invoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  stockItems<T extends Prisma.Branch$stockItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$stockItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2156,51 +2156,27 @@ export type Branch$customersArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
- * Branch.stockItems
+ * Branch.expenseEntries
  */
-export type Branch$stockItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Branch$expenseEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the StockItem
+   * Select specific fields to fetch from the ExpenseEntry
    */
-  select?: Prisma.StockItemSelect<ExtArgs> | null
+  select?: Prisma.ExpenseEntrySelect<ExtArgs> | null
   /**
-   * Omit specific fields from the StockItem
+   * Omit specific fields from the ExpenseEntry
    */
-  omit?: Prisma.StockItemOmit<ExtArgs> | null
+  omit?: Prisma.ExpenseEntryOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.StockItemInclude<ExtArgs> | null
-  where?: Prisma.StockItemWhereInput
-  orderBy?: Prisma.StockItemOrderByWithRelationInput | Prisma.StockItemOrderByWithRelationInput[]
-  cursor?: Prisma.StockItemWhereUniqueInput
+  include?: Prisma.ExpenseEntryInclude<ExtArgs> | null
+  where?: Prisma.ExpenseEntryWhereInput
+  orderBy?: Prisma.ExpenseEntryOrderByWithRelationInput | Prisma.ExpenseEntryOrderByWithRelationInput[]
+  cursor?: Prisma.ExpenseEntryWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.StockItemScalarFieldEnum | Prisma.StockItemScalarFieldEnum[]
-}
-
-/**
- * Branch.invoices
- */
-export type Branch$invoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Invoice
-   */
-  select?: Prisma.InvoiceSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Invoice
-   */
-  omit?: Prisma.InvoiceOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.InvoiceInclude<ExtArgs> | null
-  where?: Prisma.InvoiceWhereInput
-  orderBy?: Prisma.InvoiceOrderByWithRelationInput | Prisma.InvoiceOrderByWithRelationInput[]
-  cursor?: Prisma.InvoiceWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.InvoiceScalarFieldEnum | Prisma.InvoiceScalarFieldEnum[]
+  distinct?: Prisma.ExpenseEntryScalarFieldEnum | Prisma.ExpenseEntryScalarFieldEnum[]
 }
 
 /**
@@ -2228,27 +2204,51 @@ export type Branch$incomeEntriesArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
- * Branch.expenseEntries
+ * Branch.invoices
  */
-export type Branch$expenseEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Branch$invoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ExpenseEntry
+   * Select specific fields to fetch from the Invoice
    */
-  select?: Prisma.ExpenseEntrySelect<ExtArgs> | null
+  select?: Prisma.InvoiceSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ExpenseEntry
+   * Omit specific fields from the Invoice
    */
-  omit?: Prisma.ExpenseEntryOmit<ExtArgs> | null
+  omit?: Prisma.InvoiceOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ExpenseEntryInclude<ExtArgs> | null
-  where?: Prisma.ExpenseEntryWhereInput
-  orderBy?: Prisma.ExpenseEntryOrderByWithRelationInput | Prisma.ExpenseEntryOrderByWithRelationInput[]
-  cursor?: Prisma.ExpenseEntryWhereUniqueInput
+  include?: Prisma.InvoiceInclude<ExtArgs> | null
+  where?: Prisma.InvoiceWhereInput
+  orderBy?: Prisma.InvoiceOrderByWithRelationInput | Prisma.InvoiceOrderByWithRelationInput[]
+  cursor?: Prisma.InvoiceWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.ExpenseEntryScalarFieldEnum | Prisma.ExpenseEntryScalarFieldEnum[]
+  distinct?: Prisma.InvoiceScalarFieldEnum | Prisma.InvoiceScalarFieldEnum[]
+}
+
+/**
+ * Branch.stockItems
+ */
+export type Branch$stockItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StockItem
+   */
+  select?: Prisma.StockItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StockItem
+   */
+  omit?: Prisma.StockItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StockItemInclude<ExtArgs> | null
+  where?: Prisma.StockItemWhereInput
+  orderBy?: Prisma.StockItemOrderByWithRelationInput | Prisma.StockItemOrderByWithRelationInput[]
+  cursor?: Prisma.StockItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StockItemScalarFieldEnum | Prisma.StockItemScalarFieldEnum[]
 }
 
 /**

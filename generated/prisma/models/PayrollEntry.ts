@@ -193,7 +193,7 @@ export type PayrollEntryGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 
 export type PayrollEntryGroupByOutputType = {
   id: string
-  userId: string
+  userId: string | null
   payPeriod: string
   salaryAmount: runtime.Decimal
   status: $Enums.InvoiceStatus
@@ -226,18 +226,18 @@ export type PayrollEntryWhereInput = {
   OR?: Prisma.PayrollEntryWhereInput[]
   NOT?: Prisma.PayrollEntryWhereInput | Prisma.PayrollEntryWhereInput[]
   id?: Prisma.StringFilter<"PayrollEntry"> | string
-  userId?: Prisma.StringFilter<"PayrollEntry"> | string
+  userId?: Prisma.StringNullableFilter<"PayrollEntry"> | string | null
   payPeriod?: Prisma.StringFilter<"PayrollEntry"> | string
   salaryAmount?: Prisma.DecimalFilter<"PayrollEntry"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumInvoiceStatusFilter<"PayrollEntry"> | $Enums.InvoiceStatus
   datePaid?: Prisma.DateTimeNullableFilter<"PayrollEntry"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"PayrollEntry"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
 export type PayrollEntryOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
   payPeriod?: Prisma.SortOrder
   salaryAmount?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -251,18 +251,18 @@ export type PayrollEntryWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.PayrollEntryWhereInput | Prisma.PayrollEntryWhereInput[]
   OR?: Prisma.PayrollEntryWhereInput[]
   NOT?: Prisma.PayrollEntryWhereInput | Prisma.PayrollEntryWhereInput[]
-  userId?: Prisma.StringFilter<"PayrollEntry"> | string
+  userId?: Prisma.StringNullableFilter<"PayrollEntry"> | string | null
   payPeriod?: Prisma.StringFilter<"PayrollEntry"> | string
   salaryAmount?: Prisma.DecimalFilter<"PayrollEntry"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumInvoiceStatusFilter<"PayrollEntry"> | $Enums.InvoiceStatus
   datePaid?: Prisma.DateTimeNullableFilter<"PayrollEntry"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"PayrollEntry"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id">
 
 export type PayrollEntryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
   payPeriod?: Prisma.SortOrder
   salaryAmount?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -280,7 +280,7 @@ export type PayrollEntryScalarWhereWithAggregatesInput = {
   OR?: Prisma.PayrollEntryScalarWhereWithAggregatesInput[]
   NOT?: Prisma.PayrollEntryScalarWhereWithAggregatesInput | Prisma.PayrollEntryScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"PayrollEntry"> | string
-  userId?: Prisma.StringWithAggregatesFilter<"PayrollEntry"> | string
+  userId?: Prisma.StringNullableWithAggregatesFilter<"PayrollEntry"> | string | null
   payPeriod?: Prisma.StringWithAggregatesFilter<"PayrollEntry"> | string
   salaryAmount?: Prisma.DecimalWithAggregatesFilter<"PayrollEntry"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumInvoiceStatusWithAggregatesFilter<"PayrollEntry"> | $Enums.InvoiceStatus
@@ -295,12 +295,12 @@ export type PayrollEntryCreateInput = {
   status?: $Enums.InvoiceStatus
   datePaid?: Date | string | null
   createdAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutPayrollEntriesInput
+  user?: Prisma.UserCreateNestedOneWithoutPayrollEntriesInput
 }
 
 export type PayrollEntryUncheckedCreateInput = {
   id?: string
-  userId: string
+  userId?: string | null
   payPeriod: string
   salaryAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.InvoiceStatus
@@ -315,12 +315,12 @@ export type PayrollEntryUpdateInput = {
   status?: Prisma.EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
   datePaid?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutPayrollEntriesNestedInput
+  user?: Prisma.UserUpdateOneWithoutPayrollEntriesNestedInput
 }
 
 export type PayrollEntryUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   payPeriod?: Prisma.StringFieldUpdateOperationsInput | string
   salaryAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
@@ -330,7 +330,7 @@ export type PayrollEntryUncheckedUpdateInput = {
 
 export type PayrollEntryCreateManyInput = {
   id?: string
-  userId: string
+  userId?: string | null
   payPeriod: string
   salaryAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.InvoiceStatus
@@ -349,7 +349,7 @@ export type PayrollEntryUpdateManyMutationInput = {
 
 export type PayrollEntryUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   payPeriod?: Prisma.StringFieldUpdateOperationsInput | string
   salaryAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
@@ -496,7 +496,7 @@ export type PayrollEntryScalarWhereInput = {
   OR?: Prisma.PayrollEntryScalarWhereInput[]
   NOT?: Prisma.PayrollEntryScalarWhereInput | Prisma.PayrollEntryScalarWhereInput[]
   id?: Prisma.StringFilter<"PayrollEntry"> | string
-  userId?: Prisma.StringFilter<"PayrollEntry"> | string
+  userId?: Prisma.StringNullableFilter<"PayrollEntry"> | string | null
   payPeriod?: Prisma.StringFilter<"PayrollEntry"> | string
   salaryAmount?: Prisma.DecimalFilter<"PayrollEntry"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumInvoiceStatusFilter<"PayrollEntry"> | $Enums.InvoiceStatus
@@ -550,7 +550,7 @@ export type PayrollEntrySelect<ExtArgs extends runtime.Types.Extensions.Internal
   status?: boolean
   datePaid?: boolean
   createdAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.PayrollEntry$userArgs<ExtArgs>
 }, ExtArgs["result"]["payrollEntry"]>
 
 export type PayrollEntrySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -561,7 +561,7 @@ export type PayrollEntrySelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   status?: boolean
   datePaid?: boolean
   createdAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.PayrollEntry$userArgs<ExtArgs>
 }, ExtArgs["result"]["payrollEntry"]>
 
 export type PayrollEntrySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -572,7 +572,7 @@ export type PayrollEntrySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   status?: boolean
   datePaid?: boolean
   createdAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.PayrollEntry$userArgs<ExtArgs>
 }, ExtArgs["result"]["payrollEntry"]>
 
 export type PayrollEntrySelectScalar = {
@@ -587,23 +587,23 @@ export type PayrollEntrySelectScalar = {
 
 export type PayrollEntryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "payPeriod" | "salaryAmount" | "status" | "datePaid" | "createdAt", ExtArgs["result"]["payrollEntry"]>
 export type PayrollEntryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.PayrollEntry$userArgs<ExtArgs>
 }
 export type PayrollEntryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.PayrollEntry$userArgs<ExtArgs>
 }
 export type PayrollEntryIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.PayrollEntry$userArgs<ExtArgs>
 }
 
 export type $PayrollEntryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "PayrollEntry"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs>
+    user: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    userId: string
+    userId: string | null
     payPeriod: string
     salaryAmount: runtime.Decimal
     status: $Enums.InvoiceStatus
@@ -1003,7 +1003,7 @@ readonly fields: PayrollEntryFieldRefs;
  */
 export interface Prisma__PayrollEntryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.PayrollEntry$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PayrollEntry$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1438,6 +1438,25 @@ export type PayrollEntryDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Limit how many PayrollEntries to delete.
    */
   limit?: number
+}
+
+/**
+ * PayrollEntry.user
+ */
+export type PayrollEntry$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

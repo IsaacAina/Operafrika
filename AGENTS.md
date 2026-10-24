@@ -82,6 +82,7 @@ This file holds no schema, SQL, model names, dimensions, prices, thresholds, or 
 - .agent/rules/analytics-events.md, for the analytics event taxonomy.
 - .agent/rules/business-model.md, for subscription tiers and pricing.
 - .agent/rules/compliance.md, for Nigerian data protection requirements.
+- .agent/rules/account-deletion.md, for the soft delete, grace period, and purge rules.
 - .agent/rules/command-execution.md, for what the agent may run without asking and what needs confirmation first.
 
 These files live in .agent/rules/. Save the full PRD as docs/PRD.md in the repository root before starting work. This AGENTS.md is a summary of that file, not a replacement for it.

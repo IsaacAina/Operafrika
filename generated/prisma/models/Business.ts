@@ -32,6 +32,8 @@ export type BusinessMinAggregateOutputType = {
   contactInfo: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  deletedAt: Date | null
+  deletionScheduledFor: Date | null
 }
 
 export type BusinessMaxAggregateOutputType = {
@@ -42,6 +44,8 @@ export type BusinessMaxAggregateOutputType = {
   contactInfo: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  deletedAt: Date | null
+  deletionScheduledFor: Date | null
 }
 
 export type BusinessCountAggregateOutputType = {
@@ -52,6 +56,8 @@ export type BusinessCountAggregateOutputType = {
   contactInfo: number
   createdAt: number
   updatedAt: number
+  deletedAt: number
+  deletionScheduledFor: number
   _all: number
 }
 
@@ -64,6 +70,8 @@ export type BusinessMinAggregateInputType = {
   contactInfo?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
+  deletionScheduledFor?: true
 }
 
 export type BusinessMaxAggregateInputType = {
@@ -74,6 +82,8 @@ export type BusinessMaxAggregateInputType = {
   contactInfo?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
+  deletionScheduledFor?: true
 }
 
 export type BusinessCountAggregateInputType = {
@@ -84,6 +94,8 @@ export type BusinessCountAggregateInputType = {
   contactInfo?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
+  deletionScheduledFor?: true
   _all?: true
 }
 
@@ -167,6 +179,8 @@ export type BusinessGroupByOutputType = {
   contactInfo: string | null
   createdAt: Date
   updatedAt: Date
+  deletedAt: Date | null
+  deletionScheduledFor: Date | null
   _count: BusinessCountAggregateOutputType | null
   _min: BusinessMinAggregateOutputType | null
   _max: BusinessMaxAggregateOutputType | null
@@ -198,6 +212,8 @@ export type BusinessWhereInput = {
   contactInfo?: Prisma.StringNullableFilter<"Business"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Business"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Business"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Business"> | Date | string | null
+  deletionScheduledFor?: Prisma.DateTimeNullableFilter<"Business"> | Date | string | null
   branches?: Prisma.BranchListRelationFilter
   subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
   users?: Prisma.UserListRelationFilter
@@ -211,6 +227,8 @@ export type BusinessOrderByWithRelationInput = {
   contactInfo?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletionScheduledFor?: Prisma.SortOrderInput | Prisma.SortOrder
   branches?: Prisma.BranchOrderByRelationAggregateInput
   subscription?: Prisma.SubscriptionOrderByWithRelationInput
   users?: Prisma.UserOrderByRelationAggregateInput
@@ -227,6 +245,8 @@ export type BusinessWhereUniqueInput = Prisma.AtLeast<{
   contactInfo?: Prisma.StringNullableFilter<"Business"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Business"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Business"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Business"> | Date | string | null
+  deletionScheduledFor?: Prisma.DateTimeNullableFilter<"Business"> | Date | string | null
   branches?: Prisma.BranchListRelationFilter
   subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
   users?: Prisma.UserListRelationFilter
@@ -240,6 +260,8 @@ export type BusinessOrderByWithAggregationInput = {
   contactInfo?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletionScheduledFor?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.BusinessCountOrderByAggregateInput
   _max?: Prisma.BusinessMaxOrderByAggregateInput
   _min?: Prisma.BusinessMinOrderByAggregateInput
@@ -256,6 +278,8 @@ export type BusinessScalarWhereWithAggregatesInput = {
   contactInfo?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Business"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Business"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Business"> | Date | string | null
+  deletionScheduledFor?: Prisma.DateTimeNullableWithAggregatesFilter<"Business"> | Date | string | null
 }
 
 export type BusinessCreateInput = {
@@ -266,6 +290,8 @@ export type BusinessCreateInput = {
   contactInfo?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletionScheduledFor?: Date | string | null
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
@@ -279,6 +305,8 @@ export type BusinessUncheckedCreateInput = {
   contactInfo?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletionScheduledFor?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
@@ -292,6 +320,8 @@ export type BusinessUpdateInput = {
   contactInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionScheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
@@ -305,6 +335,8 @@ export type BusinessUncheckedUpdateInput = {
   contactInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionScheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
@@ -318,6 +350,8 @@ export type BusinessCreateManyInput = {
   contactInfo?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletionScheduledFor?: Date | string | null
 }
 
 export type BusinessUpdateManyMutationInput = {
@@ -328,6 +362,8 @@ export type BusinessUpdateManyMutationInput = {
   contactInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionScheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type BusinessUncheckedUpdateManyInput = {
@@ -338,6 +374,8 @@ export type BusinessUncheckedUpdateManyInput = {
   contactInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionScheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type BusinessCountOrderByAggregateInput = {
@@ -348,6 +386,8 @@ export type BusinessCountOrderByAggregateInput = {
   contactInfo?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  deletionScheduledFor?: Prisma.SortOrder
 }
 
 export type BusinessMaxOrderByAggregateInput = {
@@ -358,6 +398,8 @@ export type BusinessMaxOrderByAggregateInput = {
   contactInfo?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  deletionScheduledFor?: Prisma.SortOrder
 }
 
 export type BusinessMinOrderByAggregateInput = {
@@ -368,6 +410,8 @@ export type BusinessMinOrderByAggregateInput = {
   contactInfo?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  deletionScheduledFor?: Prisma.SortOrder
 }
 
 export type BusinessScalarRelationFilter = {
@@ -385,6 +429,10 @@ export type NullableStringFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 export type BusinessCreateNestedOneWithoutBranchesInput = {
@@ -437,6 +485,8 @@ export type BusinessCreateWithoutBranchesInput = {
   contactInfo?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletionScheduledFor?: Date | string | null
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
 }
@@ -449,6 +499,8 @@ export type BusinessUncheckedCreateWithoutBranchesInput = {
   contactInfo?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletionScheduledFor?: Date | string | null
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
 }
@@ -477,6 +529,8 @@ export type BusinessUpdateWithoutBranchesInput = {
   contactInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionScheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
 }
@@ -489,6 +543,8 @@ export type BusinessUncheckedUpdateWithoutBranchesInput = {
   contactInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionScheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
 }
@@ -501,6 +557,8 @@ export type BusinessCreateWithoutUsersInput = {
   contactInfo?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletionScheduledFor?: Date | string | null
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutBusinessInput
 }
@@ -513,6 +571,8 @@ export type BusinessUncheckedCreateWithoutUsersInput = {
   contactInfo?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletionScheduledFor?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutBusinessInput
 }
@@ -541,6 +601,8 @@ export type BusinessUpdateWithoutUsersInput = {
   contactInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionScheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutBusinessNestedInput
 }
@@ -553,6 +615,8 @@ export type BusinessUncheckedUpdateWithoutUsersInput = {
   contactInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionScheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutBusinessNestedInput
 }
@@ -565,6 +629,8 @@ export type BusinessCreateWithoutSubscriptionInput = {
   contactInfo?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletionScheduledFor?: Date | string | null
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
 }
@@ -577,6 +643,8 @@ export type BusinessUncheckedCreateWithoutSubscriptionInput = {
   contactInfo?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletionScheduledFor?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
 }
@@ -605,6 +673,8 @@ export type BusinessUpdateWithoutSubscriptionInput = {
   contactInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionScheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
 }
@@ -617,6 +687,8 @@ export type BusinessUncheckedUpdateWithoutSubscriptionInput = {
   contactInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionScheduledFor?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
 }
@@ -669,6 +741,8 @@ export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   contactInfo?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
+  deletionScheduledFor?: boolean
   branches?: boolean | Prisma.Business$branchesArgs<ExtArgs>
   subscription?: boolean | Prisma.Business$subscriptionArgs<ExtArgs>
   users?: boolean | Prisma.Business$usersArgs<ExtArgs>
@@ -683,6 +757,8 @@ export type BusinessSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   contactInfo?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
+  deletionScheduledFor?: boolean
 }, ExtArgs["result"]["business"]>
 
 export type BusinessSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -693,6 +769,8 @@ export type BusinessSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   contactInfo?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
+  deletionScheduledFor?: boolean
 }, ExtArgs["result"]["business"]>
 
 export type BusinessSelectScalar = {
@@ -703,9 +781,11 @@ export type BusinessSelectScalar = {
   contactInfo?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
+  deletionScheduledFor?: boolean
 }
 
-export type BusinessOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "businessType" | "currency" | "contactInfo" | "createdAt" | "updatedAt", ExtArgs["result"]["business"]>
+export type BusinessOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "businessType" | "currency" | "contactInfo" | "createdAt" | "updatedAt" | "deletedAt" | "deletionScheduledFor", ExtArgs["result"]["business"]>
 export type BusinessInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   branches?: boolean | Prisma.Business$branchesArgs<ExtArgs>
   subscription?: boolean | Prisma.Business$subscriptionArgs<ExtArgs>
@@ -730,6 +810,12 @@ export type $BusinessPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     contactInfo: string | null
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date | null
+    /**
+     * When the scheduled purge of this business runs. Set when the last owner
+     * of the business schedules their account for deletion.
+     */
+    deletionScheduledFor: Date | null
   }, ExtArgs["result"]["business"]>
   composites: {}
 }
@@ -1163,6 +1249,8 @@ export interface BusinessFieldRefs {
   readonly contactInfo: Prisma.FieldRef<"Business", 'String'>
   readonly createdAt: Prisma.FieldRef<"Business", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Business", 'DateTime'>
+  readonly deletedAt: Prisma.FieldRef<"Business", 'DateTime'>
+  readonly deletionScheduledFor: Prisma.FieldRef<"Business", 'DateTime'>
 }
     
 

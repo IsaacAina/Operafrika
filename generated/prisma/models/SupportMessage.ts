@@ -149,7 +149,7 @@ export type SupportMessageGroupByArgs<ExtArgs extends runtime.Types.Extensions.I
 
 export type SupportMessageGroupByOutputType = {
   id: string
-  userId: string
+  userId: string | null
   message: string
   createdAt: Date
   resolved: boolean
@@ -178,16 +178,16 @@ export type SupportMessageWhereInput = {
   OR?: Prisma.SupportMessageWhereInput[]
   NOT?: Prisma.SupportMessageWhereInput | Prisma.SupportMessageWhereInput[]
   id?: Prisma.StringFilter<"SupportMessage"> | string
-  userId?: Prisma.StringFilter<"SupportMessage"> | string
+  userId?: Prisma.StringNullableFilter<"SupportMessage"> | string | null
   message?: Prisma.StringFilter<"SupportMessage"> | string
   createdAt?: Prisma.DateTimeFilter<"SupportMessage"> | Date | string
   resolved?: Prisma.BoolFilter<"SupportMessage"> | boolean
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
 export type SupportMessageOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
   message?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   resolved?: Prisma.SortOrder
@@ -199,16 +199,16 @@ export type SupportMessageWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.SupportMessageWhereInput | Prisma.SupportMessageWhereInput[]
   OR?: Prisma.SupportMessageWhereInput[]
   NOT?: Prisma.SupportMessageWhereInput | Prisma.SupportMessageWhereInput[]
-  userId?: Prisma.StringFilter<"SupportMessage"> | string
+  userId?: Prisma.StringNullableFilter<"SupportMessage"> | string | null
   message?: Prisma.StringFilter<"SupportMessage"> | string
   createdAt?: Prisma.DateTimeFilter<"SupportMessage"> | Date | string
   resolved?: Prisma.BoolFilter<"SupportMessage"> | boolean
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id">
 
 export type SupportMessageOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
   message?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   resolved?: Prisma.SortOrder
@@ -222,7 +222,7 @@ export type SupportMessageScalarWhereWithAggregatesInput = {
   OR?: Prisma.SupportMessageScalarWhereWithAggregatesInput[]
   NOT?: Prisma.SupportMessageScalarWhereWithAggregatesInput | Prisma.SupportMessageScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"SupportMessage"> | string
-  userId?: Prisma.StringWithAggregatesFilter<"SupportMessage"> | string
+  userId?: Prisma.StringNullableWithAggregatesFilter<"SupportMessage"> | string | null
   message?: Prisma.StringWithAggregatesFilter<"SupportMessage"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SupportMessage"> | Date | string
   resolved?: Prisma.BoolWithAggregatesFilter<"SupportMessage"> | boolean
@@ -233,12 +233,12 @@ export type SupportMessageCreateInput = {
   message: string
   createdAt?: Date | string
   resolved?: boolean
-  user: Prisma.UserCreateNestedOneWithoutSupportMessagesInput
+  user?: Prisma.UserCreateNestedOneWithoutSupportMessagesInput
 }
 
 export type SupportMessageUncheckedCreateInput = {
   id?: string
-  userId: string
+  userId?: string | null
   message: string
   createdAt?: Date | string
   resolved?: boolean
@@ -249,12 +249,12 @@ export type SupportMessageUpdateInput = {
   message?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   resolved?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  user?: Prisma.UserUpdateOneRequiredWithoutSupportMessagesNestedInput
+  user?: Prisma.UserUpdateOneWithoutSupportMessagesNestedInput
 }
 
 export type SupportMessageUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   message?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   resolved?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -262,7 +262,7 @@ export type SupportMessageUncheckedUpdateInput = {
 
 export type SupportMessageCreateManyInput = {
   id?: string
-  userId: string
+  userId?: string | null
   message: string
   createdAt?: Date | string
   resolved?: boolean
@@ -277,7 +277,7 @@ export type SupportMessageUpdateManyMutationInput = {
 
 export type SupportMessageUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   message?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   resolved?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -404,7 +404,7 @@ export type SupportMessageScalarWhereInput = {
   OR?: Prisma.SupportMessageScalarWhereInput[]
   NOT?: Prisma.SupportMessageScalarWhereInput | Prisma.SupportMessageScalarWhereInput[]
   id?: Prisma.StringFilter<"SupportMessage"> | string
-  userId?: Prisma.StringFilter<"SupportMessage"> | string
+  userId?: Prisma.StringNullableFilter<"SupportMessage"> | string | null
   message?: Prisma.StringFilter<"SupportMessage"> | string
   createdAt?: Prisma.DateTimeFilter<"SupportMessage"> | Date | string
   resolved?: Prisma.BoolFilter<"SupportMessage"> | boolean
@@ -446,7 +446,7 @@ export type SupportMessageSelect<ExtArgs extends runtime.Types.Extensions.Intern
   message?: boolean
   createdAt?: boolean
   resolved?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.SupportMessage$userArgs<ExtArgs>
 }, ExtArgs["result"]["supportMessage"]>
 
 export type SupportMessageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -455,7 +455,7 @@ export type SupportMessageSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   message?: boolean
   createdAt?: boolean
   resolved?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.SupportMessage$userArgs<ExtArgs>
 }, ExtArgs["result"]["supportMessage"]>
 
 export type SupportMessageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -464,7 +464,7 @@ export type SupportMessageSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   message?: boolean
   createdAt?: boolean
   resolved?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.SupportMessage$userArgs<ExtArgs>
 }, ExtArgs["result"]["supportMessage"]>
 
 export type SupportMessageSelectScalar = {
@@ -477,23 +477,23 @@ export type SupportMessageSelectScalar = {
 
 export type SupportMessageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "message" | "createdAt" | "resolved", ExtArgs["result"]["supportMessage"]>
 export type SupportMessageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.SupportMessage$userArgs<ExtArgs>
 }
 export type SupportMessageIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.SupportMessage$userArgs<ExtArgs>
 }
 export type SupportMessageIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.SupportMessage$userArgs<ExtArgs>
 }
 
 export type $SupportMessagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "SupportMessage"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs>
+    user: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    userId: string
+    userId: string | null
     message: string
     createdAt: Date
     resolved: boolean
@@ -891,7 +891,7 @@ readonly fields: SupportMessageFieldRefs;
  */
 export interface Prisma__SupportMessageClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.SupportMessage$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SupportMessage$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1324,6 +1324,25 @@ export type SupportMessageDeleteManyArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many SupportMessages to delete.
    */
   limit?: number
+}
+
+/**
+ * SupportMessage.user
+ */
+export type SupportMessage$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

@@ -54,8 +54,10 @@ export const ModelName = {
   Business: 'Business',
   Branch: 'Branch',
   User: 'User',
+  Session: 'Session',
   BranchAccess: 'BranchAccess',
   PlatformUser: 'PlatformUser',
+  PlatformSession: 'PlatformSession',
   Customer: 'Customer',
   StockItem: 'StockItem',
   StockMovement: 'StockMovement',
@@ -67,7 +69,9 @@ export const ModelName = {
   Subscription: 'Subscription',
   SupportMessage: 'SupportMessage',
   AuditLog: 'AuditLog',
-  AnalyticsEvent: 'AnalyticsEvent'
+  AnalyticsEvent: 'AnalyticsEvent',
+  PasswordResetToken: 'PasswordResetToken',
+  EmailVerificationCode: 'EmailVerificationCode'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -93,7 +97,9 @@ export const BusinessScalarFieldEnum = {
   currency: 'currency',
   contactInfo: 'contactInfo',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  deletionScheduledFor: 'deletionScheduledFor'
 } as const
 
 export type BusinessScalarFieldEnum = (typeof BusinessScalarFieldEnum)[keyof typeof BusinessScalarFieldEnum]
@@ -119,10 +125,29 @@ export const UserScalarFieldEnum = {
   role: 'role',
   businessId: 'businessId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  emailVerifiedAt: 'emailVerifiedAt',
+  bannedAt: 'bannedAt',
+  lockedUntil: 'lockedUntil',
+  deletedAt: 'deletedAt',
+  deletionCancelTokenExpires: 'deletionCancelTokenExpires',
+  deletionCancelTokenHash: 'deletionCancelTokenHash',
+  deletionScheduledFor: 'deletionScheduledFor',
+  onboardingCompletedAt: 'onboardingCompletedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const SessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  tokenHash: 'tokenHash',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
 
 
 export const BranchAccessScalarFieldEnum = {
@@ -146,6 +171,17 @@ export const PlatformUserScalarFieldEnum = {
 } as const
 
 export type PlatformUserScalarFieldEnum = (typeof PlatformUserScalarFieldEnum)[keyof typeof PlatformUserScalarFieldEnum]
+
+
+export const PlatformSessionScalarFieldEnum = {
+  id: 'id',
+  platformUserId: 'platformUserId',
+  tokenHash: 'tokenHash',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type PlatformSessionScalarFieldEnum = (typeof PlatformSessionScalarFieldEnum)[keyof typeof PlatformSessionScalarFieldEnum]
 
 
 export const CustomerScalarFieldEnum = {
@@ -290,7 +326,8 @@ export const AuditLogScalarFieldEnum = {
   previousValue: 'previousValue',
   newValue: 'newValue',
   metadata: 'metadata',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  actorEmail: 'actorEmail'
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
@@ -308,6 +345,29 @@ export const AnalyticsEventScalarFieldEnum = {
 } as const
 
 export type AnalyticsEventScalarFieldEnum = (typeof AnalyticsEventScalarFieldEnum)[keyof typeof AnalyticsEventScalarFieldEnum]
+
+
+export const PasswordResetTokenScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  tokenHash: 'tokenHash',
+  expires: 'expires',
+  createdAt: 'createdAt'
+} as const
+
+export type PasswordResetTokenScalarFieldEnum = (typeof PasswordResetTokenScalarFieldEnum)[keyof typeof PasswordResetTokenScalarFieldEnum]
+
+
+export const EmailVerificationCodeScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  codeHash: 'codeHash',
+  attempts: 'attempts',
+  expires: 'expires',
+  createdAt: 'createdAt'
+} as const
+
+export type EmailVerificationCodeScalarFieldEnum = (typeof EmailVerificationCodeScalarFieldEnum)[keyof typeof EmailVerificationCodeScalarFieldEnum]
 
 
 export const SortOrder = {

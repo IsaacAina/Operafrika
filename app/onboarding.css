@@ -1,0 +1,229 @@
+/* app/onboarding.css */
+/* ------------------------------------------------------------
+   Onboarding UI styling – layout, spacing, and visual polish.
+   Uses design tokens imported in globals.css (ds variables).
+   This file is imported globally via `@import "./onboarding.css"` in
+   `app/globals.css`.
+------------------------------------------------------------- */
+
+/* Container for the entire onboarding page */
+.auth-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* center vertically */
+  width: 100%;
+  min-height: var(--ds-layout-full-dvh);
+  padding: var(--ds-space-8) var(--ds-space-4);
+  gap: var(--ds-space-5);
+  background: var(--ds-color-background);
+  color: var(--ds-color-on-background);
+  position: relative;
+}
+
+.onboarding-header {
+  width: 100%;
+  max-width: 540px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-4);
+  margin: 0 auto;
+}
+
+/* Close button (top‑right X) */
+.onboarding-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--ds-radius-full);
+  cursor: pointer;
+  color: var(--ds-color-on-background);
+  padding: 0;
+}
+
+.onboarding-close svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.onboarding-brand {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Card that holds each step's content */
+.onboarding-card {
+  background: var(--ds-color-surface-container-lowest);
+  border: var(--ds-border-width-standard) solid var(--ds-color-outline-variant);
+  border-radius: var(--ds-radius-lg);
+  padding: var(--ds-space-6);
+  box-shadow: var(--ds-effect-soft-shadow);
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-4);
+}
+
+/* Animated pane wrapper – will animate opacity & position via GSAP */
+.onboarding-animated-pane {
+  opacity: 0; /* start hidden; GSAP fades in */
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Decorative illustration above the onboarding heading. Uses an inline SVG
+   rendered by OnboardingIllustration; keep it compact and avoid a filled block. */
+.onboarding-illustration {
+  width: 100%;
+  max-width: 220px;
+  margin: 0 auto var(--ds-space-4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.onboarding-illustration svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Titles and subtitles */
+.auth-title {
+  font: var(--ds-text-display-medium);
+  color: var(--ds-color-primary);
+  margin-bottom: var(--ds-space-1);
+  text-align: center;
+}
+
+.auth-subtitle {
+  font: var(--ds-text-body-large);
+  color: var(--ds-color-on-surface-variant);
+  margin-bottom: var(--ds-space-4);
+  text-align: center;
+}
+
+/* Form layout */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-4);
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.auth-label {
+  font: var(--ds-text-label-medium);
+  color: var(--ds-color-on-surface);
+}
+
+.auth-input {
+  padding: var(--ds-space-2);
+  border: 1px solid var(--ds-color-outline-variant);
+  border-radius: var(--ds-radius-sm);
+  font: var(--ds-text-body-medium);
+  background: var(--ds-color-surface);
+  color: var(--ds-color-on-surface);
+}
+
+/* Grid for side‑by‑side fields (e.g., business type & category) */
+.onboarding-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--ds-space-3);
+}
+
+/* Section titles inside forms */
+.onboarding-section-title {
+  font: var(--ds-text-title-medium);
+  color: var(--ds-color-primary);
+  margin-bottom: var(--ds-space-3);
+}
+
+/* Navigation buttons */
+.auth-button-primary {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-on-primary);
+  border: none;
+  padding: var(--ds-space-2) var(--ds-space-4);
+  border-radius: var(--ds-radius-md);
+  font: var(--ds-text-label-large);
+  cursor: pointer;
+  align-self: flex-end;
+  margin-top: var(--ds-space-4);
+}
+
+.auth-button-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Progress stepper overrides – make the bar a bit taller */
+.onboarding-stepper {
+  width: 100%;
+  margin-bottom: var(--ds-space-6);
+}
+
+.onboarding-stepper-list {
+  gap: var(--ds-space-4);
+}
+
+/* Ensure the animated pane becomes visible after GSAP runs */
+.onboarding-animated-pane.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Responsive tweaks */
+@media (max-width: 480px) {
+  .auth-page {
+    padding: var(--ds-space-6) var(--ds-space-3) var(--ds-space-8);
+    gap: var(--ds-space-4);
+  }
+  .onboarding-header {
+    max-width: 100%;
+  }
+  .onboarding-close {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+  .onboarding-illustration {
+    max-width: 180px;
+  }
+  .onboarding-card {
+    padding: var(--ds-space-4);
+    gap: var(--ds-space-3);
+  }
+  .auth-title {
+    margin-bottom: var(--ds-space-1);
+  }
+  .auth-subtitle {
+    margin-bottom: var(--ds-space-3);
+  }
+  .onboarding-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--ds-space-2);
+  }
+  .onboarding-actions-single {
+    align-items: flex-end;
+  }
+  .onboarding-cta-button,
+  .onboarding-button-quiet {
+    width: 100%;
+    justify-content: center;
+  }
+}

@@ -198,6 +198,7 @@ export type PlatformUserWhereInput = {
   canAccessFounderDashboard?: Prisma.BoolFilter<"PlatformUser"> | boolean
   createdAt?: Prisma.DateTimeFilter<"PlatformUser"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PlatformUser"> | Date | string
+  sessions?: Prisma.PlatformSessionListRelationFilter
 }
 
 export type PlatformUserOrderByWithRelationInput = {
@@ -208,6 +209,7 @@ export type PlatformUserOrderByWithRelationInput = {
   canAccessFounderDashboard?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  sessions?: Prisma.PlatformSessionOrderByRelationAggregateInput
 }
 
 export type PlatformUserWhereUniqueInput = Prisma.AtLeast<{
@@ -221,6 +223,7 @@ export type PlatformUserWhereUniqueInput = Prisma.AtLeast<{
   canAccessFounderDashboard?: Prisma.BoolFilter<"PlatformUser"> | boolean
   createdAt?: Prisma.DateTimeFilter<"PlatformUser"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PlatformUser"> | Date | string
+  sessions?: Prisma.PlatformSessionListRelationFilter
 }, "id" | "email">
 
 export type PlatformUserOrderByWithAggregationInput = {
@@ -257,6 +260,7 @@ export type PlatformUserCreateInput = {
   canAccessFounderDashboard?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  sessions?: Prisma.PlatformSessionCreateNestedManyWithoutPlatformUserInput
 }
 
 export type PlatformUserUncheckedCreateInput = {
@@ -267,6 +271,7 @@ export type PlatformUserUncheckedCreateInput = {
   canAccessFounderDashboard?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  sessions?: Prisma.PlatformSessionUncheckedCreateNestedManyWithoutPlatformUserInput
 }
 
 export type PlatformUserUpdateInput = {
@@ -277,6 +282,7 @@ export type PlatformUserUpdateInput = {
   canAccessFounderDashboard?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.PlatformSessionUpdateManyWithoutPlatformUserNestedInput
 }
 
 export type PlatformUserUncheckedUpdateInput = {
@@ -287,6 +293,7 @@ export type PlatformUserUncheckedUpdateInput = {
   canAccessFounderDashboard?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.PlatformSessionUncheckedUpdateManyWithoutPlatformUserNestedInput
 }
 
 export type PlatformUserCreateManyInput = {
@@ -349,10 +356,114 @@ export type PlatformUserMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type PlatformUserScalarRelationFilter = {
+  is?: Prisma.PlatformUserWhereInput
+  isNot?: Prisma.PlatformUserWhereInput
+}
+
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
 
+export type PlatformUserCreateNestedOneWithoutSessionsInput = {
+  create?: Prisma.XOR<Prisma.PlatformUserCreateWithoutSessionsInput, Prisma.PlatformUserUncheckedCreateWithoutSessionsInput>
+  connectOrCreate?: Prisma.PlatformUserCreateOrConnectWithoutSessionsInput
+  connect?: Prisma.PlatformUserWhereUniqueInput
+}
+
+export type PlatformUserUpdateOneRequiredWithoutSessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.PlatformUserCreateWithoutSessionsInput, Prisma.PlatformUserUncheckedCreateWithoutSessionsInput>
+  connectOrCreate?: Prisma.PlatformUserCreateOrConnectWithoutSessionsInput
+  upsert?: Prisma.PlatformUserUpsertWithoutSessionsInput
+  connect?: Prisma.PlatformUserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PlatformUserUpdateToOneWithWhereWithoutSessionsInput, Prisma.PlatformUserUpdateWithoutSessionsInput>, Prisma.PlatformUserUncheckedUpdateWithoutSessionsInput>
+}
+
+export type PlatformUserCreateWithoutSessionsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  canAccessAdminConsole?: boolean
+  canAccessFounderDashboard?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type PlatformUserUncheckedCreateWithoutSessionsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  canAccessAdminConsole?: boolean
+  canAccessFounderDashboard?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type PlatformUserCreateOrConnectWithoutSessionsInput = {
+  where: Prisma.PlatformUserWhereUniqueInput
+  create: Prisma.XOR<Prisma.PlatformUserCreateWithoutSessionsInput, Prisma.PlatformUserUncheckedCreateWithoutSessionsInput>
+}
+
+export type PlatformUserUpsertWithoutSessionsInput = {
+  update: Prisma.XOR<Prisma.PlatformUserUpdateWithoutSessionsInput, Prisma.PlatformUserUncheckedUpdateWithoutSessionsInput>
+  create: Prisma.XOR<Prisma.PlatformUserCreateWithoutSessionsInput, Prisma.PlatformUserUncheckedCreateWithoutSessionsInput>
+  where?: Prisma.PlatformUserWhereInput
+}
+
+export type PlatformUserUpdateToOneWithWhereWithoutSessionsInput = {
+  where?: Prisma.PlatformUserWhereInput
+  data: Prisma.XOR<Prisma.PlatformUserUpdateWithoutSessionsInput, Prisma.PlatformUserUncheckedUpdateWithoutSessionsInput>
+}
+
+export type PlatformUserUpdateWithoutSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  canAccessAdminConsole?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  canAccessFounderDashboard?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type PlatformUserUncheckedUpdateWithoutSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  canAccessAdminConsole?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  canAccessFounderDashboard?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+
+/**
+ * Count Type PlatformUserCountOutputType
+ */
+
+export type PlatformUserCountOutputType = {
+  sessions: number
+}
+
+export type PlatformUserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  sessions?: boolean | PlatformUserCountOutputTypeCountSessionsArgs
+}
+
+/**
+ * PlatformUserCountOutputType without action
+ */
+export type PlatformUserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlatformUserCountOutputType
+   */
+  select?: Prisma.PlatformUserCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * PlatformUserCountOutputType without action
+ */
+export type PlatformUserCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PlatformSessionWhereInput
+}
 
 
 export type PlatformUserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -363,6 +474,8 @@ export type PlatformUserSelect<ExtArgs extends runtime.Types.Extensions.Internal
   canAccessFounderDashboard?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  sessions?: boolean | Prisma.PlatformUser$sessionsArgs<ExtArgs>
+  _count?: boolean | Prisma.PlatformUserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["platformUser"]>
 
 export type PlatformUserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -396,10 +509,18 @@ export type PlatformUserSelectScalar = {
 }
 
 export type PlatformUserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "passwordHash" | "canAccessAdminConsole" | "canAccessFounderDashboard" | "createdAt" | "updatedAt", ExtArgs["result"]["platformUser"]>
+export type PlatformUserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  sessions?: boolean | Prisma.PlatformUser$sessionsArgs<ExtArgs>
+  _count?: boolean | Prisma.PlatformUserCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type PlatformUserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type PlatformUserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $PlatformUserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "PlatformUser"
-  objects: {}
+  objects: {
+    sessions: Prisma.$PlatformSessionPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     email: string
@@ -802,6 +923,7 @@ readonly fields: PlatformUserFieldRefs;
  */
 export interface Prisma__PlatformUserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  sessions<T extends Prisma.PlatformUser$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PlatformUser$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlatformSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -855,6 +977,10 @@ export type PlatformUserFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.
    */
   omit?: Prisma.PlatformUserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlatformUserInclude<ExtArgs> | null
+  /**
    * Filter, which PlatformUser to fetch.
    */
   where: Prisma.PlatformUserWhereUniqueInput
@@ -873,6 +999,10 @@ export type PlatformUserFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Exte
    */
   omit?: Prisma.PlatformUserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlatformUserInclude<ExtArgs> | null
+  /**
    * Filter, which PlatformUser to fetch.
    */
   where: Prisma.PlatformUserWhereUniqueInput
@@ -890,6 +1020,10 @@ export type PlatformUserFindFirstArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the PlatformUser
    */
   omit?: Prisma.PlatformUserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlatformUserInclude<ExtArgs> | null
   /**
    * Filter, which PlatformUser to fetch.
    */
@@ -939,6 +1073,10 @@ export type PlatformUserFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Exten
    */
   omit?: Prisma.PlatformUserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlatformUserInclude<ExtArgs> | null
+  /**
    * Filter, which PlatformUser to fetch.
    */
   where?: Prisma.PlatformUserWhereInput
@@ -986,6 +1124,10 @@ export type PlatformUserFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Omit specific fields from the PlatformUser
    */
   omit?: Prisma.PlatformUserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlatformUserInclude<ExtArgs> | null
   /**
    * Filter, which PlatformUsers to fetch.
    */
@@ -1035,6 +1177,10 @@ export type PlatformUserCreateArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   omit?: Prisma.PlatformUserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlatformUserInclude<ExtArgs> | null
+  /**
    * The data needed to create a PlatformUser.
    */
   data: Prisma.XOR<Prisma.PlatformUserCreateInput, Prisma.PlatformUserUncheckedCreateInput>
@@ -1082,6 +1228,10 @@ export type PlatformUserUpdateArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Omit specific fields from the PlatformUser
    */
   omit?: Prisma.PlatformUserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlatformUserInclude<ExtArgs> | null
   /**
    * The data needed to update a PlatformUser.
    */
@@ -1149,6 +1299,10 @@ export type PlatformUserUpsertArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   omit?: Prisma.PlatformUserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlatformUserInclude<ExtArgs> | null
+  /**
    * The filter to search for the PlatformUser to update in case it exists.
    */
   where: Prisma.PlatformUserWhereUniqueInput
@@ -1175,6 +1329,10 @@ export type PlatformUserDeleteArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   omit?: Prisma.PlatformUserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlatformUserInclude<ExtArgs> | null
+  /**
    * Filter which PlatformUser to delete.
    */
   where: Prisma.PlatformUserWhereUniqueInput
@@ -1195,6 +1353,30 @@ export type PlatformUserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.
 }
 
 /**
+ * PlatformUser.sessions
+ */
+export type PlatformUser$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlatformSession
+   */
+  select?: Prisma.PlatformSessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PlatformSession
+   */
+  omit?: Prisma.PlatformSessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlatformSessionInclude<ExtArgs> | null
+  where?: Prisma.PlatformSessionWhereInput
+  orderBy?: Prisma.PlatformSessionOrderByWithRelationInput | Prisma.PlatformSessionOrderByWithRelationInput[]
+  cursor?: Prisma.PlatformSessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PlatformSessionScalarFieldEnum | Prisma.PlatformSessionScalarFieldEnum[]
+}
+
+/**
  * PlatformUser without action
  */
 export type PlatformUserDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1206,4 +1388,8 @@ export type PlatformUserDefaultArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Omit specific fields from the PlatformUser
    */
   omit?: Prisma.PlatformUserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlatformUserInclude<ExtArgs> | null
 }

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
 import type { FormEvent, RefObject } from 'react';
+import { useLogin, useSignup } from '@/lib/auth-queries';
 
 export type AuthView = 'login' | 'signup';
 
@@ -13,6 +14,7 @@ const EMPTY_MESSAGE = 'This field must not be empty';
 
 type AuthCardProps = {
   view: AuthView;
+  next?: string | null;
 };
 
 type TouchedState = {
@@ -36,9 +38,11 @@ function validateEmail(value: string): string | null {
   return emailPattern.test(value) ? null : 'Enter a valid email address';
 }
 
-function validatePassword(value: string): string | null {
-  if (value.length === 0) return EMPTY_MESSAGE;
-  if (value.length < 8) return 'Password must be at least 8 characters.';
+function validatePassword(value: string, requireMinLength: boolean): string | null {
+  if (value.trim().length === 0) return EMPTY_MESSAGE;
+  if (requireMinLength && value.length < 8) {
+    return 'Password must be at least 8 characters.';
+  }
   return null;
 }
 
@@ -123,7 +127,10 @@ function AuthField({
   );
 }
 
-export default function AuthCard({ view }: AuthCardProps) {
+const BREACHED_PASSWORD_MESSAGE =
+  'This password has appeared in a known data breach. Please choose a different password.';
+
+export default function AuthCard({ view, next }: AuthCardProps) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -135,6 +142,11 @@ export default function AuthCard({ view }: AuthCardProps) {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [termsSignal, setTermsSignal] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
+  const [breachedPassword, setBreachedPassword] = useState(false);
+
+  const loginMutation = useLogin();
+  const signupMutation = useSignup();
+  const submitting = loginMutation.isPending || signupMutation.isPending;
 
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
@@ -145,7 +157,9 @@ export default function AuthCard({ view }: AuthCardProps) {
 
   const nameError = isSignup ? validateName(name) : null;
   const emailError = validateEmail(email);
-  const passwordError = validatePassword(password);
+  const passwordError = breachedPassword
+    ? BREACHED_PASSWORD_MESSAGE
+    : validatePassword(password, isSignup);
   const formValid = !nameError && !emailError && !passwordError;
   const canSubmit = formValid && (!isSignup || termsAccepted);
 
@@ -167,9 +181,10 @@ export default function AuthCard({ view }: AuthCardProps) {
     }
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setStatus(null);
+    setBreachedPassword(false);
     setTouched({ name: true, email: true, password: true });
 
     if (!formValid) {
@@ -177,7 +192,7 @@ export default function AuthCard({ view }: AuthCardProps) {
       return;
     }
 
-    if (!termsAccepted) {
+    if (isSignup && !termsAccepted) {
       setTermsSignal(
         'Please accept the terms and conditions to create your account.',
       );
@@ -186,7 +201,41 @@ export default function AuthCard({ view }: AuthCardProps) {
     }
 
     setTermsSignal(null);
-    setStatus('Authentication is not connected yet.');
+    setStatus(null);
+
+    const normalizedEmail = email.trim().toLowerCase();
+
+    try {
+      if (isSignup) {
+        const data = await signupMutation.mutateAsync({
+          name,
+          email: normalizedEmail,
+          password,
+        });
+        window.location.href = data.redirect ?? '/app';
+      } else {
+        const data = await loginMutation.mutateAsync({
+          email: normalizedEmail,
+          password,
+          next: next ?? undefined,
+        });
+        window.location.href = data.redirect ?? '/app';
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        const message = error.message;
+        if (isSignup && message === BREACHED_PASSWORD_MESSAGE) {
+          setBreachedPassword(true);
+          setStatus(null);
+          setTouched((current) => ({ ...current, password: true }));
+          passwordRef.current?.focus();
+        } else {
+          setStatus(message);
+        }
+      } else {
+        setStatus('Something went wrong. Please try again.');
+      }
+    }
   }
 
   return (
@@ -239,7 +288,7 @@ export default function AuthCard({ view }: AuthCardProps) {
             autoComplete="email"
             value={email}
             onChange={(value) => {
-              setEmail(value);
+              setEmail(value.trim().toLowerCase());
               setTermsSignal(null);
             }}
             onBlur={() => markTouched('email')}
@@ -254,11 +303,15 @@ export default function AuthCard({ view }: AuthCardProps) {
             name="password"
             autoComplete={isSignup ? 'new-password' : 'current-password'}
             value={password}
-            onChange={setPassword}
+            onChange={(value) => {
+              setPassword(value);
+              setBreachedPassword(false);
+              setStatus(null);
+            }}
             onBlur={() => markTouched('password')}
             error={passwordError}
-            touched={touched.password}
-            live={false}
+            touched={touched.password || breachedPassword}
+            live={isSignup || breachedPassword}
             inputRef={passwordRef}
             hint={
               isSignup ? 'Your password must be at least 8 characters.' : undefined
@@ -302,6 +355,14 @@ export default function AuthCard({ view }: AuthCardProps) {
             </>
           ) : null}
 
+          {isSignup ? null : (
+            <p className="auth-forgot">
+              <Link href={`/app/auth/forgot-password${email.trim() ? `?email=${encodeURIComponent(email.trim().toLowerCase())}` : ''}`}>
+                Forgot password?
+              </Link>
+            </p>
+          )}
+
           {status ? (
             <p className="auth-status" role="status">
               {status}
@@ -320,8 +381,15 @@ export default function AuthCard({ view }: AuthCardProps) {
             className={`auth-submit${canSubmit ? '' : ' auth-submit-disabled'}`}
             aria-disabled={!canSubmit}
             aria-describedby="auth-submit-notice"
+            disabled={submitting}
           >
-            {isSignup ? 'Create account' : 'Log in'}
+            {submitting
+              ? isSignup
+                ? 'Creating account...'
+                : 'Logging in...'
+              : isSignup
+                ? 'Create account'
+                : 'Log in'}
           </button>
         </form>
 
