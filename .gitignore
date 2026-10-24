@@ -37,7 +37,7 @@ next-env.d.ts
 # Exclude generic Markdown docs (e.g., notes, drafts) but keep functional docs
 *.md
 !README.md
-!AGENTS.md
+#!AGENTS.md  # now ignored
 !docs/**/*.md
 
 # --- Context folders (configuration / rules) ---
@@ -45,3 +45,9 @@ next-env.d.ts
 agent/
 skills/
 rules/
+
+# ignore generated build artifacts
+.generated/
+
+# ignore all markdown inside .agent (rules, skills, etc.)
+.agent/**/*.md
