@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import { getPlatformSession } from '@/lib/platform-auth'
 import { prisma } from '@/lib/db'
+import PlatformSignOutButton from './sign-out-button'
 
 export const metadata: Metadata = {
   title: 'Admin Console',
@@ -32,11 +34,29 @@ export default async function AdminConsolePage() {
   return (
     <main className="route-page-container" style={{ alignItems: 'flex-start', textAlign: 'left', padding: 'var(--ds-space-8)' }}>
       <div style={{ width: '100%', maxWidth: '1200px', display: 'flex', flexDirection: 'column', gap: 'var(--ds-space-6)' }}>
-        <header style={{ display: 'flex', flexDirection: 'column', gap: 'var(--ds-space-2)' }}>
-          <h1 className="route-page-title" style={{ textAlign: 'left' }}>Platform Admin Console</h1>
-          <p className="route-page-desc" style={{ textAlign: 'left' }}>
-            Operational overview. Signed in as {session.email}
-          </p>
+        <header style={{ display: 'flex', flexDirection: 'column', gap: 'var(--ds-space-3)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 'var(--ds-space-3)' }}>
+            <Image
+              src="/icon.svg"
+              alt="Operafrika"
+              width={40}
+              height={40}
+              priority
+            />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-space-3)' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                <span className="badge-tag badge-admin">Admin Dashboard</span>
+                <span className="card-body">Signed in as {session.email}</span>
+              </div>
+              <PlatformSignOutButton />
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--ds-space-2)' }}>
+            <h1 className="route-page-title" style={{ textAlign: 'left' }}>Platform Admin Console</h1>
+            <p className="route-page-desc" style={{ textAlign: 'left' }}>
+              Operational overview
+            </p>
+          </div>
         </header>
 
         <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 'var(--ds-space-4)' }}>

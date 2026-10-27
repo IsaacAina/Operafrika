@@ -51,3 +51,12 @@ rules/
 
 # ignore all markdown inside .agent (rules, skills, etc.)
 .agent/**/*.md
+
+# Additional context/docs to ignore
+AGENTS.md
+agents.md
+README.MD
+TESTUSERS.md
+testusers.md
+docs/PRD.md
+*.mdx
