@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
-import { prisma } from '@/lib/db'
+import { toRlsRole, withRls } from '@/lib/rls'
 import { businessSetupSchema, firstIssue, readJson } from '@/lib/validation'
 import { trackAnalyticsEvent } from '@/lib/analytics'
 import { Role } from '@/generated/prisma/client'
@@ -37,7 +37,13 @@ export async function POST(req: Request) {
   } = parsed.data
 
   try {
-    await prisma.$transaction(async (tx) => {
+    await withRls(
+      {
+        role: toRlsRole(session.role),
+        businessId: session.businessId,
+        userId: session.userId,
+      },
+      async (tx) => {
       // 1. Update the business profile
       await tx.business.update({
         where: { id: session.businessId },
@@ -80,7 +86,8 @@ export async function POST(req: Request) {
         businessId: session.businessId,
         branchId: branch?.id ?? null,
       })
-    })
+      },
+    )
 
     return NextResponse.json({ success: true })
   } catch (error) {

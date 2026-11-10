@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
-import { prisma } from '@/lib/db'
+import { withSystemRls } from '@/lib/rls'
 import { trackAnalyticsEvent } from '@/lib/analytics'
 
 export const dynamic = 'force-dynamic'
@@ -11,10 +11,12 @@ export async function POST() {
     return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.userId },
-    select: { onboardingCompletedAt: true },
-  })
+  const user = await withSystemRls((tx) =>
+    tx.user.findUnique({
+      where: { id: session.userId },
+      select: { onboardingCompletedAt: true },
+    }),
+  )
 
   if (!user) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
@@ -24,7 +26,7 @@ export async function POST() {
     return NextResponse.json({ success: true, alreadyCompleted: true })
   }
 
-  await prisma.$transaction(async (tx) => {
+  await withSystemRls(async (tx) => {
     await tx.user.update({
       where: { id: session.userId },
       data: { onboardingCompletedAt: new Date() },

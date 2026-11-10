@@ -1,5 +1,6 @@
 import { randomBytes } from 'crypto'
 import { prisma } from '@/lib/db'
+import { withSystemRls } from '@/lib/rls'
 import { hashToken } from '@/lib/token-hash'
 
 export const SESSION_COOKIE_NAME = 'operafrika_session'
@@ -92,19 +93,21 @@ export async function resolveSessionFromToken(
     return null
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.userId },
-    select: {
-      id: true,
-      email: true,
-      role: true,
-      businessId: true,
-      emailVerifiedAt: true,
-      bannedAt: true,
-      lockedUntil: true,
-      deletedAt: true,
-    },
-  })
+  const user = await withSystemRls((tx) =>
+    tx.user.findUnique({
+      where: { id: session.userId },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        businessId: true,
+        emailVerifiedAt: true,
+        bannedAt: true,
+        lockedUntil: true,
+        deletedAt: true,
+      },
+    }),
+  )
   if (!user) return null
 
   if (isUserLocked(user)) {

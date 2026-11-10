@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { getSessionUser } from '@/lib/auth'
-import { prisma } from '@/lib/db'
+import { toRlsRole, withRls } from '@/lib/rls'
 import { trackAnalyticsEventNow } from '@/lib/analytics'
 import OnboardingSteps from './onboarding-steps'
 
@@ -20,34 +20,47 @@ export default async function OnboardingPage() {
     redirect('/app/auth/verify-email')
   }
 
-  const dbUser = await prisma.user.findUnique({
-    where: { id: user.id },
-    select: { onboardingCompletedAt: true },
-  })
+  const { dbUser, business, alreadyStarted } = await withRls(
+    {
+      role: toRlsRole(user.role),
+      businessId: user.businessId,
+      userId: user.id,
+    },
+    async (tx) => {
+      const dbUser = await tx.user.findUnique({
+        where: { id: user.id },
+        select: { onboardingCompletedAt: true },
+      })
+
+      if (dbUser?.onboardingCompletedAt) {
+        return { dbUser, business: null, alreadyStarted: null }
+      }
+
+      const business = await tx.business.findUnique({
+        where: { id: user.businessId },
+        include: {
+          branches: {
+            take: 1,
+            orderBy: { createdAt: 'asc' },
+          },
+        },
+      })
+
+      const alreadyStarted = await tx.analyticsEvent.findFirst({
+        where: {
+          userId: user.id,
+          eventType: 'onboarding_started',
+        },
+        select: { id: true },
+      })
+
+      return { dbUser, business, alreadyStarted }
+    },
+  )
 
   if (dbUser?.onboardingCompletedAt) {
     redirect('/app')
   }
-
-  // Load current business and first branch
-  const business = await prisma.business.findUnique({
-    where: { id: user.businessId },
-    include: {
-      branches: {
-        take: 1,
-        orderBy: { createdAt: 'asc' },
-      },
-    },
-  })
-
-  // Track server-side onboarding_started event if this is the first visit
-  const alreadyStarted = await prisma.analyticsEvent.findFirst({
-    where: {
-      userId: user.id,
-      eventType: 'onboarding_started',
-    },
-    select: { id: true },
-  })
 
   if (!alreadyStarted) {
     await trackAnalyticsEventNow({

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
+import { withSystemRls } from '@/lib/rls'
 import { verifyPassword } from '@/lib/password'
 import { createSession } from '@/lib/auth'
 import { loginSchema, firstIssue, readJson } from '@/lib/validation'
@@ -64,21 +65,23 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: 'No platform access granted' }, { status: 403 })
       }
 
-      const user = await prisma.user.findUnique({
-        where: { email },
-        select: {
-          id: true,
-          businessId: true,
-          role: true,
-          email: true,
-          passwordHash: true,
-          emailVerifiedAt: true,
-          bannedAt: true,
-          lockedUntil: true,
-          deletedAt: true,
-          onboardingCompletedAt: true,
-        },
-      })
+      const user = await withSystemRls((tx) =>
+        tx.user.findUnique({
+          where: { email },
+          select: {
+            id: true,
+            businessId: true,
+            role: true,
+            email: true,
+            passwordHash: true,
+            emailVerifiedAt: true,
+            bannedAt: true,
+            lockedUntil: true,
+            deletedAt: true,
+            onboardingCompletedAt: true,
+          },
+        }),
+      )
 
       // An unknown email is verified against a hash nobody knows, so the reply
       // takes the same time as a wrong password. Otherwise the response time

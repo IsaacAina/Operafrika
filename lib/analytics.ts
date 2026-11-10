@@ -1,5 +1,5 @@
-import { Prisma } from '@/generated/prisma/client'
-import { prisma } from '@/lib/db'
+import { Prisma } from '@prisma/client'
+import { withSystemRls } from '@/lib/rls'
 
 /**
  * Strict union of allowed analytics events defined in rules/analytics-events.md.
@@ -124,7 +124,7 @@ export async function trackAnalyticsEventNow(
   event: AnalyticsEventData,
 ): Promise<void> {
   try {
-    await trackAnalyticsEvent(prisma, event)
+    await withSystemRls((tx) => trackAnalyticsEvent(tx, event))
   } catch (error) {
     console.error('Failed to log analytics event:', event.eventType, error)
   }

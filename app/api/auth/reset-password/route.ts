@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/db'
+import { withSystemRls } from '@/lib/rls'
 import { hashPassword } from '@/lib/password'
 import { revokeAllSessions } from '@/lib/session'
 import { hashToken } from '@/lib/token-hash'
@@ -16,10 +16,12 @@ export async function POST(req: Request) {
 
     const { token, password } = parsed.data
 
-    const resetToken = await prisma.passwordResetToken.findUnique({
-      where: { tokenHash: hashToken(token) },
-      include: { user: true },
-    })
+    const resetToken = await withSystemRls((tx) =>
+      tx.passwordResetToken.findUnique({
+        where: { tokenHash: hashToken(token) },
+        include: { user: true },
+      }),
+    )
 
     if (!resetToken || resetToken.expires < new Date()) {
       return NextResponse.json({ error: 'Invalid or expired token' }, { status: 400 })
@@ -34,7 +36,7 @@ export async function POST(req: Request) {
     // The password change, the revocation of every existing session, and the
     // consumption of the reset token all succeed or fail together. A reset
     // must evict a session that was opened with the old password.
-    await prisma.$transaction(async (tx) => {
+    await withSystemRls(async (tx) => {
       await tx.user.update({
         where: { id: resetToken.userId },
         data: { passwordHash: hashedPassword },

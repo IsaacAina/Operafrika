@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/db'
+import { withSystemRls } from '@/lib/rls'
 import { hashPassword } from '@/lib/password'
 import { createSession } from '@/lib/auth'
 import { sendWelcomeEmail } from '@/lib/welcome-email'
@@ -32,7 +32,7 @@ export async function POST(req: Request) {
     // an owner.
     let user
     try {
-      user = await prisma.$transaction(async (tx) => {
+      user = await withSystemRls(async (tx) => {
         const business = await tx.business.create({
           data: {
             name: fullName + "'s Business",

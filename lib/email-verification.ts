@@ -1,5 +1,5 @@
 import { randomBytes } from 'crypto'
-import { prisma } from '@/lib/db'
+import { withSystemRls } from '@/lib/rls'
 import { sendEmail } from '@/lib/email'
 import { hashToken } from '@/lib/token-hash'
 
@@ -28,11 +28,13 @@ export async function issueVerificationCode(userId: string): Promise<string> {
   const expires = new Date(Date.now() + VERIFICATION_CODE_TTL_MS)
 
   // Only the hash is stored. The raw code is emailed and never written down.
-  await prisma.emailVerificationCode.upsert({
-    where: { userId },
-    update: { codeHash: hashToken(code), expires, attempts: 0 },
-    create: { userId, codeHash: hashToken(code), expires },
-  })
+  await withSystemRls((tx) =>
+    tx.emailVerificationCode.upsert({
+      where: { userId },
+      update: { codeHash: hashToken(code), expires, attempts: 0 },
+      create: { userId, codeHash: hashToken(code), expires },
+    }),
+  )
 
   return code
 }
@@ -74,44 +76,44 @@ export async function verifyEmailCode(
   userId: string,
   code: string,
 ): Promise<VerifyResult> {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { emailVerifiedAt: true },
-  })
-
-  if (!user) return 'invalid'
-  if (user.emailVerifiedAt) return 'already-verified'
-
-  const record = await prisma.emailVerificationCode.findUnique({
-    where: { userId },
-  })
-
-  if (!record) return 'invalid'
-
-  if (record.expires < new Date()) {
-    await prisma.emailVerificationCode.deleteMany({ where: { userId } })
-    return 'expired'
-  }
-
-  if (record.attempts >= MAX_VERIFICATION_ATTEMPTS) {
-    return 'too-many-attempts'
-  }
-
-  if (record.codeHash !== hashToken(code)) {
-    await prisma.emailVerificationCode.update({
-      where: { userId },
-      data: { attempts: { increment: 1 } },
+  return withSystemRls(async (tx) => {
+    const user = await tx.user.findUnique({
+      where: { id: userId },
+      select: { emailVerifiedAt: true },
     })
-    return 'invalid'
-  }
 
-  await prisma.$transaction([
-    prisma.user.update({
+    if (!user) return 'invalid'
+    if (user.emailVerifiedAt) return 'already-verified'
+
+    const record = await tx.emailVerificationCode.findUnique({
+      where: { userId },
+    })
+
+    if (!record) return 'invalid'
+
+    if (record.expires < new Date()) {
+      await tx.emailVerificationCode.deleteMany({ where: { userId } })
+      return 'expired'
+    }
+
+    if (record.attempts >= MAX_VERIFICATION_ATTEMPTS) {
+      return 'too-many-attempts'
+    }
+
+    if (record.codeHash !== hashToken(code)) {
+      await tx.emailVerificationCode.update({
+        where: { userId },
+        data: { attempts: { increment: 1 } },
+      })
+      return 'invalid'
+    }
+
+    await tx.user.update({
       where: { id: userId },
       data: { emailVerifiedAt: new Date() },
-    }),
-    prisma.emailVerificationCode.deleteMany({ where: { userId } }),
-  ])
+    })
+    await tx.emailVerificationCode.deleteMany({ where: { userId } })
 
-  return 'verified'
+    return 'verified'
+  })
 }

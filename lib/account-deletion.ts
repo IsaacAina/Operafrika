@@ -1,6 +1,6 @@
 import { randomBytes } from 'crypto'
 import { AuditAction, Role } from '@/generated/prisma/client'
-import { prisma } from '@/lib/db'
+import { withSystemRls } from '@/lib/rls'
 import { writeAuditEntry } from '@/lib/audit-log'
 import { hashToken } from '@/lib/token-hash'
 
@@ -81,17 +81,19 @@ export interface AccountDeletionOutcome {
 export async function requestAccountDeletion(
   userId: string,
 ): Promise<AccountDeletionOutcome> {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: {
-      id: true,
-      email: true,
-      role: true,
-      businessId: true,
-      deletedAt: true,
-      business: { select: { name: true } },
-    },
-  })
+  const user = await withSystemRls((tx) =>
+    tx.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        businessId: true,
+        deletedAt: true,
+        business: { select: { name: true } },
+      },
+    }),
+  )
 
   if (!user) {
     throw new AccountDeletionError('Account not found.', 404)
@@ -103,14 +105,16 @@ export async function requestAccountDeletion(
     )
   }
 
-  const otherActiveOwners = await prisma.user.count({
-    where: {
-      businessId: user.businessId,
-      role: Role.OWNER,
-      deletedAt: null,
-      id: { not: user.id },
-    },
-  })
+  const otherActiveOwners = await withSystemRls((tx) =>
+    tx.user.count({
+      where: {
+        businessId: user.businessId,
+        role: Role.OWNER,
+        deletedAt: null,
+        id: { not: user.id },
+      },
+    }),
+  )
   const isLastOwner = user.role === Role.OWNER && otherActiveOwners === 0
 
   const now = new Date()
@@ -121,7 +125,7 @@ export async function requestAccountDeletion(
   // the account can still be saved, and cannot outlive the account.
   const cancelTokenExpires = scheduledFor
 
-  await prisma.$transaction(async (tx) => {
+  await withSystemRls(async (tx) => {
     await tx.user.update({
       where: { id: user.id },
       data: {
@@ -191,16 +195,18 @@ export async function cancelAccountDeletion(
   if (!rawToken) return null
 
   const tokenHash = hashToken(rawToken)
-  const candidates = await prisma.user.findMany({
-    where: { deletionCancelTokenHash: tokenHash },
-    select: {
-      id: true,
-      email: true,
-      businessId: true,
-      deletedAt: true,
-      deletionCancelTokenExpires: true,
-    },
-  })
+  const candidates = await withSystemRls((tx) =>
+    tx.user.findMany({
+      where: { deletionCancelTokenHash: tokenHash },
+      select: {
+        id: true,
+        email: true,
+        businessId: true,
+        deletedAt: true,
+        deletionCancelTokenExpires: true,
+      },
+    }),
+  )
 
   const now = new Date()
   const user = candidates.find(
@@ -211,7 +217,7 @@ export async function cancelAccountDeletion(
   )
   if (!user) return null
 
-  await prisma.$transaction(async (tx) => {
+  await withSystemRls(async (tx) => {
     await tx.user.update({
       where: { id: user.id },
       data: {
@@ -274,10 +280,12 @@ export async function purgeExpiredAccountDeletions(
     failures: [],
   }
 
-  const businesses = await prisma.business.findMany({
-    where: { deletedAt: { not: null }, deletionScheduledFor: { lte: now } },
-    select: { id: true },
-  })
+  const businesses = await withSystemRls((tx) =>
+    tx.business.findMany({
+      where: { deletedAt: { not: null }, deletionScheduledFor: { lte: now } },
+      select: { id: true },
+    }),
+  )
 
   for (const business of businesses) {
     try {
@@ -292,17 +300,19 @@ export async function purgeExpiredAccountDeletions(
     }
   }
 
-  const users = await prisma.user.findMany({
-    where: {
-      deletedAt: { not: null },
-      deletionScheduledFor: { lte: now },
-      // Accounts that belong to a business which is also scheduled are left
-      // to the business purge. Purging them on their own would leave a
-      // business without its owner if the business purge then fails.
-      business: { deletedAt: null },
-    },
-    select: { id: true },
-  })
+  const users = await withSystemRls((tx) =>
+    tx.user.findMany({
+      where: {
+        deletedAt: { not: null },
+        deletionScheduledFor: { lte: now },
+        // Accounts that belong to a business which is also scheduled are left
+        // to the business purge. Purging them on their own would leave a
+        // business without its owner if the business purge then fails.
+        business: { deletedAt: null },
+      },
+      select: { id: true },
+    }),
+  )
 
   for (const user of users) {
     try {
@@ -329,13 +339,15 @@ export async function purgeExpiredAccountDeletions(
  * payroll entries keep their content and only lose the link to the account.
  */
 async function purgeUser(userId: string, now: Date): Promise<void> {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { id: true, email: true, businessId: true },
-  })
+  const user = await withSystemRls((tx) =>
+    tx.user.findUnique({
+      where: { id: userId },
+      select: { id: true, email: true, businessId: true },
+    }),
+  )
   if (!user) return
 
-  await prisma.$transaction(async (tx) => {
+  await withSystemRls(async (tx) => {
     await tx.auditLog.updateMany({
       where: { userId: user.id },
       data: { userId: null, actorEmail: user.email },
@@ -356,31 +368,39 @@ async function purgeUser(userId: string, now: Date): Promise<void> {
  * itself are kept: they are the record of what was erased.
  */
 async function purgeBusiness(businessId: string, now: Date): Promise<void> {
-  const business = await prisma.business.findUnique({
-    where: { id: businessId },
-    select: { id: true, name: true },
-  })
+  const business = await withSystemRls((tx) =>
+    tx.business.findUnique({
+      where: { id: businessId },
+      select: { id: true, name: true },
+    }),
+  )
   if (!business) return
 
-  const branches = await prisma.branch.findMany({
-    where: { businessId: business.id },
-    select: { id: true },
-  })
+  const branches = await withSystemRls((tx) =>
+    tx.branch.findMany({
+      where: { businessId: business.id },
+      select: { id: true },
+    }),
+  )
   const branchIds = branches.map((branch) => branch.id)
 
-  const users = await prisma.user.findMany({
-    where: { businessId: business.id },
-    select: { id: true, email: true },
-  })
+  const users = await withSystemRls((tx) =>
+    tx.user.findMany({
+      where: { businessId: business.id },
+      select: { id: true, email: true },
+    }),
+  )
   const userIds = users.map((user) => user.id)
 
-  const invoices = await prisma.invoice.findMany({
-    where: { branchId: { in: branchIds } },
-    select: { id: true },
-  })
+  const invoices = await withSystemRls((tx) =>
+    tx.invoice.findMany({
+      where: { branchId: { in: branchIds } },
+      select: { id: true },
+    }),
+  )
   const invoiceIds = invoices.map((invoice) => invoice.id)
 
-  await prisma.$transaction(async (tx) => {
+  await withSystemRls(async (tx) => {
     await tx.auditLog.create({
       data: {
         userId: null,

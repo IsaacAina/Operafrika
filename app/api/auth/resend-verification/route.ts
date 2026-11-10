@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/db'
+import { withSystemRls } from '@/lib/rls'
 import { getSession } from '@/lib/auth'
 import { issueVerificationCode, sendVerificationEmail } from '@/lib/email-verification'
 import { guard } from '@/lib/rate-limit'
@@ -17,10 +17,12 @@ export async function POST(req: Request) {
         )
       }
 
-      const user = await prisma.user.findUnique({
-        where: { id: session.userId },
-        select: { email: true, emailVerifiedAt: true },
-      })
+      const user = await withSystemRls((tx) =>
+        tx.user.findUnique({
+          where: { id: session.userId },
+          select: { email: true, emailVerifiedAt: true },
+        }),
+      )
 
       if (!user) {
         return NextResponse.json({ error: 'Account not found.' }, { status: 404 })

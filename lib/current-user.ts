@@ -1,5 +1,5 @@
 import { getSessionUser } from '@/lib/auth'
-import { prisma } from '@/lib/db'
+import { withRls, toRlsRole } from '@/lib/rls'
 import type { AuthUser } from '@/lib/auth-api'
 
 /**
@@ -12,10 +12,18 @@ export async function readCurrentUser(): Promise<AuthUser | null> {
   const user = await getSessionUser()
   if (!user) return null
 
-  const business = await prisma.business.findUnique({
-    where: { id: user.businessId },
-    select: { name: true },
-  })
+  const business = await withRls(
+    {
+      role: toRlsRole(user.role),
+      businessId: user.businessId,
+      userId: user.id,
+    },
+    (tx) =>
+      tx.business.findUnique({
+        where: { id: user.businessId },
+        select: { name: true },
+      }),
+  )
 
   return {
     id: user.id,

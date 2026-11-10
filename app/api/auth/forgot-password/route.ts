@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import crypto from 'crypto'
-import { prisma } from '@/lib/db'
+import { withSystemRls } from '@/lib/rls'
 import { sendEmail } from '@/lib/email'
 import { hashToken } from '@/lib/token-hash'
 import { forgotPasswordSchema, firstIssue, readJson } from '@/lib/validation'
@@ -18,18 +18,22 @@ export async function POST(req: Request) {
 
       const { email } = parsed.data
 
-      const user = await prisma.user.findUnique({ where: { email } })
+      const user = await withSystemRls((tx) =>
+        tx.user.findUnique({ where: { email } }),
+      )
       if (user) {
         const token = crypto.randomBytes(32).toString('hex')
         const expires = new Date(Date.now() + 60 * 60 * 1000)
 
         // Only the hash is stored. The raw token exists in the email link and
         // nowhere else, so a leaked table cannot reset this account.
-        await prisma.passwordResetToken.upsert({
-          where: { userId: user.id },
-          update: { tokenHash: hashToken(token), expires },
-          create: { userId: user.id, tokenHash: hashToken(token), expires },
-        })
+        await withSystemRls((tx) =>
+          tx.passwordResetToken.upsert({
+            where: { userId: user.id },
+            update: { tokenHash: hashToken(token), expires },
+            create: { userId: user.id, tokenHash: hashToken(token), expires },
+          }),
+        )
 
         const appUrl = process.env.APP_URL || 'http://localhost:3000'
         const resetUrl = `${appUrl}/app/auth/reset-password/${token}`

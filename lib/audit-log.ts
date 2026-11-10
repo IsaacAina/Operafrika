@@ -1,5 +1,5 @@
 import { Prisma, AuditAction } from '@prisma/client'
-import { prisma } from '@/lib/db'
+import { withSystemRls } from '@/lib/rls'
 
 /**
  * The subset of a Prisma client this module needs. Accepts both the top level
@@ -53,5 +53,5 @@ export async function writeAuditEntry(
 
 /** Writes an audit entry outside of any caller owned transaction. */
 export async function writeAuditEntryNow(entry: AuditEntry): Promise<void> {
-  await writeAuditEntry(prisma, entry)
+  await withSystemRls((tx) => writeAuditEntry(tx, entry))
 }

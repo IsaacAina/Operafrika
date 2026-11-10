@@ -5,6 +5,7 @@ import {
 } from '@tanstack/react-query'
 import { authKeys } from '@/lib/auth-keys'
 import { readCurrentUser } from '@/lib/current-user'
+import AiAssistantWidget from './ai-assistant-widget'
 
 /**
  * Seeds the client query cache with the user the server already resolved.
@@ -25,6 +26,7 @@ export default async function AppLayout({
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       {children}
+      {user && <AiAssistantWidget userRole={user.role} businessId={user.businessId} />}
     </HydrationBoundary>
   )
 }
