@@ -50,17 +50,30 @@ export default async function SupportPage() {
         return { onboarding: true as const, initialTickets: [] }
       }
 
-      const rawTickets = await tx.supportMessage.findMany({
-        where: { userId: user.userId },
-        orderBy: { createdAt: 'desc' },
-        take: 30,
-      })
+      const rawTickets = await tx.$queryRaw<
+        Array<{
+          id: string
+          message: string
+          resolved: boolean
+          createdAt: Date | string
+          adminReply: string | null
+          adminRepliedAt: Date | string | null
+          adminEmail: string | null
+        }>
+      >`SELECT id, message, resolved, "createdAt", "adminReply", "adminRepliedAt", "adminEmail"
+          FROM "SupportMessage"
+         WHERE "userId" = ${user.userId}
+         ORDER BY "createdAt" DESC
+         LIMIT 30`
 
       const initialTickets: UserSupportTicket[] = rawTickets.map((t) => ({
         id: t.id,
         message: t.message,
         resolved: t.resolved,
-        createdAt: t.createdAt.toISOString(),
+        createdAt: t.createdAt instanceof Date ? t.createdAt.toISOString() : String(t.createdAt),
+        adminReply: t.adminReply ?? null,
+        adminRepliedAt: t.adminRepliedAt ? new Date(t.adminRepliedAt).toISOString() : null,
+        adminEmail: t.adminEmail ?? null,
       }))
 
       return {
@@ -148,14 +161,6 @@ export default async function SupportPage() {
               <ArrowLeft size={18} />
             </Link>
             <h1 className="subpage-mobile-title">Help &amp; Support</h1>
-            <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <NotificationCenter />
-              <UserAvatarMenu
-                name={data.businessName}
-                email={user.email}
-                role={user.role}
-              />
-            </div>
           </div>
         </header>
 

@@ -76,6 +76,40 @@ export default function AiAssistantWidget({
     }
   }, [isOpen, messages])
 
+  // Load saved chat history from the database on initial mount
+  useEffect(() => {
+    async function loadSavedChatHistory() {
+      try {
+        const res = await fetch('/api/chat')
+        if (!res.ok) return
+        const data = await res.json()
+        if (data.success && Array.isArray(data.history) && data.history.length > 0) {
+          const loadedMessages: MessageItem[] = []
+          for (const item of data.history) {
+            loadedMessages.push({
+              id: `history-u-${item.id}`,
+              sender: 'user',
+              text: item.prompt,
+              timestamp: new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            })
+            loadedMessages.push({
+              id: `history-a-${item.id}`,
+              sender: 'assistant',
+              text: item.response,
+              label: (item.label as any) || 'Calculated Fact',
+              dataSnapshot: item.dataSnapshot,
+              timestamp: new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            })
+          }
+          setMessages((prev) => [prev[0], ...loadedMessages])
+        }
+      } catch {
+        // Core business records remain usable if chat history fails to load
+      }
+    }
+    loadSavedChatHistory()
+  }, [])
+
   const handleSend = async (questionText?: string) => {
     const textToSend = (questionText || query).trim()
     if (!textToSend || isLoading) return
@@ -92,10 +126,10 @@ export default function AiAssistantWidget({
     setIsLoading(true)
 
     try {
-      const res = await fetch('/api/ai/ask', {
+      const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: textToSend }),
+        body: JSON.stringify({ message: textToSend }),
       })
 
       const data = await res.json()
@@ -167,58 +201,13 @@ export default function AiAssistantWidget({
           type="button"
           onClick={() => setIsOpen(true)}
           aria-label="Open Operafrika AI Business Assistant"
-          style={{
-            position: 'fixed',
-            bottom: '24px',
-            right: '24px',
-            zIndex: 900,
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '12px 20px',
-            borderRadius: '9999px',
-            backgroundColor: '#1d4ed8',
-            color: '#ffffff',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            boxShadow: '0 10px 25px -5px rgba(29, 78, 216, 0.4), 0 8px 10px -6px rgba(29, 78, 216, 0.3)',
-            cursor: 'pointer',
-            fontWeight: 700,
-            fontSize: '0.875rem',
-            transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-2px)'
-            e.currentTarget.style.boxShadow = '0 14px 28px -4px rgba(29, 78, 216, 0.5)'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)'
-            e.currentTarget.style.boxShadow = '0 10px 25px -5px rgba(29, 78, 216, 0.4)'
-          }}
+          className="ai-assistant-floating-btn"
         >
-          <span
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '24px',
-              height: '24px',
-              borderRadius: '50%',
-              backgroundColor: 'rgba(255, 255, 255, 0.2)',
-            }}
-          >
+          <span className="ai-assistant-btn-icon-wrapper">
             <Sparkles size={14} />
           </span>
-          <span>Ask AI Assistant</span>
-          <span
-            style={{
-              display: 'inline-block',
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              backgroundColor: '#4ade80',
-              marginLeft: '2px',
-            }}
-          />
+          <span className="ai-assistant-btn-label">Ask AI Assistant</span>
+          <span className="ai-assistant-btn-indicator" />
         </button>
       )}
 

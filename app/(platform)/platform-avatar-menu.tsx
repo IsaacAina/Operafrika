@@ -59,16 +59,36 @@ export default function PlatformAvatarMenu({
   }
 
   return (
-    <div ref={menuRef} style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div
+      ref={menuRef}
+      className="header-avatar-wrapper"
+      style={{
+        position: 'relative',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '40px',
+        height: '40px',
+        minWidth: '40px',
+        minHeight: '40px',
+        flexShrink: 0,
+      }}
+    >
       {/* Round Avatar Icon Button */}
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Platform account menu"
         aria-expanded={isOpen}
+        className="header-round-btn header-avatar-btn"
         style={{
           width: '40px',
           height: '40px',
+          minWidth: '40px',
+          minHeight: '40px',
+          maxWidth: '40px',
+          maxHeight: '40px',
+          aspectRatio: '1 / 1',
           borderRadius: '50%',
           backgroundColor: 'var(--ds-color-primary)',
           color: '#ffffff',
@@ -77,14 +97,17 @@ export default function PlatformAvatarMenu({
           lineHeight: 1,
           border: '2px solid rgba(255, 255, 255, 0.9)',
           boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-          display: 'flex',
+          display: 'inline-flex',
           alignItems: 'center',
           justifyContent: 'center',
           cursor: 'pointer',
           padding: 0,
+          margin: 0,
+          boxSizing: 'border-box',
           outline: 'none',
           transition: 'all 0.15s ease',
           flexShrink: 0,
+          overflow: 'hidden',
         }}
       >
         {initial}

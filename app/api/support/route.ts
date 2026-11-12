@@ -16,11 +16,13 @@ export async function GET() {
 
   try {
     const messages = await withSystemRls(async (tx) => {
-      return tx.supportMessage.findMany({
-        where: { userId: session.userId },
-        orderBy: { createdAt: 'desc' },
-        take: 40,
-      })
+      return tx.$queryRaw<any[]>`
+        SELECT id, message, resolved, "createdAt", "adminReply", "adminRepliedAt", "adminEmail"
+          FROM "SupportMessage"
+         WHERE "userId" = ${session.userId}
+         ORDER BY "createdAt" DESC
+         LIMIT 40
+      `
     })
 
     return NextResponse.json({ messages })

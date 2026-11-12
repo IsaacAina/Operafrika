@@ -22,7 +22,37 @@ import {
   DollarSign,
   ChevronLeft,
   ChevronRight,
+  BarChart3,
+  MessageSquare,
+  Receipt,
+  Package,
+  FileSpreadsheet,
+  Zap,
+  Database,
 } from 'lucide-react'
+
+export interface SignupVelocityData {
+  last7Days: number
+  last30Days: number
+  weeklyTrend: Array<{ label: string; count: number; percentage: number }>
+}
+
+export interface PlatformFeatureAdoption {
+  totalAiConversations: number
+  totalInvoicesRecorded: number
+  totalCustomers: number
+  totalStockItems: number
+  totalCsvImports: number
+  multiBranchCount: number
+  singleBranchCount: number
+}
+
+export interface OnboardingFunnelStep {
+  step: string
+  label: string
+  count: number
+  percentage: number
+}
 
 export interface SignupRecord {
   id: string
@@ -58,6 +88,9 @@ interface FounderViewProps {
   totalPages: number
   pageSize: number
   totalSignupsCount: number
+  signupVelocity?: SignupVelocityData
+  featureAdoption?: PlatformFeatureAdoption
+  onboardingFunnel?: OnboardingFunnelStep[]
 }
 
 export default function FounderView({
@@ -73,6 +106,9 @@ export default function FounderView({
   totalPages,
   pageSize,
   totalSignupsCount,
+  signupVelocity,
+  featureAdoption,
+  onboardingFunnel,
 }: FounderViewProps) {
   const router = useRouter()
   const [selectedMember, setSelectedMember] = useState<SignupRecord | null>(null)
@@ -247,50 +283,77 @@ export default function FounderView({
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            {/* Stage 1 */}
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '0.8125rem', fontWeight: 600 }}>
-                <span>1. Business Created</span>
-                <span>{businessCount} (100%)</span>
-              </div>
-              <div style={{ height: '8px', width: '100%', backgroundColor: 'var(--ds-color-surface-container-low)', borderRadius: '4px', overflow: 'hidden' }}>
-                <div style={{ height: '100%', width: '100%', backgroundColor: 'var(--ds-color-primary)' }} />
-              </div>
-            </div>
+            {onboardingFunnel && onboardingFunnel.length > 0 ? (
+              onboardingFunnel.map((item, idx) => {
+                const colors = ['var(--ds-color-primary)', '#2563eb', '#7c3aed', '#059669']
+                const color = colors[idx % colors.length]
+                return (
+                  <div key={item.step}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '0.8125rem', fontWeight: 600 }}>
+                      <span>{item.step}: {item.label}</span>
+                      <span>{item.count} ({item.percentage}%)</span>
+                    </div>
+                    <div style={{ height: '8px', width: '100%', backgroundColor: 'var(--ds-color-surface-container-low)', borderRadius: '4px', overflow: 'hidden' }}>
+                      <div
+                        style={{
+                          height: '100%',
+                          width: `${item.percentage}%`,
+                          backgroundColor: color,
+                          transition: 'width 0.3s ease',
+                        }}
+                      />
+                    </div>
+                  </div>
+                )
+              })
+            ) : (
+              <>
+                {/* Stage 1 */}
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '0.8125rem', fontWeight: 600 }}>
+                    <span>1. Business Created</span>
+                    <span>{businessCount} (100%)</span>
+                  </div>
+                  <div style={{ height: '8px', width: '100%', backgroundColor: 'var(--ds-color-surface-container-low)', borderRadius: '4px', overflow: 'hidden' }}>
+                    <div style={{ height: '100%', width: '100%', backgroundColor: 'var(--ds-color-primary)' }} />
+                  </div>
+                </div>
 
-            {/* Stage 2 */}
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '0.8125rem', fontWeight: 600 }}>
-                <span>2. First Branch Registered</span>
-                <span>{branchCount} ({businessCount > 0 ? Math.min(100, Math.round((branchCount / businessCount) * 100)) : 0}%)</span>
-              </div>
-              <div style={{ height: '8px', width: '100%', backgroundColor: 'var(--ds-color-surface-container-low)', borderRadius: '4px', overflow: 'hidden' }}>
-                <div
-                  style={{
-                    height: '100%',
-                    width: `${businessCount > 0 ? Math.min(100, Math.round((branchCount / businessCount) * 100)) : 0}%`,
-                    backgroundColor: '#2563eb',
-                  }}
-                />
-              </div>
-            </div>
+                {/* Stage 2 */}
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '0.8125rem', fontWeight: 600 }}>
+                    <span>2. First Branch Registered</span>
+                    <span>{branchCount} ({businessCount > 0 ? Math.min(100, Math.round((branchCount / businessCount) * 100)) : 0}%)</span>
+                  </div>
+                  <div style={{ height: '8px', width: '100%', backgroundColor: 'var(--ds-color-surface-container-low)', borderRadius: '4px', overflow: 'hidden' }}>
+                    <div
+                      style={{
+                        height: '100%',
+                        width: `${businessCount > 0 ? Math.min(100, Math.round((branchCount / businessCount) * 100)) : 0}%`,
+                        backgroundColor: '#2563eb',
+                      }}
+                    />
+                  </div>
+                </div>
 
-            {/* Stage 3 */}
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '0.8125rem', fontWeight: 600 }}>
-                <span>3. Onboarding Flow Completed</span>
-                <span>{completedOnboardingCount} ({onboardingCompletionRate}%)</span>
-              </div>
-              <div style={{ height: '8px', width: '100%', backgroundColor: 'var(--ds-color-surface-container-low)', borderRadius: '4px', overflow: 'hidden' }}>
-                <div
-                  style={{
-                    height: '100%',
-                    width: `${onboardingCompletionRate}%`,
-                    backgroundColor: '#059669',
-                  }}
-                />
-              </div>
-            </div>
+                {/* Stage 3 */}
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '0.8125rem', fontWeight: 600 }}>
+                    <span>3. Onboarding Flow Completed</span>
+                    <span>{completedOnboardingCount} ({onboardingCompletionRate}%)</span>
+                  </div>
+                  <div style={{ height: '8px', width: '100%', backgroundColor: 'var(--ds-color-surface-container-low)', borderRadius: '4px', overflow: 'hidden' }}>
+                    <div
+                      style={{
+                        height: '100%',
+                        width: `${onboardingCompletionRate}%`,
+                        backgroundColor: '#059669',
+                      }}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
 
             {/* In Progress Callout */}
             <div
@@ -380,6 +443,261 @@ export default function FounderView({
           <p style={{ margin: 'auto 0 0 0', fontSize: '0.75rem', color: 'var(--ds-color-on-surface-variant)', lineHeight: 1.4 }}>
             All accounts are granted full-feature access through the MVP trial period until live V2 billing launches.
           </p>
+        </section>
+      </div>
+
+      {/* Two Column Grid: Signup Velocity & Platform Feature Adoption */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: 'var(--ds-space-6)' }}>
+        {/* Signup Velocity Card */}
+        <section
+          style={{
+            backgroundColor: 'var(--ds-color-surface-container-lowest)',
+            borderRadius: 'var(--ds-radius-xl)',
+            border: '1px solid var(--ds-color-outline-variant)',
+            padding: 'var(--ds-space-6)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 'var(--ds-space-4)',
+          }}
+        >
+          <div>
+            <span style={{ fontSize: '0.6875rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--ds-color-on-surface-variant)', letterSpacing: '0.05em' }}>
+              Acquisition Momentum
+            </span>
+            <h2 style={{ margin: '4px 0 0 0', fontSize: '1.125rem', fontWeight: 800, color: 'var(--ds-color-on-surface)' }}>
+              Signup Velocity &amp; Weekly Trend
+            </h2>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--ds-space-3)' }}>
+            <div
+              style={{
+                padding: '12px 14px',
+                borderRadius: 'var(--ds-radius-lg)',
+                backgroundColor: 'var(--ds-color-surface-container-low)',
+                border: '1px solid var(--ds-color-outline-variant)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '4px',
+              }}
+            >
+              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--ds-color-on-surface-variant)' }}>
+                Last 7 Days
+              </span>
+              <span style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--ds-color-primary)', lineHeight: 1.1 }}>
+                +{signupVelocity?.last7Days ?? 0}
+              </span>
+              <span style={{ fontSize: '0.6875rem', color: 'var(--ds-color-on-surface-variant)' }}>
+                New SME businesses registered
+              </span>
+            </div>
+
+            <div
+              style={{
+                padding: '12px 14px',
+                borderRadius: 'var(--ds-radius-lg)',
+                backgroundColor: 'var(--ds-color-surface-container-low)',
+                border: '1px solid var(--ds-color-outline-variant)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '4px',
+              }}
+            >
+              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--ds-color-on-surface-variant)' }}>
+                Last 30 Days
+              </span>
+              <span style={{ fontSize: '1.5rem', fontWeight: 800, color: '#2563eb', lineHeight: 1.1 }}>
+                +{signupVelocity?.last30Days ?? 0}
+              </span>
+              <span style={{ fontSize: '0.6875rem', color: 'var(--ds-color-on-surface-variant)' }}>
+                Monthly acquisition volume
+              </span>
+            </div>
+          </div>
+
+          {/* 4-Week Progress Bars */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '4px' }}>
+            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--ds-color-on-surface-variant)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              4-Week Registration Velocity
+            </span>
+            {(signupVelocity?.weeklyTrend || []).map((w) => (
+              <div key={w.label}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', fontSize: '0.75rem', fontWeight: 600 }}>
+                  <span style={{ color: 'var(--ds-color-on-surface)' }}>{w.label}</span>
+                  <span style={{ color: 'var(--ds-color-on-surface-variant)' }}>{w.count} signups</span>
+                </div>
+                <div style={{ height: '6px', width: '100%', backgroundColor: 'var(--ds-color-surface-container-low)', borderRadius: '3px', overflow: 'hidden' }}>
+                  <div
+                    style={{
+                      height: '100%',
+                      width: `${Math.max(5, w.percentage)}%`,
+                      backgroundColor: 'var(--ds-color-primary)',
+                      borderRadius: '3px',
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Aggregated Feature Adoption & Product Activity Card */}
+        <section
+          style={{
+            backgroundColor: 'var(--ds-color-surface-container-lowest)',
+            borderRadius: 'var(--ds-radius-xl)',
+            border: '1px solid var(--ds-color-outline-variant)',
+            padding: 'var(--ds-space-6)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 'var(--ds-space-4)',
+          }}
+        >
+          <div>
+            <span style={{ fontSize: '0.6875rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--ds-color-on-surface-variant)', letterSpacing: '0.05em' }}>
+              Platform Activity
+            </span>
+            <h2 style={{ margin: '4px 0 0 0', fontSize: '1.125rem', fontWeight: 800, color: 'var(--ds-color-on-surface)' }}>
+              Core Feature Adoption
+            </h2>
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, 1fr)',
+              gap: 'var(--ds-space-3)',
+            }}
+          >
+            {/* AI Assistant Conversations */}
+            <div
+              style={{
+                padding: '12px 14px',
+                borderRadius: 'var(--ds-radius-lg)',
+                backgroundColor: 'var(--ds-color-surface-container-low)',
+                border: '1px solid var(--ds-color-outline-variant)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '4px',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--ds-color-on-surface-variant)' }}>
+                  AI Assistant
+                </span>
+                <Sparkles size={15} color="#0284c7" />
+              </div>
+              <span style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--ds-color-on-surface)', lineHeight: 1.1 }}>
+                {featureAdoption?.totalAiConversations ?? 0}
+              </span>
+              <span style={{ fontSize: '0.6875rem', color: 'var(--ds-color-on-surface-variant)' }}>
+                Conversations answered
+              </span>
+            </div>
+
+            {/* Invoices & Sales Recorded */}
+            <div
+              style={{
+                padding: '12px 14px',
+                borderRadius: 'var(--ds-radius-lg)',
+                backgroundColor: 'var(--ds-color-surface-container-low)',
+                border: '1px solid var(--ds-color-outline-variant)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '4px',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--ds-color-on-surface-variant)' }}>
+                  Sales &amp; Invoices
+                </span>
+                <Receipt size={15} color="#059669" />
+              </div>
+              <span style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--ds-color-on-surface)', lineHeight: 1.1 }}>
+                {featureAdoption?.totalInvoicesRecorded ?? 0}
+              </span>
+              <span style={{ fontSize: '0.6875rem', color: 'var(--ds-color-on-surface-variant)' }}>
+                Total transactions recorded
+              </span>
+            </div>
+
+            {/* Customers Managed */}
+            <div
+              style={{
+                padding: '12px 14px',
+                borderRadius: 'var(--ds-radius-lg)',
+                backgroundColor: 'var(--ds-color-surface-container-low)',
+                border: '1px solid var(--ds-color-outline-variant)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '4px',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--ds-color-on-surface-variant)' }}>
+                  SME Customers
+                </span>
+                <Users size={15} color="#7c3aed" />
+              </div>
+              <span style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--ds-color-on-surface)', lineHeight: 1.1 }}>
+                {featureAdoption?.totalCustomers ?? 0}
+              </span>
+              <span style={{ fontSize: '0.6875rem', color: 'var(--ds-color-on-surface-variant)' }}>
+                Customer profiles managed
+              </span>
+            </div>
+
+            {/* Inventory Items Tracked */}
+            <div
+              style={{
+                padding: '12px 14px',
+                borderRadius: 'var(--ds-radius-lg)',
+                backgroundColor: 'var(--ds-color-surface-container-low)',
+                border: '1px solid var(--ds-color-outline-variant)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '4px',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--ds-color-on-surface-variant)' }}>
+                  Catalog SKUs
+                </span>
+                <Package size={15} color="#d97706" />
+              </div>
+              <span style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--ds-color-on-surface)', lineHeight: 1.1 }}>
+                {featureAdoption?.totalStockItems ?? 0}
+              </span>
+              <span style={{ fontSize: '0.6875rem', color: 'var(--ds-color-on-surface-variant)' }}>
+                Stock items tracked
+              </span>
+            </div>
+          </div>
+
+          {/* Multi-Branch Split Footer */}
+          <div
+            className="founder-topology-split"
+            style={{
+              padding: '10px 14px',
+              borderRadius: 'var(--ds-radius-md)',
+              backgroundColor: 'var(--ds-color-surface-container-low)',
+              border: '1px solid var(--ds-color-outline-variant)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              fontSize: '0.75rem',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Store size={14} color="var(--ds-color-primary)" />
+              <span style={{ color: 'var(--ds-color-on-surface)', fontWeight: 600 }}>
+                Branch Topology Split:
+              </span>
+            </div>
+            <span style={{ color: 'var(--ds-color-on-surface-variant)' }}>
+              <strong>{featureAdoption?.singleBranchCount ?? 0}</strong> Single-Branch &middot; <strong>{featureAdoption?.multiBranchCount ?? 0}</strong> Multi-Branch
+            </span>
+          </div>
         </section>
       </div>
 

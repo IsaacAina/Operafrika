@@ -71,6 +71,7 @@ model User {
   payrollEntries             PayrollEntry[]
   sessions                   Session[]
   supportMessages            SupportMessage[]
+  chatMessages               ChatMessage[]
   business                   Business               @relation(fields: [businessId], references: [id])
 
   @@index([deletedAt])
@@ -245,12 +246,32 @@ model Subscription {
 }
 
 model SupportMessage {
-  id        String   @id @default(cuid())
-  userId    String?
-  message   String
-  createdAt DateTime @default(now())
-  resolved  Boolean  @default(false)
-  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id             String    @id @default(cuid())
+  userId         String?
+  message        String
+  createdAt      DateTime  @default(now())
+  resolved       Boolean   @default(false)
+  adminReply     String?
+  adminRepliedAt DateTime?
+  adminEmail     String?
+  user           User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ChatMessage {
+  id           String    @id @default(cuid())
+  userId       String
+  businessId   String
+  branchId     String?
+  prompt       String
+  response     String
+  label        String?
+  dataSnapshot Json?
+  createdAt    DateTime  @default(now())
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([businessId])
+  @@index([createdAt])
 }
 
 model AuditLog {

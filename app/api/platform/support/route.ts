@@ -34,35 +34,79 @@ export async function GET(request: Request) {
     }
 
     const { messages, totalCount, pendingCount, resolvedCount } = await withSystemRls(async (tx) => {
-      const totalCount = await tx.supportMessage.count()
-      const pendingCount = await tx.supportMessage.count({ where: { resolved: false } })
-      const resolvedCount = await tx.supportMessage.count({ where: { resolved: true } })
+      const counts = await tx.$queryRaw<Array<{ total: bigint; pending: bigint; resolved: bigint }>>`
+        SELECT
+          COUNT(*)::bigint AS total,
+          COUNT(*) FILTER (WHERE resolved = false)::bigint AS pending,
+          COUNT(*) FILTER (WHERE resolved = true)::bigint AS resolved
+        FROM "SupportMessage"
+      `
+      const totalCount = Number(counts[0]?.total ?? 0)
+      const pendingCount = Number(counts[0]?.pending ?? 0)
+      const resolvedCount = Number(counts[0]?.resolved ?? 0)
 
-      const messages = await tx.supportMessage.findMany({
-        where: whereClause,
-        include: {
-          user: {
-            select: {
-              id: true,
-              email: true,
-              role: true,
+      let rawRows: any[] = []
+      if (status === 'pending') {
+        rawRows = await tx.$queryRaw<any[]>`
+          SELECT sm.id, sm.message, sm.resolved, sm."createdAt", sm."adminReply", sm."adminRepliedAt", sm."adminEmail",
+                 u.id as "userId", u.email as "userEmail", u.role as "userRole",
+                 b.id as "businessId", b.name as "businessName", b.currency as "businessCurrency", b."businessType" as "businessType"
+            FROM "SupportMessage" sm
+            LEFT JOIN "User" u ON sm."userId" = u.id
+            LEFT JOIN "Business" b ON u."businessId" = b.id
+           WHERE sm.resolved = false
+           ORDER BY sm."createdAt" DESC
+           LIMIT ${pageSize} OFFSET ${skip}
+        `
+      } else if (status === 'resolved') {
+        rawRows = await tx.$queryRaw<any[]>`
+          SELECT sm.id, sm.message, sm.resolved, sm."createdAt", sm."adminReply", sm."adminRepliedAt", sm."adminEmail",
+                 u.id as "userId", u.email as "userEmail", u.role as "userRole",
+                 b.id as "businessId", b.name as "businessName", b.currency as "businessCurrency", b."businessType" as "businessType"
+            FROM "SupportMessage" sm
+            LEFT JOIN "User" u ON sm."userId" = u.id
+            LEFT JOIN "Business" b ON u."businessId" = b.id
+           WHERE sm.resolved = true
+           ORDER BY sm."createdAt" DESC
+           LIMIT ${pageSize} OFFSET ${skip}
+        `
+      } else {
+        rawRows = await tx.$queryRaw<any[]>`
+          SELECT sm.id, sm.message, sm.resolved, sm."createdAt", sm."adminReply", sm."adminRepliedAt", sm."adminEmail",
+                 u.id as "userId", u.email as "userEmail", u.role as "userRole",
+                 b.id as "businessId", b.name as "businessName", b.currency as "businessCurrency", b."businessType" as "businessType"
+            FROM "SupportMessage" sm
+            LEFT JOIN "User" u ON sm."userId" = u.id
+            LEFT JOIN "Business" b ON u."businessId" = b.id
+           ORDER BY sm."createdAt" DESC
+           LIMIT ${pageSize} OFFSET ${skip}
+        `
+      }
+
+      const formatted = rawRows.map((m) => ({
+        id: m.id,
+        message: m.message,
+        resolved: m.resolved,
+        createdAt: m.createdAt,
+        adminReply: m.adminReply ?? null,
+        adminRepliedAt: m.adminRepliedAt ?? null,
+        adminEmail: m.adminEmail ?? null,
+        user: m.userId
+          ? {
+              id: m.userId,
+              email: m.userEmail,
+              role: m.userRole,
               business: {
-                select: {
-                  id: true,
-                  name: true,
-                  businessType: true,
-                  currency: true,
-                },
+                id: m.businessId,
+                name: m.businessName,
+                currency: m.businessCurrency,
+                businessType: m.businessType,
               },
-            },
-          },
-        },
-        orderBy: { createdAt: 'desc' },
-        skip,
-        take: pageSize,
-      })
+            }
+          : null,
+      }))
 
-      return { messages, totalCount, pendingCount, resolvedCount }
+      return { messages: formatted, totalCount, pendingCount, resolvedCount }
     })
 
     const filteredTotal =

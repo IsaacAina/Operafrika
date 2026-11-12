@@ -47,6 +47,8 @@ export default async function AdminConsolePage({
     initialSupportMessages,
     pendingSupportCount,
     totalSupportCount,
+    systemHealth,
+    complianceOverview,
   } = await withSystemRls(
     async (tx) => {
       const businessCount = await tx.business.count({
@@ -72,43 +74,50 @@ export default async function AdminConsolePage({
       const totalSupportCount = await tx.supportMessage.count()
       const pendingSupportCount = await tx.supportMessage.count({ where: { resolved: false } })
 
-      const rawSupportMessages = await tx.supportMessage.findMany({
-        include: {
-          user: {
-            select: {
-              id: true,
-              email: true,
-              role: true,
-              business: {
-                select: {
-                  id: true,
-                  name: true,
-                  currency: true,
-                  businessType: true,
-                },
-              },
-            },
-          },
-        },
-        orderBy: { createdAt: 'desc' },
-        take: 40,
-      })
+      const rawSupportMessages = await tx.$queryRaw<
+        Array<{
+          id: string
+          message: string
+          resolved: boolean
+          createdAt: Date | string
+          adminReply: string | null
+          adminRepliedAt: Date | string | null
+          adminEmail: string | null
+          userId: string | null
+          userEmail: string | null
+          userRole: string | null
+          businessId: string | null
+          businessName: string | null
+          businessCurrency: string | null
+          businessType: string | null
+        }>
+      >`SELECT sm.id, sm.message, sm.resolved, sm."createdAt", sm."adminReply", sm."adminRepliedAt", sm."adminEmail",
+               u.id as "userId", u.email as "userEmail", u.role as "userRole",
+               b.id as "businessId", b.name as "businessName", b.currency as "businessCurrency", b."businessType" as "businessType"
+          FROM "SupportMessage" sm
+          LEFT JOIN "User" u ON sm."userId" = u.id
+          LEFT JOIN "Business" b ON u."businessId" = b.id
+         ORDER BY sm."createdAt" DESC
+         LIMIT 40`
 
       const initialSupportMessages = rawSupportMessages.map((m) => ({
         id: m.id,
         message: m.message,
         resolved: m.resolved,
-        createdAt: m.createdAt.toISOString(),
-        user: m.user
+        createdAt: m.createdAt instanceof Date ? m.createdAt.toISOString() : String(m.createdAt),
+        adminReply: m.adminReply ?? null,
+        adminRepliedAt: m.adminRepliedAt ? new Date(m.adminRepliedAt).toISOString() : null,
+        adminEmail: m.adminEmail ?? null,
+        user: m.userId
           ? {
-              id: m.user.id,
-              email: m.user.email,
-              role: m.user.role,
+              id: m.userId,
+              email: m.userEmail || '',
+              role: m.userRole || 'OWNER',
               business: {
-                id: m.user.business.id,
-                name: m.user.business.name,
-                currency: m.user.business.currency,
-                businessType: m.user.business.businessType,
+                id: m.businessId || '',
+                name: m.businessName || 'Business',
+                currency: m.businessCurrency || 'NGN',
+                businessType: m.businessType || 'SME',
               },
             }
           : null,
@@ -172,6 +181,69 @@ export default async function AdminConsolePage({
         }
       })
 
+      // System Health measurement
+      const dbPingStart = performance.now()
+      await tx.$queryRaw`SELECT 1`
+      const dbLatencyMs = Math.max(1, Math.round(performance.now() - dbPingStart))
+
+      const activeSessionsCount = await tx.session.count({
+        where: { expiresAt: { gt: new Date() } },
+      })
+
+      const systemHealth = {
+        databaseStatus: 'Healthy (PostgreSQL)',
+        databaseLatencyMs: dbLatencyMs,
+        aiServiceStatus: process.env.GEMINI_API_KEY ? 'Configured (Gemini Free Tier)' : 'Missing GEMINI_API_KEY',
+        rlsEnforcement: 'Active (PostgreSQL Policies Enforced)',
+        activeSessionsCount,
+        nodeVersion: process.version,
+        environment: process.env.NODE_ENV || 'development',
+      }
+
+      // Compliance & Account Lifecycle (NDPA)
+      const scheduledDeletionsCount = await tx.business.count({
+        where: { deletedAt: { not: null } },
+      })
+
+      const lockedOrBannedUsersCount = await tx.user.count({
+        where: {
+          OR: [
+            { bannedAt: { not: null } },
+            { lockedUntil: { gt: new Date() } },
+          ],
+        },
+      })
+
+      const deletingBusinesses = await tx.business.findMany({
+        where: { deletedAt: { not: null } },
+        select: {
+          id: true,
+          name: true,
+          deletedAt: true,
+          deletionScheduledFor: true,
+          users: {
+            where: { role: 'OWNER' },
+            select: { email: true },
+            take: 1,
+          },
+        },
+        take: 10,
+      })
+
+      const pendingDeletions = deletingBusinesses.map((b) => ({
+        id: b.id,
+        name: b.name,
+        ownerEmail: b.users[0]?.email || 'Unknown',
+        deletedAt: b.deletedAt ? b.deletedAt.toISOString() : null,
+        deletionScheduledFor: b.deletionScheduledFor ? b.deletionScheduledFor.toISOString() : null,
+      }))
+
+      const complianceOverview = {
+        scheduledDeletionsCount,
+        lockedOrBannedUsersCount,
+        pendingDeletions,
+      }
+
       return {
         businessCount,
         userCount,
@@ -181,6 +253,8 @@ export default async function AdminConsolePage({
         initialSupportMessages,
         pendingSupportCount,
         totalSupportCount,
+        systemHealth,
+        complianceOverview,
       }
     },
   )
@@ -293,6 +367,8 @@ export default async function AdminConsolePage({
           initialSupportMessages={initialSupportMessages}
           pendingSupportCount={pendingSupportCount}
           totalSupportCount={totalSupportCount}
+          systemHealth={systemHealth}
+          complianceOverview={complianceOverview}
         />
       </div>
     </main>

@@ -145,7 +145,21 @@ export default function NotificationCenter() {
   }
 
   return (
-    <div ref={panelRef} style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div
+      ref={panelRef}
+      className="header-notification-wrapper"
+      style={{
+        position: 'relative',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '40px',
+        height: '40px',
+        minWidth: '40px',
+        minHeight: '40px',
+        flexShrink: 0,
+      }}
+    >
       {/* Bell Trigger Button */}
       <button
         type="button"
@@ -156,14 +170,23 @@ export default function NotificationCenter() {
           setIsOpen((prev) => !prev)
           if (!isOpen) fetchNotifications()
         }}
+        className="header-round-btn header-notification-btn"
         style={{
-          display: 'flex',
+          display: 'inline-flex',
           alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
           width: '40px',
           height: '40px',
-          borderRadius: 'var(--ds-radius-full)',
+          minWidth: '40px',
+          minHeight: '40px',
+          maxWidth: '40px',
+          maxHeight: '40px',
+          aspectRatio: '1 / 1',
+          padding: 0,
+          margin: 0,
+          boxSizing: 'border-box',
+          borderRadius: '50%',
           backgroundColor: isOpen ? 'var(--ds-color-surface-container-high)' : 'var(--ds-color-surface-container-low)',
           border: '1px solid var(--ds-color-outline-variant)',
           color: 'var(--ds-color-on-surface)',
@@ -172,6 +195,7 @@ export default function NotificationCenter() {
           transition: 'all 0.18s ease',
           boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
           flexShrink: 0,
+          overflow: 'visible',
         }}
       >
         <Bell size={18} color={hasCritical ? '#dc2626' : 'var(--ds-color-on-surface)'} />
@@ -222,351 +246,351 @@ export default function NotificationCenter() {
             <div className="notification-mobile-handle" aria-hidden="true" />
 
             {/* Drawer Header */}
-          <div
-            style={{
-              padding: 'var(--ds-space-4) var(--ds-space-5)',
-              borderBottom: '1px solid var(--ds-color-outline-variant)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              backgroundColor: 'var(--ds-color-surface-container-low)',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Bell size={18} color="var(--ds-color-primary)" />
-              <h3
-                style={{
-                  margin: 0,
-                  fontSize: '0.9375rem',
-                  fontWeight: 800,
-                  color: 'var(--ds-color-on-surface)',
-                  letterSpacing: '-0.01em',
-                }}
-              >
-                Notifications
-              </h3>
-              {unreadCount > 0 && (
-                <span
+            <div
+              style={{
+                padding: 'var(--ds-space-4) var(--ds-space-5)',
+                borderBottom: '1px solid var(--ds-color-outline-variant)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                backgroundColor: 'var(--ds-color-surface-container-low)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Bell size={18} color="var(--ds-color-primary)" />
+                <h3
                   style={{
-                    padding: '2px 8px',
-                    borderRadius: 'var(--ds-radius-full)',
-                    backgroundColor: hasCritical ? 'rgba(239, 68, 68, 0.15)' : 'rgba(15, 118, 110, 0.15)',
-                    color: hasCritical ? '#dc2626' : 'var(--ds-color-primary)',
-                    fontSize: '0.6875rem',
+                    margin: 0,
+                    fontSize: '0.9375rem',
                     fontWeight: 800,
+                    color: 'var(--ds-color-on-surface)',
+                    letterSpacing: '-0.01em',
                   }}
                 >
-                  {unreadCount} new
-                </span>
-              )}
-            </div>
+                  Notifications
+                </h3>
+                {unreadCount > 0 && (
+                  <span
+                    style={{
+                      padding: '2px 8px',
+                      borderRadius: 'var(--ds-radius-full)',
+                      backgroundColor: hasCritical ? 'rgba(239, 68, 68, 0.15)' : 'rgba(15, 118, 110, 0.15)',
+                      color: hasCritical ? '#dc2626' : 'var(--ds-color-primary)',
+                      fontSize: '0.6875rem',
+                      fontWeight: 800,
+                    }}
+                  >
+                    {unreadCount} new
+                  </span>
+                )}
+              </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              {unreadCount > 0 && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                {unreadCount > 0 && (
+                  <button
+                    type="button"
+                    onClick={handleMarkAllAsRead}
+                    title="Mark all notifications as read"
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      color: 'var(--ds-color-primary)',
+                      cursor: 'pointer',
+                      fontSize: '0.75rem',
+                      fontWeight: 700,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      padding: '4px 6px',
+                      borderRadius: 'var(--ds-radius-sm)',
+                    }}
+                  >
+                    <CheckCheck size={14} />
+                    <span>Mark read</span>
+                  </button>
+                )}
                 <button
                   type="button"
-                  onClick={handleMarkAllAsRead}
-                  title="Mark all notifications as read"
+                  onClick={() => setIsOpen(false)}
+                  aria-label="Close notifications"
                   style={{
                     background: 'transparent',
                     border: 'none',
-                    color: 'var(--ds-color-primary)',
+                    color: 'var(--ds-color-on-surface-variant)',
                     cursor: 'pointer',
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    padding: '4px 6px',
-                    borderRadius: 'var(--ds-radius-sm)',
-                  }}
-                >
-                  <CheckCheck size={14} />
-                  <span>Mark read</span>
-                </button>
-              )}
-              <button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                aria-label="Close notifications"
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  color: 'var(--ds-color-on-surface-variant)',
-                  cursor: 'pointer',
-                  padding: '4px',
-                  borderRadius: 'var(--ds-radius-md)',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
-                <X size={18} />
-              </button>
-            </div>
-          </div>
-
-          {/* Segmented Filter Bar */}
-          <div
-            style={{
-              padding: '8px 12px',
-              borderBottom: '1px solid var(--ds-color-outline-variant)',
-              display: 'flex',
-              gap: '4px',
-              backgroundColor: 'var(--ds-color-surface-container-lowest)',
-            }}
-          >
-            <button
-              type="button"
-              onClick={() => setActiveTab('all')}
-              style={{
-                flex: 1,
-                padding: '6px 8px',
-                borderRadius: 'var(--ds-radius-md)',
-                border: 'none',
-                backgroundColor: activeTab === 'all' ? 'var(--ds-color-surface-container-high)' : 'transparent',
-                color: activeTab === 'all' ? 'var(--ds-color-on-surface)' : 'var(--ds-color-on-surface-variant)',
-                fontSize: '0.75rem',
-                fontWeight: activeTab === 'all' ? 700 : 500,
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '4px',
-              }}
-            >
-              <span>All</span>
-              <span style={{ fontSize: '0.6875rem', opacity: 0.8 }}>({notifications.length})</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab('alerts')}
-              style={{
-                flex: 1,
-                padding: '6px 8px',
-                borderRadius: 'var(--ds-radius-md)',
-                border: 'none',
-                backgroundColor: activeTab === 'alerts' ? 'var(--ds-color-surface-container-high)' : 'transparent',
-                color: activeTab === 'alerts' ? 'var(--ds-color-on-surface)' : 'var(--ds-color-on-surface-variant)',
-                fontSize: '0.75rem',
-                fontWeight: activeTab === 'alerts' ? 700 : 500,
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '4px',
-              }}
-            >
-              <span>Alerts</span>
-              <span style={{ fontSize: '0.6875rem', opacity: 0.8 }}>({alertCount})</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab('system')}
-              style={{
-                flex: 1,
-                padding: '6px 8px',
-                borderRadius: 'var(--ds-radius-md)',
-                border: 'none',
-                backgroundColor: activeTab === 'system' ? 'var(--ds-color-surface-container-high)' : 'transparent',
-                color: activeTab === 'system' ? 'var(--ds-color-on-surface)' : 'var(--ds-color-on-surface-variant)',
-                fontSize: '0.75rem',
-                fontWeight: activeTab === 'system' ? 700 : 500,
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '4px',
-              }}
-            >
-              <span>System</span>
-              <span style={{ fontSize: '0.6875rem', opacity: 0.8 }}>({systemCount})</span>
-            </button>
-          </div>
-
-          {/* Notifications Scroll Area */}
-          <div
-            style={{
-              maxHeight: '380px',
-              overflowY: 'auto',
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-          >
-            {filteredNotifications.length === 0 ? (
-              <div
-                style={{
-                  padding: 'var(--ds-space-8) var(--ds-space-4)',
-                  textAlign: 'center',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: 'var(--ds-space-2)',
-                }}
-              >
-                <div
-                  style={{
-                    width: '42px',
-                    height: '42px',
-                    borderRadius: 'var(--ds-radius-full)',
-                    backgroundColor: 'rgba(16, 185, 129, 0.12)',
-                    color: '#047857',
+                    padding: '4px',
+                    borderRadius: 'var(--ds-radius-md)',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
                   }}
                 >
-                  <CheckCircle2 size={22} />
-                </div>
-                <h4 style={{ margin: '4px 0 0', fontSize: '0.875rem', fontWeight: 700, color: 'var(--ds-color-on-surface)' }}>
-                  All caught up!
-                </h4>
-                <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--ds-color-on-surface-variant)', maxWidth: '240px' }}>
-                  No active warnings or unread alerts in this category.
-                </p>
+                  <X size={18} />
+                </button>
               </div>
-            ) : (
-              filteredNotifications.map((n) => {
-                const isRead = readIds.has(n.id)
-                const styling = getCategoryIcon(n.category, n.severity)
+            </div>
 
-                return (
-                  <Link
-                    key={n.id}
-                    href={n.link}
-                    onClick={() => {
-                      handleMarkAsRead(n.id)
-                      setIsOpen(false)
-                    }}
-                    style={{
-                      padding: '12px 16px',
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      gap: '12px',
-                      borderBottom: '1px solid var(--ds-color-outline-variant)',
-                      backgroundColor: isRead ? 'transparent' : 'rgba(15, 118, 110, 0.04)',
-                      textDecoration: 'none',
-                      transition: 'background-color 0.15s ease',
-                    }}
-                  >
-                    {/* Category Icon Badge */}
-                    <div
-                      style={{
-                        width: '32px',
-                        height: '32px',
-                        borderRadius: 'var(--ds-radius-lg)',
-                        backgroundColor: styling.bg,
-                        color: styling.color,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0,
-                        marginTop: '2px',
-                      }}
-                    >
-                      {styling.icon}
-                    </div>
-
-                    {/* Content Details */}
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
-                        <span
-                          style={{
-                            fontWeight: isRead ? 600 : 800,
-                            fontSize: '0.8125rem',
-                            color: 'var(--ds-color-on-surface)',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                          }}
-                        >
-                          {n.title}
-                        </span>
-                        {!isRead && (
-                          <span
-                            style={{
-                              width: '7px',
-                              height: '7px',
-                              borderRadius: 'var(--ds-radius-full)',
-                              backgroundColor: n.severity === 'CRITICAL' ? '#dc2626' : 'var(--ds-color-primary)',
-                              flexShrink: 0,
-                            }}
-                          />
-                        )}
-                      </div>
-
-                      <p
-                        style={{
-                          margin: '3px 0 0 0',
-                          fontSize: '0.75rem',
-                          color: 'var(--ds-color-on-surface-variant)',
-                          lineHeight: 1.4,
-                        }}
-                      >
-                        {n.message}
-                      </p>
-
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                          marginTop: '6px',
-                          fontSize: '0.6875rem',
-                          color: 'var(--ds-color-on-surface-variant)',
-                        }}
-                      >
-                        {n.branchName && (
-                          <span
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: '3px',
-                              fontWeight: 600,
-                            }}
-                          >
-                            <Store size={10} /> {n.branchName}
-                          </span>
-                        )}
-                        <span>&middot;</span>
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', color: 'var(--ds-color-primary)', fontWeight: 600 }}>
-                          View details <ChevronRight size={10} />
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                )
-              })
-            )}
-          </div>
-
-          {/* Drawer Footer */}
-          <div
-            style={{
-              padding: '10px 16px',
-              backgroundColor: 'var(--ds-color-surface-container-low)',
-              borderTop: '1px solid var(--ds-color-outline-variant)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              fontSize: '0.75rem',
-            }}
-          >
-            <span style={{ color: 'var(--ds-color-on-surface-variant)' }}>
-              In-app alerts &middot; Operafrika MVP
-            </span>
-            <Link
-              href="/app/settings"
-              onClick={() => setIsOpen(false)}
+            {/* Segmented Filter Bar */}
+            <div
               style={{
-                color: 'var(--ds-color-primary)',
-                fontWeight: 700,
-                textDecoration: 'none',
+                padding: '8px 12px',
+                borderBottom: '1px solid var(--ds-color-outline-variant)',
+                display: 'flex',
+                gap: '4px',
+                backgroundColor: 'var(--ds-color-surface-container-lowest)',
               }}
             >
-              Preferences &rarr;
-            </Link>
+              <button
+                type="button"
+                onClick={() => setActiveTab('all')}
+                style={{
+                  flex: 1,
+                  padding: '6px 8px',
+                  borderRadius: 'var(--ds-radius-md)',
+                  border: 'none',
+                  backgroundColor: activeTab === 'all' ? 'var(--ds-color-surface-container-high)' : 'transparent',
+                  color: activeTab === 'all' ? 'var(--ds-color-on-surface)' : 'var(--ds-color-on-surface-variant)',
+                  fontSize: '0.75rem',
+                  fontWeight: activeTab === 'all' ? 700 : 500,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '4px',
+                }}
+              >
+                <span>All</span>
+                <span style={{ fontSize: '0.6875rem', opacity: 0.8 }}>({notifications.length})</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab('alerts')}
+                style={{
+                  flex: 1,
+                  padding: '6px 8px',
+                  borderRadius: 'var(--ds-radius-md)',
+                  border: 'none',
+                  backgroundColor: activeTab === 'alerts' ? 'var(--ds-color-surface-container-high)' : 'transparent',
+                  color: activeTab === 'alerts' ? 'var(--ds-color-on-surface)' : 'var(--ds-color-on-surface-variant)',
+                  fontSize: '0.75rem',
+                  fontWeight: activeTab === 'alerts' ? 700 : 500,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '4px',
+                }}
+              >
+                <span>Alerts</span>
+                <span style={{ fontSize: '0.6875rem', opacity: 0.8 }}>({alertCount})</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab('system')}
+                style={{
+                  flex: 1,
+                  padding: '6px 8px',
+                  borderRadius: 'var(--ds-radius-md)',
+                  border: 'none',
+                  backgroundColor: activeTab === 'system' ? 'var(--ds-color-surface-container-high)' : 'transparent',
+                  color: activeTab === 'system' ? 'var(--ds-color-on-surface)' : 'var(--ds-color-on-surface-variant)',
+                  fontSize: '0.75rem',
+                  fontWeight: activeTab === 'system' ? 700 : 500,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '4px',
+                }}
+              >
+                <span>System</span>
+                <span style={{ fontSize: '0.6875rem', opacity: 0.8 }}>({systemCount})</span>
+              </button>
+            </div>
+
+            {/* Notifications Scroll Area */}
+            <div
+              style={{
+                maxHeight: '380px',
+                overflowY: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              {filteredNotifications.length === 0 ? (
+                <div
+                  style={{
+                    padding: 'var(--ds-space-8) var(--ds-space-4)',
+                    textAlign: 'center',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: 'var(--ds-space-2)',
+                  }}
+                >
+                  <div
+                    style={{
+                      width: '42px',
+                      height: '42px',
+                      borderRadius: 'var(--ds-radius-full)',
+                      backgroundColor: 'rgba(16, 185, 129, 0.12)',
+                      color: '#047857',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <CheckCircle2 size={22} />
+                  </div>
+                  <h4 style={{ margin: '4px 0 0', fontSize: '0.875rem', fontWeight: 700, color: 'var(--ds-color-on-surface)' }}>
+                    All caught up!
+                  </h4>
+                  <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--ds-color-on-surface-variant)', maxWidth: '240px' }}>
+                    No active warnings or unread alerts in this category.
+                  </p>
+                </div>
+              ) : (
+                filteredNotifications.map((n) => {
+                  const isRead = readIds.has(n.id)
+                  const styling = getCategoryIcon(n.category, n.severity)
+
+                  return (
+                    <Link
+                      key={n.id}
+                      href={n.link}
+                      onClick={() => {
+                        handleMarkAsRead(n.id)
+                        setIsOpen(false)
+                      }}
+                      style={{
+                        padding: '12px 16px',
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: '12px',
+                        borderBottom: '1px solid var(--ds-color-outline-variant)',
+                        backgroundColor: isRead ? 'transparent' : 'rgba(15, 118, 110, 0.04)',
+                        textDecoration: 'none',
+                        transition: 'background-color 0.15s ease',
+                      }}
+                    >
+                      {/* Category Icon Badge */}
+                      <div
+                        style={{
+                          width: '32px',
+                          height: '32px',
+                          borderRadius: 'var(--ds-radius-lg)',
+                          backgroundColor: styling.bg,
+                          color: styling.color,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          flexShrink: 0,
+                          marginTop: '2px',
+                        }}
+                      >
+                        {styling.icon}
+                      </div>
+
+                      {/* Content Details */}
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+                          <span
+                            style={{
+                              fontWeight: isRead ? 600 : 800,
+                              fontSize: '0.8125rem',
+                              color: 'var(--ds-color-on-surface)',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
+                          >
+                            {n.title}
+                          </span>
+                          {!isRead && (
+                            <span
+                              style={{
+                                width: '7px',
+                                height: '7px',
+                                borderRadius: 'var(--ds-radius-full)',
+                                backgroundColor: n.severity === 'CRITICAL' ? '#dc2626' : 'var(--ds-color-primary)',
+                                flexShrink: 0,
+                              }}
+                            />
+                          )}
+                        </div>
+
+                        <p
+                          style={{
+                            margin: '3px 0 0 0',
+                            fontSize: '0.75rem',
+                            color: 'var(--ds-color-on-surface-variant)',
+                            lineHeight: 1.4,
+                          }}
+                        >
+                          {n.message}
+                        </p>
+
+                        <div
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            marginTop: '6px',
+                            fontSize: '0.6875rem',
+                            color: 'var(--ds-color-on-surface-variant)',
+                          }}
+                        >
+                          {n.branchName && (
+                            <span
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '3px',
+                                fontWeight: 600,
+                              }}
+                            >
+                              <Store size={10} /> {n.branchName}
+                            </span>
+                          )}
+                          <span>&middot;</span>
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', color: 'var(--ds-color-primary)', fontWeight: 600 }}>
+                            View details <ChevronRight size={10} />
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  )
+                })
+              )}
+            </div>
+
+            {/* Drawer Footer */}
+            <div
+              style={{
+                padding: '10px 16px',
+                backgroundColor: 'var(--ds-color-surface-container-low)',
+                borderTop: '1px solid var(--ds-color-outline-variant)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                fontSize: '0.75rem',
+              }}
+            >
+              <span style={{ color: 'var(--ds-color-on-surface-variant)' }}>
+                In-app alerts &middot; Operafrika MVP
+              </span>
+              <Link
+                href="/app/settings"
+                onClick={() => setIsOpen(false)}
+                style={{
+                  color: 'var(--ds-color-primary)',
+                  fontWeight: 700,
+                  textDecoration: 'none',
+                }}
+              >
+                Preferences &rarr;
+              </Link>
+            </div>
           </div>
-        </div>
         </>
       )}
     </div>

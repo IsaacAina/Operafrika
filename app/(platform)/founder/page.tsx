@@ -130,6 +130,140 @@ export default async function FounderDashboardPage({
 
     const totalPages = Math.max(1, Math.ceil(businessCount / pageSize))
 
+    // 1. Signup Velocity
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+
+    const signupsLast7Days = await tx.business.count({
+      where: { deletedAt: null, createdAt: { gte: sevenDaysAgo } },
+    })
+
+    const signupsLast30Days = await tx.business.count({
+      where: { deletedAt: null, createdAt: { gte: thirtyDaysAgo } },
+    })
+
+    const week4Ago = new Date(Date.now() - 28 * 24 * 60 * 60 * 1000)
+    const week3Ago = new Date(Date.now() - 21 * 24 * 60 * 60 * 1000)
+    const week2Ago = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
+    const week1Ago = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+
+    const [w4Count, w3Count, w2Count, w1Count] = await Promise.all([
+      tx.business.count({ where: { deletedAt: null, createdAt: { gte: week4Ago, lt: week3Ago } } }),
+      tx.business.count({ where: { deletedAt: null, createdAt: { gte: week3Ago, lt: week2Ago } } }),
+      tx.business.count({ where: { deletedAt: null, createdAt: { gte: week2Ago, lt: week1Ago } } }),
+      tx.business.count({ where: { deletedAt: null, createdAt: { gte: week1Ago } } }),
+    ])
+
+    const maxWeekly = Math.max(1, w4Count, w3Count, w2Count, w1Count)
+    const weeklyTrend = [
+      { label: '3-4 wks ago', count: w4Count, percentage: Math.round((w4Count / maxWeekly) * 100) },
+      { label: '2-3 wks ago', count: w3Count, percentage: Math.round((w3Count / maxWeekly) * 100) },
+      { label: 'Last week', count: w2Count, percentage: Math.round((w2Count / maxWeekly) * 100) },
+      { label: 'This week', count: w1Count, percentage: Math.round((w1Count / maxWeekly) * 100) },
+    ]
+
+    const signupVelocity = {
+      last7Days: signupsLast7Days,
+      last30Days: signupsLast30Days,
+      weeklyTrend,
+    }
+
+    // 2. Feature Adoption & Activity
+    let totalAiConversations = 0
+    try {
+      if ((tx as any).chatMessage) {
+        totalAiConversations = await (tx as any).chatMessage.count()
+      } else {
+        const chatRows = await tx.$queryRaw<Array<{ count: bigint }>>`
+          SELECT COUNT(*)::bigint AS count FROM "ChatMessage"
+        `
+        totalAiConversations = Number(chatRows[0]?.count ?? 0)
+      }
+    } catch {
+      try {
+        const chatRows = await tx.$queryRaw<Array<{ count: bigint }>>`
+          SELECT COUNT(*)::bigint AS count FROM "ChatMessage"
+        `
+        totalAiConversations = Number(chatRows[0]?.count ?? 0)
+      } catch {
+        totalAiConversations = 0
+      }
+    }
+
+    const totalInvoicesRecorded = await tx.invoice.count()
+    const totalCustomers = await tx.customer.count()
+    const totalStockItems = await tx.stockItem.count()
+
+    let totalCsvImports = 0
+    try {
+      if ((tx as any).analyticsEvent) {
+        totalCsvImports = await (tx as any).analyticsEvent.count({
+          where: { eventType: 'customer_import_completed' },
+        })
+      } else {
+        const importRows = await tx.$queryRaw<Array<{ count: bigint }>>`
+          SELECT COUNT(*)::bigint AS count FROM "AnalyticsEvent" WHERE "eventType" = 'customer_import_completed'
+        `
+        totalCsvImports = Number(importRows[0]?.count ?? 0)
+      }
+    } catch {
+      totalCsvImports = 0
+    }
+
+    const branchDistribution = await tx.$queryRaw<Array<{ multi: bigint; single: bigint }>>`
+      SELECT
+        COUNT(*) FILTER (WHERE branch_count > 1)::bigint AS multi,
+        COUNT(*) FILTER (WHERE branch_count <= 1)::bigint AS single
+      FROM (
+        SELECT b.id, COUNT(br.id) AS branch_count
+        FROM "Business" b
+        LEFT JOIN "Branch" br ON b.id = br."businessId"
+        WHERE b."deletedAt" IS NULL
+        GROUP BY b.id
+      ) sub
+    `
+    const multiBranchCount = Number(branchDistribution[0]?.multi ?? 0)
+    const singleBranchCount = Number(branchDistribution[0]?.single ?? 0)
+
+    const featureAdoption = {
+      totalAiConversations,
+      totalInvoicesRecorded,
+      totalCustomers,
+      totalStockItems,
+      totalCsvImports,
+      multiBranchCount,
+      singleBranchCount,
+    }
+
+    // 3. Granular Step-by-Step Onboarding Funnel
+    const baseFunnel = Math.max(1, userCount)
+    const onboardingFunnel = [
+      {
+        step: '1. Registration',
+        label: 'Users Registered',
+        count: userCount,
+        percentage: 100,
+      },
+      {
+        step: '2. Profile',
+        label: 'Business Created',
+        count: businessCount,
+        percentage: Math.min(100, Math.round((businessCount / baseFunnel) * 100)),
+      },
+      {
+        step: '3. Deployment',
+        label: 'Branches Configured',
+        count: branchCount,
+        percentage: Math.min(100, Math.round((branchCount / baseFunnel) * 100)),
+      },
+      {
+        step: '4. Completion',
+        label: 'Onboarding Completed',
+        count: completedOnboardingCount,
+        percentage: Math.min(100, Math.round((completedOnboardingCount / baseFunnel) * 100)),
+      },
+    ]
+
     return {
       businessCount,
       userCount,
@@ -142,6 +276,9 @@ export default async function FounderDashboardPage({
       totalPages,
       pageSize,
       totalSignupsCount: businessCount,
+      signupVelocity,
+      featureAdoption,
+      onboardingFunnel,
     }
   })
 
@@ -251,6 +388,9 @@ export default async function FounderDashboardPage({
           totalPages={data.totalPages}
           pageSize={data.pageSize}
           totalSignupsCount={data.totalSignupsCount}
+          signupVelocity={data.signupVelocity}
+          featureAdoption={data.featureAdoption}
+          onboardingFunnel={data.onboardingFunnel}
         />
       </div>
     </main>

@@ -72,7 +72,21 @@ export default function UserAvatarMenu({ name, email, role }: UserAvatarMenuProp
         : { bg: 'rgba(107, 114, 128, 0.12)', color: '#4b5563' }
 
   return (
-    <div ref={menuRef} style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div
+      ref={menuRef}
+      className="header-avatar-wrapper"
+      style={{
+        position: 'relative',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '40px',
+        height: '40px',
+        minWidth: '40px',
+        minHeight: '40px',
+        flexShrink: 0,
+      }}
+    >
       {/* Round Avatar Icon */}
       <button
         type="button"
@@ -80,13 +94,22 @@ export default function UserAvatarMenu({ name, email, role }: UserAvatarMenuProp
         aria-haspopup="true"
         aria-expanded={isOpen}
         onClick={() => setIsOpen((prev) => !prev)}
+        className="header-round-btn header-avatar-btn"
         style={{
-          display: 'flex',
+          display: 'inline-flex',
           alignItems: 'center',
           justifyContent: 'center',
           width: '40px',
           height: '40px',
-          borderRadius: 'var(--ds-radius-full)',
+          minWidth: '40px',
+          minHeight: '40px',
+          maxWidth: '40px',
+          maxHeight: '40px',
+          aspectRatio: '1 / 1',
+          padding: 0,
+          margin: 0,
+          boxSizing: 'border-box',
+          borderRadius: '50%',
           backgroundColor: 'var(--ds-color-primary)',
           color: '#ffffff',
           fontWeight: 800,
@@ -100,6 +123,7 @@ export default function UserAvatarMenu({ name, email, role }: UserAvatarMenuProp
           transition: 'all 0.18s ease',
           transform: isOpen ? 'scale(1.05)' : 'scale(1)',
           flexShrink: 0,
+          overflow: 'hidden',
         }}
       >
         {initial}

@@ -23,6 +23,9 @@ import {
   DollarSign,
   Tag,
   Check,
+  X,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react'
 
 export interface UserSupportTicket {
@@ -30,6 +33,9 @@ export interface UserSupportTicket {
   message: string
   resolved: boolean
   createdAt: string
+  adminReply?: string | null
+  adminRepliedAt?: string | null
+  adminEmail?: string | null
 }
 
 interface SupportViewProps {
@@ -122,6 +128,14 @@ const FAQ_ITEMS: FaqItem[] = [
   },
 ]
 
+const CATEGORY_META: Record<FaqCategory, { label: string; shortLabel: string; icon: React.ElementType }> = {
+  ALL: { label: 'All Topics', shortLabel: 'All', icon: BookOpen },
+  SALES: { label: 'Sales & Invoicing', shortLabel: 'Sales', icon: Receipt },
+  STOCK: { label: 'Stock & Alerts', shortLabel: 'Stock', icon: Package },
+  ROLES: { label: 'Roles & Branches', shortLabel: 'Roles', icon: Store },
+  AI_REPORTS: { label: 'AI & Reports', shortLabel: 'AI & Reports', icon: Sparkles },
+}
+
 const INQUIRY_TOPICS = [
   'General Question',
   'Currency Correction Request',
@@ -143,14 +157,39 @@ export default function SupportView({
   const [selectedCategory, setSelectedCategory] = useState<FaqCategory>('ALL')
   const [openFaqId, setOpenFaqId] = useState<string | null>('faq-1')
 
+  // Category counts
+  const categoryCounts = useMemo(() => {
+    const counts: Record<FaqCategory, number> = {
+      ALL: FAQ_ITEMS.length,
+      SALES: 0,
+      STOCK: 0,
+      ROLES: 0,
+      AI_REPORTS: 0,
+    }
+    for (const item of FAQ_ITEMS) {
+      if (counts[item.category] !== undefined) {
+        counts[item.category]++
+      }
+    }
+    return counts
+  }, [])
+
   // Form states
   const [selectedTopic, setSelectedTopic] = useState<string>('General Question')
   const [message, setMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState<string | null>(null)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [historyPage, setHistoryPage] = useState(1)
+  const historyPageSize = 5
 
   const pendingTicketsCount = tickets.filter((t) => !t.resolved).length
+
+  const historyTotalPages = Math.max(1, Math.ceil(tickets.length / historyPageSize))
+  const paginatedUserTickets = useMemo(() => {
+    const start = (historyPage - 1) * historyPageSize
+    return tickets.slice(start, start + historyPageSize)
+  }, [tickets, historyPage, historyPageSize])
 
   // Filter FAQs
   const filteredFaqs = useMemo(() => {
@@ -235,35 +274,15 @@ export default function SupportView({
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--ds-space-6)', width: '100%' }}>
       {/* Modern Segmented Navigation Bar */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          borderBottom: '1px solid var(--ds-color-outline-variant)',
-          paddingBottom: '12px',
-          overflowX: 'auto',
-          WebkitOverflowScrolling: 'touch',
-        }}
-      >
+      <div className="support-tabs-bar">
         <button
           type="button"
           onClick={() => setActiveTab('faq')}
+          className="support-tab-btn"
           style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '8px 16px',
-            borderRadius: 'var(--ds-radius-lg)',
-            border: '1px solid',
             borderColor: activeTab === 'faq' ? 'var(--ds-color-primary)' : 'transparent',
             backgroundColor: activeTab === 'faq' ? 'var(--ds-color-primary)' : 'transparent',
             color: activeTab === 'faq' ? '#ffffff' : 'var(--ds-color-on-surface-variant)',
-            fontSize: '0.875rem',
-            fontWeight: 700,
-            cursor: 'pointer',
-            whiteSpace: 'nowrap',
-            transition: 'all 0.15s ease',
           }}
         >
           <BookOpen size={16} />
@@ -273,21 +292,11 @@ export default function SupportView({
         <button
           type="button"
           onClick={() => setActiveTab('compose')}
+          className="support-tab-btn"
           style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '8px 16px',
-            borderRadius: 'var(--ds-radius-lg)',
-            border: '1px solid',
             borderColor: activeTab === 'compose' ? 'var(--ds-color-primary)' : 'transparent',
             backgroundColor: activeTab === 'compose' ? 'var(--ds-color-primary)' : 'transparent',
             color: activeTab === 'compose' ? '#ffffff' : 'var(--ds-color-on-surface-variant)',
-            fontSize: '0.875rem',
-            fontWeight: 700,
-            cursor: 'pointer',
-            whiteSpace: 'nowrap',
-            transition: 'all 0.15s ease',
           }}
         >
           <MessageSquare size={16} />
@@ -297,21 +306,11 @@ export default function SupportView({
         <button
           type="button"
           onClick={() => setActiveTab('history')}
+          className="support-tab-btn"
           style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '8px 16px',
-            borderRadius: 'var(--ds-radius-lg)',
-            border: '1px solid',
             borderColor: activeTab === 'history' ? 'var(--ds-color-primary)' : 'transparent',
             backgroundColor: activeTab === 'history' ? 'var(--ds-color-primary)' : 'transparent',
             color: activeTab === 'history' ? '#ffffff' : 'var(--ds-color-on-surface-variant)',
-            fontSize: '0.875rem',
-            fontWeight: 700,
-            cursor: 'pointer',
-            whiteSpace: 'nowrap',
-            transition: 'all 0.15s ease',
           }}
         >
           <Clock size={16} />
@@ -353,28 +352,18 @@ export default function SupportView({
           style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: 'var(--ds-space-5)',
+            gap: 'var(--ds-space-4)',
             width: '100%',
           }}
         >
-          {/* Search & Topic Bar */}
-          <div
-            style={{
-              backgroundColor: 'var(--ds-color-surface-container-lowest)',
-              borderRadius: 'var(--ds-radius-xl)',
-              border: '1px solid var(--ds-color-outline-variant)',
-              padding: 'var(--ds-space-5)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 'var(--ds-space-4)',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+          {/* Search & Topic Bar Card */}
+          <div className="route-card support-search-card">
+            <div className="support-search-header">
               <div>
-                <h2 style={{ fontSize: '1.125rem', fontWeight: 800, color: 'var(--ds-color-on-surface)', margin: 0 }}>
+                <h2 style={{ fontSize: '1.125rem', fontWeight: 800, color: 'var(--ds-color-on-surface)', margin: 0, letterSpacing: '-0.01em' }}>
                   Search Knowledgebase
                 </h2>
-                <p style={{ fontSize: '0.8125rem', color: 'var(--ds-color-on-surface-variant)', margin: '2px 0 0 0' }}>
+                <p style={{ fontSize: '0.8125rem', color: 'var(--ds-color-on-surface-variant)', margin: '3px 0 0 0', lineHeight: 1.4 }}>
                   Frequently asked questions covering sales, branch permissions, inventory, and AI calculations.
                 </p>
               </div>
@@ -382,81 +371,68 @@ export default function SupportView({
               <button
                 type="button"
                 onClick={() => setActiveTab('compose')}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '6px 12px',
-                  borderRadius: 'var(--ds-radius-md)',
-                  border: '1px solid var(--ds-color-primary)',
-                  backgroundColor: 'rgba(15, 118, 110, 0.08)',
-                  color: 'var(--ds-color-primary)',
-                  fontSize: '0.75rem',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                }}
+                className="support-direct-help-btn"
+                aria-label="Contact Platform Team directly"
               >
-                <MessageSquare size={13} />
+                <MessageSquare size={14} />
                 <span>Need Direct Help? Ask Platform Team</span>
               </button>
             </div>
 
-            {/* Search Input */}
-            <div style={{ position: 'relative', width: '100%' }}>
+            {/* Search Input with Clear Button */}
+            <div className="support-search-input-wrapper">
               <Search
-                size={16}
+                size={17}
                 color="var(--ds-color-on-surface-variant)"
-                style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }}
+                style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}
               />
               <input
                 type="text"
-                placeholder="Search questions (e.g. walk-in sale, stock threshold, staff, currency)..."
+                aria-label="Search FAQs"
+                placeholder="Search FAQs (e.g. walk-in sales, stock, staff, currency)..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '10px 14px 10px 38px',
-                  borderRadius: 'var(--ds-radius-lg)',
-                  border: '1px solid var(--ds-color-outline-variant)',
-                  backgroundColor: 'var(--ds-color-surface-container-low)',
-                  fontSize: '0.875rem',
-                  color: 'var(--ds-color-on-surface)',
-                  outline: 'none',
-                }}
+                className="support-search-input"
               />
+              {searchQuery.trim().length > 0 && (
+                <button
+                  type="button"
+                  aria-label="Clear search query"
+                  onClick={() => setSearchQuery('')}
+                  className="support-search-clear-btn"
+                >
+                  <X size={14} />
+                </button>
+              )}
             </div>
 
-            {/* Category Filter Pills */}
-            <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+            {/* Horizontally Scrollable Category Filter Chips */}
+            <div className="support-category-scroll" role="tablist" aria-label="FAQ Topics">
               {(
                 [
-                  { id: 'ALL', label: 'All Topics' },
-                  { id: 'SALES', label: 'Sales & Invoicing' },
-                  { id: 'STOCK', label: 'Stock & Alerts' },
-                  { id: 'ROLES', label: 'Roles & Branches' },
-                  { id: 'AI_REPORTS', label: 'AI & Reports' },
-                ] as { id: FaqCategory; label: string }[]
-              ).map((cat) => {
-                const active = selectedCategory === cat.id
+                  'ALL',
+                  'SALES',
+                  'STOCK',
+                  'ROLES',
+                  'AI_REPORTS',
+                ] as FaqCategory[]
+              ).map((catId) => {
+                const active = selectedCategory === catId
+                const meta = CATEGORY_META[catId]
+                const Icon = meta.icon
+                const count = categoryCounts[catId]
                 return (
                   <button
-                    key={cat.id}
+                    key={catId}
                     type="button"
-                    onClick={() => setSelectedCategory(cat.id)}
-                    style={{
-                      padding: '5px 12px',
-                      fontSize: '0.75rem',
-                      fontWeight: 700,
-                      borderRadius: 'var(--ds-radius-full)',
-                      border: '1px solid',
-                      borderColor: active ? 'var(--ds-color-primary)' : 'var(--ds-color-outline-variant)',
-                      backgroundColor: active ? 'var(--ds-color-primary)' : 'var(--ds-color-surface-container-lowest)',
-                      color: active ? '#ffffff' : 'var(--ds-color-on-surface-variant)',
-                      cursor: 'pointer',
-                      transition: 'all 0.15s ease',
-                    }}
+                    role="tab"
+                    aria-selected={active}
+                    onClick={() => setSelectedCategory(catId)}
+                    className={`support-category-pill ${active ? 'active' : ''}`}
                   >
-                    {cat.label}
+                    <Icon size={14} />
+                    <span>{meta.label}</span>
+                    <span className="support-category-count">{count}</span>
                   </button>
                 )
               })}
@@ -467,18 +443,42 @@ export default function SupportView({
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--ds-space-2)' }}>
             {filteredFaqs.length === 0 ? (
               <div
+                className="route-card"
                 style={{
-                  backgroundColor: 'var(--ds-color-surface-container-lowest)',
-                  borderRadius: 'var(--ds-radius-xl)',
-                  border: '1px solid var(--ds-color-outline-variant)',
                   padding: 'var(--ds-space-8) var(--ds-space-4)',
                   textAlign: 'center',
-                  color: 'var(--ds-color-on-surface-variant)',
-                  fontSize: '0.875rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '10px',
                 }}
               >
-                No FAQs matching &quot;{searchQuery}&quot;.
-                <div style={{ marginTop: '10px' }}>
+                <HelpCircle size={32} color="var(--ds-color-on-surface-variant)" strokeWidth={1.5} />
+                <div>
+                  <p style={{ margin: 0, fontSize: '0.9375rem', fontWeight: 700, color: 'var(--ds-color-on-surface)' }}>
+                    No FAQs matching &quot;{searchQuery}&quot;
+                  </p>
+                  <p style={{ margin: '4px 0 0 0', fontSize: '0.8125rem', color: 'var(--ds-color-on-surface-variant)' }}>
+                    Try searching for another topic or send a direct inquiry to our team.
+                  </p>
+                </div>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '6px' }}>
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery('')}
+                    style={{
+                      padding: '8px 14px',
+                      borderRadius: 'var(--ds-radius-md)',
+                      backgroundColor: 'var(--ds-color-surface-container-low)',
+                      border: '1px solid var(--ds-color-outline-variant)',
+                      color: 'var(--ds-color-on-surface)',
+                      fontSize: '0.8125rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Clear Search
+                  </button>
                   <button
                     type="button"
                     onClick={() => setActiveTab('compose')}
@@ -500,61 +500,45 @@ export default function SupportView({
             ) : (
               filteredFaqs.map((faq) => {
                 const isOpen = openFaqId === faq.id
+                const categoryMeta = CATEGORY_META[faq.category]
+                const CategoryIcon = categoryMeta.icon
                 return (
                   <div
                     key={faq.id}
-                    style={{
-                      border: '1px solid var(--ds-color-outline-variant)',
-                      borderRadius: 'var(--ds-radius-xl)',
-                      overflow: 'hidden',
-                      backgroundColor: 'var(--ds-color-surface-container-lowest)',
-                      transition: 'all 0.15s ease',
-                    }}
+                    className={`support-faq-card ${isOpen ? 'open' : ''}`}
                   >
                     <button
                       type="button"
+                      id={`faq-trigger-${faq.id}`}
+                      aria-expanded={isOpen}
+                      aria-controls={`faq-answer-${faq.id}`}
                       onClick={() => toggleFaq(faq.id)}
-                      style={{
-                        width: '100%',
-                        padding: '14px 18px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        gap: '12px',
-                        border: 'none',
-                        background: 'transparent',
-                        cursor: 'pointer',
-                        textAlign: 'left',
-                      }}
+                      className="support-faq-trigger"
                     >
-                      <span
-                        style={{
-                          fontSize: '0.9375rem',
-                          fontWeight: 700,
-                          color: 'var(--ds-color-on-surface)',
-                          lineHeight: 1.4,
-                        }}
-                      >
-                        {faq.question}
-                      </span>
-                      {isOpen ? (
-                        <ChevronUp size={18} color="var(--ds-color-primary)" style={{ flexShrink: 0 }} />
-                      ) : (
-                        <ChevronDown size={18} color="var(--ds-color-on-surface-variant)" style={{ flexShrink: 0 }} />
-                      )}
+                      <div className="support-faq-q-content">
+                        <span className="support-faq-badge">
+                          <CategoryIcon size={11} />
+                          <span>{categoryMeta.shortLabel}</span>
+                        </span>
+                        <span className="support-faq-question-text">
+                          {faq.question}
+                        </span>
+                      </div>
+                      <div className="support-faq-icon-pill" aria-hidden="true">
+                        {isOpen ? (
+                          <ChevronUp size={16} />
+                        ) : (
+                          <ChevronDown size={16} />
+                        )}
+                      </div>
                     </button>
 
                     {isOpen && (
                       <div
-                        style={{
-                          padding: '0 18px 16px 18px',
-                          fontSize: '0.875rem',
-                          lineHeight: 1.65,
-                          color: 'var(--ds-color-on-surface-variant)',
-                          borderTop: '1px solid var(--ds-color-outline-variant)',
-                          backgroundColor: 'var(--ds-color-surface-container-low)',
-                          paddingTop: '12px',
-                        }}
+                        id={`faq-answer-${faq.id}`}
+                        role="region"
+                        aria-labelledby={`faq-trigger-${faq.id}`}
+                        className="support-faq-body"
                       >
                         {faq.answer}
                       </div>
@@ -563,6 +547,34 @@ export default function SupportView({
                 )
               })
             )}
+          </div>
+
+          {/* Mobile-Friendly Bottom Assistance Card */}
+          <div className="support-bottom-help-card">
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                <Sparkles size={16} color="var(--ds-color-primary)" />
+                <h3 style={{ margin: 0, fontSize: '0.9375rem', fontWeight: 800, color: 'var(--ds-color-on-surface)' }}>
+                  Didn&apos;t find what you need?
+                </h3>
+              </div>
+              <p style={{ margin: 0, fontSize: '0.8125rem', color: 'var(--ds-color-on-surface-variant)', lineHeight: 1.4 }}>
+                Our team replies directly within 24 hours to help with currencies, stock rules, or permissions.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setActiveTab('compose')}
+              className="support-direct-help-btn"
+              style={{
+                backgroundColor: 'var(--ds-color-primary)',
+                color: '#ffffff',
+                border: 'none',
+              }}
+            >
+              <MessageSquare size={14} />
+              <span>Contact Platform Team</span>
+            </button>
           </div>
         </section>
       )}
@@ -904,7 +916,7 @@ export default function SupportView({
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--ds-space-3)' }}>
-              {tickets.map((ticket) => (
+              {paginatedUserTickets.map((ticket) => (
                 <div
                   key={ticket.id}
                   style={{
@@ -970,8 +982,104 @@ export default function SupportView({
                   >
                     {ticket.message}
                   </div>
+
+                  {/* Platform Admin In-App Response */}
+                  {ticket.adminReply && (
+                    <div
+                      style={{
+                        backgroundColor: '#f0fdf4',
+                        border: '1px solid #bbf7d0',
+                        borderRadius: 'var(--ds-radius-lg)',
+                        padding: '12px 16px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '6px',
+                        marginTop: '2px',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <ShieldCheck size={14} color="#059669" />
+                          <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#065f46', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                            Operafrika Platform Team Reply
+                          </span>
+                        </div>
+                        {ticket.adminRepliedAt && (
+                          <span style={{ fontSize: '0.6875rem', color: '#047857' }}>
+                            {new Date(ticket.adminRepliedAt).toLocaleDateString('en-NG', {
+                              day: 'numeric',
+                              month: 'short',
+                              year: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
+                          </span>
+                        )}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: '0.875rem',
+                          lineHeight: 1.6,
+                          color: '#064e3b',
+                          whiteSpace: 'pre-wrap',
+                        }}
+                      >
+                        {ticket.adminReply}
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
+            </div>
+          )}
+
+          {/* Pagination Controls for Ticket History (Mobile and Desktop) */}
+          {tickets.length > 0 && (
+            <div
+              className="platform-pagination-container"
+              style={{
+                backgroundColor: 'var(--ds-color-surface-container-lowest)',
+                borderRadius: 'var(--ds-radius-xl)',
+                border: '1px solid var(--ds-color-outline-variant)',
+              }}
+            >
+              <span className="platform-pagination-summary">
+                Showing <strong>{(historyPage - 1) * historyPageSize + 1}</strong> to{' '}
+                <strong>{Math.min(historyPage * historyPageSize, tickets.length)}</strong> of{' '}
+                <strong>{tickets.length}</strong> inquiries
+              </span>
+
+              <div className="platform-pagination-controls">
+                <button
+                  type="button"
+                  disabled={historyPage <= 1}
+                  onClick={() => setHistoryPage((p) => Math.max(1, p - 1))}
+                  className="platform-pagination-btn"
+                  style={{
+                    opacity: historyPage <= 1 ? 0.4 : 1,
+                    cursor: historyPage <= 1 ? 'not-allowed' : 'pointer',
+                  }}
+                >
+                  <ChevronLeft size={14} /> Previous
+                </button>
+
+                <span className="platform-pagination-page-indicator">
+                  Page {historyPage} of {historyTotalPages}
+                </span>
+
+                <button
+                  type="button"
+                  disabled={historyPage >= historyTotalPages}
+                  onClick={() => setHistoryPage((p) => Math.min(historyTotalPages, p + 1))}
+                  className="platform-pagination-btn"
+                  style={{
+                    opacity: historyPage >= historyTotalPages ? 0.4 : 1,
+                    cursor: historyPage >= historyTotalPages ? 'not-allowed' : 'pointer',
+                  }}
+                >
+                  Next <ChevronRight size={14} />
+                </button>
+              </div>
             </div>
           )}
         </section>

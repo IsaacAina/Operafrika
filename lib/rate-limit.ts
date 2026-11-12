@@ -134,3 +134,31 @@ export async function guard(
 
   return response
 }
+
+/**
+ * Rate limiter specifically for AI Chat and Gemini model requests.
+ * Allows up to maxRequests within windowSeconds per user.
+ */
+export function checkChatRateLimit(
+  userId: string,
+  maxRequests = 15,
+  windowSeconds = 60,
+): { allowed: boolean; retryAfter?: number } {
+  const now = Date.now()
+  const key = `chat:user:${userId}`
+  const bucket = buckets.get(key)
+  const windowMs = windowSeconds * 1000
+
+  if (!bucket || bucket.resetAt <= now) {
+    buckets.set(key, { count: 1, resetAt: now + windowMs })
+    return { allowed: true }
+  }
+
+  if (bucket.count >= maxRequests) {
+    const retryAfter = Math.max(1, Math.ceil((bucket.resetAt - now) / 1000))
+    return { allowed: false, retryAfter }
+  }
+
+  bucket.count += 1
+  return { allowed: true }
+}
